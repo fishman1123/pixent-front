@@ -17,9 +17,9 @@ export const RouterList = [
     {
         path: "/",
         element: (
-            <SecuredRoute>
+            // <SecuredRoute>
                 <Layout />
-            </SecuredRoute>
+            //</SecuredRoute>
         ),
         children: [
             {

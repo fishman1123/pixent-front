@@ -6,7 +6,23 @@ export default {
     "./node_modules/flowbite/**/*.js",
   ],
   theme: {
-    extend: {},
+    extend: {
+      maxWidth: {
+        'custom': '375px',
+      },
+      minWidth: {
+        'pcScreen': '500px',
+      },
+      screens: {
+        'responsive': '100vw',
+      },
+      backgroundColor: {
+        'intro': 'lightgrey',
+      },
+      fontFamily: {
+        'title': ['"Times New Roman"', 'serif'],
+      },
+    },
   },
   plugins: [
     require('@tailwindcss/forms'),
@@ -15,4 +31,3 @@ export default {
     require('flowbite/plugin'),
   ],
 }
-
