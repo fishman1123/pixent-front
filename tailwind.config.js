@@ -3,6 +3,7 @@ export default {
   content: [
     "./src/**/*.{js,jsx,ts,tsx}",
     "./public/**/*.html",
+    "./node_modules/flowbite/**/*.js",
   ],
   theme: {
     extend: {},
@@ -11,6 +12,7 @@ export default {
     require('@tailwindcss/forms'),
     require('@tailwindcss/typography'),
     require('@tailwindcss/aspect-ratio'),
+    require('flowbite/plugin'),
   ],
 }
 
