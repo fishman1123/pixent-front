@@ -1,18 +1,15 @@
-import { useState } from 'react'
-
+import { StrictMode } from 'react'
+import { createRoot } from 'react-dom/client'
+import { RouterProvider, createBrowserRouter } from 'react-router-dom';
+import { RecoilRoot } from 'recoil';
+import { RouterList } from './RouterList.jsx';
 import './index.css'
 
-function App() {
-
-    return (
-        <>
-            <div className="flex justify-center items-center h-screen">
-                <div className="text-center">
-                    Test
-                </div>
-            </div>
-        </>
-    )
-}
-
-export default App
+const router = createBrowserRouter(RouterList);
+createRoot(document.getElementById('root')).render(
+    <StrictMode>
+        <RecoilRoot>
+            <RouterProvider router={router} />
+        </RecoilRoot>
+    </StrictMode>,
+)
