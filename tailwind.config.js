@@ -17,7 +17,7 @@ export default {
         'responsive': '100vw',
       },
       backgroundColor: {
-        'intro': 'lightgrey',
+        'intro': 'black',
       },
       fontFamily: {
         'title': ['"Times New Roman"', 'serif'],
