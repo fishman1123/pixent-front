@@ -1,20 +1,20 @@
-import { useRecoilValue } from 'recoil';
-import { userAtoms } from '../../recoil/userAtoms.jsx';
 import { useEffect } from 'react';
+import { useSetRecoilState } from 'recoil';
+import { userAtoms } from '../../recoil/userAtoms';
 
 export const Input = () => {
-    const userState = useRecoilValue(userAtoms); // Access Recoil state
+    const setUserState = useSetRecoilState(userAtoms);
 
     useEffect(() => {
-        // Log current page value
-        console.log('Current Page:', userState.currentPage);
-    }, [userState.currentPage]);
+        setUserState((prevState) => ({
+            ...prevState,
+            currentPage: 'input',
+        }));
+    }, [setUserState]);
 
     return (
-        <>
-            <div>
-                input page
-            </div>
-        </>
+        <div className="flex-col justify-center items-center min-h-screen w-full text-center">
+            Input page
+        </div>
     );
 };

@@ -1,31 +1,32 @@
-import { Layout } from "./components/Layout.jsx";
-import { Intro } from "./components/pages/Intro.jsx";
-import { Input } from "./components/pages/Input.jsx";
-import SecuredRoute from './components/SecuredRoute';
+// RouterList.jsx
+
+import { Layout } from './components/Layout.jsx';
+import { Intro } from './components/pages/Intro.jsx';
+import { Input } from './components/pages/Input.jsx';
 
 export const RouterList = [
     {
-        path: "/",
-        element: <Layout />,
+        path: '/',
+        element: (
+                <Layout />
+        ),
         children: [
             {
-                path: "/",
+                index: true, // Using 'index: true' for the default route
                 element: <Intro />,
             },
         ],
     },
     {
-        path: "/",
+        path: '/',
         element: (
-            // <SecuredRoute>
                 <Layout />
-            //</SecuredRoute>
         ),
         children: [
             {
-                path: "basic",
+                path: 'basic',
                 element: <Input />,
-            }
-        ]
-    }
+            },
+        ],
+    },
 ];

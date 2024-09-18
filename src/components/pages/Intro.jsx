@@ -1,28 +1,25 @@
-import { useEffect } from "react";
-import { useRecoilState } from 'recoil'; // Assuming Recoil is used
-import { userAtoms } from '../../recoil/userAtoms'; // Import the userAtom
-import { IntroTop } from "../intro/IntroTop.jsx";
-import { IntroBottom } from "../intro/IntroBotttom.jsx";
-import { IntroCenter } from "../intro/IntroCenter.jsx";
+import { useEffect } from 'react';
+import { useSetRecoilState } from 'recoil';
+import { userAtoms } from '../../recoil/userAtoms';
+import { IntroTop } from '../intro/IntroTop.jsx';
+import { IntroBottom } from '../intro/IntroBotttom.jsx';
+import { IntroCenter } from '../intro/IntroCenter.jsx';
 
 export const Intro = () => {
-    const [userPage, setCurrentPage] = useRecoilState(userAtoms);
-    console.log(userPage);
+    const setUserState = useSetRecoilState(userAtoms);
 
     useEffect(() => {
-        setCurrentPage((prevState) => ({
+        setUserState((prevState) => ({
             ...prevState,
-            currentPage: 'intro'
+            currentPage: 'intro',
         }));
-    }, [setCurrentPage]);
+    }, [setUserState]);
 
     return (
-        <>
-            <div className="flex-col justify-center items-center min-h-screen w-full text-center">
-                <IntroTop />
-                <IntroCenter />
-                <IntroBottom />
-            </div>
-        </>
+        <div className="flex-col justify-center items-center min-h-screen w-full text-center">
+            <IntroTop />
+            <IntroCenter />
+            <IntroBottom />
+        </div>
     );
 };

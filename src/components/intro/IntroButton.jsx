@@ -1,22 +1,18 @@
 import React from 'react';
-import { useRecoilState } from 'recoil';
+import { useSetRecoilState } from 'recoil';
 import { userAtoms } from '../../recoil/userAtoms';
 import { useNavigate } from 'react-router-dom';
-import './IntroButton.css'; // Import your CSS
+import './IntroButton.css';
 
 export const IntroButton = () => {
-    const [userState, setUserState] = useRecoilState(userAtoms); // Get the Recoil state
+    const setUserState = useSetRecoilState(userAtoms);
     const navigate = useNavigate();
 
-    // Handle button click
     const handleButtonClick = () => {
-        // Update the current page to "input"
         setUserState((prevState) => ({
             ...prevState,
             currentPage: 'input',
         }));
-
-        // Redirect to "/basic"
         navigate('/basic');
     };
 
