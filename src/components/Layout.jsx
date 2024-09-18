@@ -12,9 +12,8 @@ export const Layout = () => {
             <div className="relative min-h-screen bg-intro max-w-[480px] mx-auto">
                 <Navbar />
                 {/* Main Content */}
-                <div className="relative z-10">
+                <div className="relative z-10 mt-[80px] mx-[20px]">
                     <Outlet />
-
                 </div>
                 <Footer />
             </div>

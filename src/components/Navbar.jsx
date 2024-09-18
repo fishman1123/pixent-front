@@ -1,9 +1,19 @@
 import { useState } from "react";
-import translatorIcon from '../assets/translate.svg';
+import { useRecoilValue } from 'recoil';
 import { Menu } from './navbar/Menu';
+import { TranslateButton } from './navbar/TranslateButton';
+import { BackButton } from "./navbar/BackButton.jsx";
+import { userAtoms } from '../recoil/userAtoms';
 
 export const Navbar = () => {
     const [isOpen, setIsOpen] = useState(false);
+
+    // Get the entire userState object first to debug
+    const userState = useRecoilValue(userAtoms);
+    console.log("userState:", userState);
+
+    // Now destructure currentPage after confirming userState has this property
+    const { currentPage } = userState || {};
 
     const toggleMenu = () => {
         setIsOpen(!isOpen);
@@ -14,15 +24,9 @@ export const Navbar = () => {
             <div className="max-w-[480px] mx-auto">
                 <div className="fixed top-0 left-0 w-full text-black z-30">
                     <div className="max-w-[480px] mx-auto bg-white flex items-center justify-between p-4">
-                        <div className="ml-[4px] mt-[4px]">
-                            <button>
-                                <img
-                                    src={translatorIcon}
-                                    alt="Translator Icon"
-                                    className="w-6 h-6"
-                                />
-                            </button>
-                        </div>
+                        {/* Conditionally render TranslateButton or BackButton based on currentPage */}
+                        {currentPage === "intro" ? <TranslateButton /> : <BackButton />}
+
                         <div className="flex-1 text-[24px] font-headerTitle text-center">
                             AC'SCENT
                         </div>
