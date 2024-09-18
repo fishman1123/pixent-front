@@ -17,10 +17,11 @@ export default {
         'responsive': '100vw',
       },
       backgroundColor: {
-        'intro': 'black',
+        'intro': 'white',
       },
       fontFamily: {
-        'title': ['"Times New Roman"', 'serif'],
+        'headerTitle': ['"Times New Roman"', 'serif'],
+        'introTitle': ['"Inter"', 'serif'],
       },
     },
   },

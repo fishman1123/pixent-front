@@ -1,5 +1,6 @@
 import {IntroTop} from "../intro/IntroTop.jsx";
 import {IntroBottom} from "../intro/IntroBotttom.jsx";
+import {IntroCenter} from "../intro/IntroCenter.jsx";
 
 export const Intro = () => {
 
@@ -8,6 +9,7 @@ export const Intro = () => {
         <>
             <div className="flex-col justify-center items-center min-h-screen w-full text-center">
                 <IntroTop/>
+                <IntroCenter/>
                 <IntroBottom/>
             </div>
         </>

@@ -14,8 +14,9 @@ export const Layout = () => {
                 {/* Main Content */}
                 <div className="relative z-10">
                     <Outlet />
-                    <Footer />
+
                 </div>
+                <Footer />
             </div>
         </>
     );
