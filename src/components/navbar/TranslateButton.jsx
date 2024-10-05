@@ -51,7 +51,7 @@ export const TranslateButton = () => {
             {/* Translator Icon with Dropdown */}
             <button
                 onClick={toggleDropdown}
-                className="text-black focus:ring-4 focus:outline-none focus:ring-none font-medium rounded-lg text-sm px-3 py-2.5 text-center inline-flex items-center"
+                className="text-black focus:ring-4 focus:outline-none focus:ring-none font-medium rounded-lg text-sm px-1 py-2.5 text-center inline-flex items-center"
                 type="button"
             >
                 <img

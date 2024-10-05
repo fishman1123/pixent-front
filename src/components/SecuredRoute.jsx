@@ -7,11 +7,9 @@ const SecuredRoute = ({ children }) => {
     const userState = useRecoilValue(userAtoms);
 
     if (!userState.isAuthenticated) {
-        // If the user is not authenticated, redirect to the homepage or a login page
         return <Navigate to="/" />;
     }
 
-    // If the user is authenticated, render the children components
     return children;
 };
 

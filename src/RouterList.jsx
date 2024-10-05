@@ -3,6 +3,9 @@
 import { Layout } from './components/Layout.jsx';
 import { Intro } from './components/pages/Intro.jsx';
 import { Input } from './components/pages/Input.jsx';
+import SecuredRoute from "./components/SecuredRoute.jsx";
+import {InfoInput} from "./components/pages/InfoInput.jsx";
+import {Modal} from "./components/Modal.jsx";
 
 export const RouterList = [
     {
@@ -12,7 +15,7 @@ export const RouterList = [
         ),
         children: [
             {
-                index: true, // Using 'index: true' for the default route
+                index: true,
                 element: <Intro />,
             },
         ],
@@ -27,6 +30,15 @@ export const RouterList = [
                 path: 'basic',
                 element: <Input />,
             },
+            {
+                path: 'input',
+                element: <SecuredRoute><InfoInput/></SecuredRoute>
+            },
+            {
+                path: 'inputTwo',
+                element: <SecuredRoute><InfoInput/></SecuredRoute>
+            },
+
         ],
     },
 ];
