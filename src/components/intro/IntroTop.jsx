@@ -8,8 +8,8 @@ export const IntroTop = () => {
             <div className="text-xl">DISCOVER</div>
             <div className="text-xl">YOUR SCENT</div>
             <div className="text-[14px] mt-[20px] mb-[48px] text-black">Uncover your unique fragrance profile</div>
-            <ProcedureButton text="분석하기" route="/basic" subText="테스트중입니다" />
-
+            <ProcedureButton text="분석하기" route="/basic" subText="테스트중입니다" confirm={false} />
         </div>
+
     )
 }

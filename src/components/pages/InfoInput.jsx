@@ -100,7 +100,7 @@ export const InfoInput = () => {
             <Checkbox componentId={1} />
             <InputTextCenter />
             <Checkbox componentId={2} />
-            <ProcedureButton text="다음페이지" route="/inputTwo" subText="테스트 중입니다."/>
+            <ProcedureButton text="다음" route="/inputTwo" subText="테스트 중입니다" confirm={true}/>
         </div>
     );
 };

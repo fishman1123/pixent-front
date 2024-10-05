@@ -6,6 +6,8 @@ export const userAtoms = atom({
         isAuthenticated: false,
         userName: null,
         userBirth: null,
+        userGender: null,
+        keyword: null,
         securityNumber: null,
         userLanguage: 'Korean', // Default language set to Korean
         userImageName: null,

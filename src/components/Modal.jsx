@@ -2,12 +2,14 @@ import React, { useState, useRef, useEffect } from 'react';
 import { useRecoilState } from 'recoil';
 import { modalTriggerAtom } from '../recoil/modalTriggerAtom';
 import './intro/IntroButton.css';
+import { confirmationAtom } from "../recoil/confirmationAtom.jsx";
 
 export const Modal = ({ title, onClose, children }) => {
     const [isVisible, setIsVisible] = useState(false);
     const [isClosing, setIsClosing] = useState(false);
     const modalRef = useRef(null);
     const [modalState, setModalState] = useRecoilState(modalTriggerAtom);
+    const [confirmModalState] = useRecoilState(confirmationAtom); // Get the confirmation state
 
     useEffect(() => {
         setIsVisible(true);
@@ -16,7 +18,7 @@ export const Modal = ({ title, onClose, children }) => {
 
     const closeModal = (skipDelay = false) => {
         setIsClosing(true);
-        //animation trigger
+        // animation trigger
         const delay = skipDelay ? 0 : 800;
         setTimeout(() => {
             setIsVisible(false);
@@ -85,18 +87,21 @@ export const Modal = ({ title, onClose, children }) => {
 
                 <div className="flex-grow p-4 space-y-4 overflow-y-auto touch-pan-y">{children}</div>
 
-                <div className="flex-shrink-0 flex items-center justify-center p-4 border-t border-black bg-white">
-                    <button
-                        onClick={() => closeModal(false)}
-                        className={`defaultButton touch-manipulation ${isClosing ? 'closing' : ''}`}
-                        disabled={isClosing}
-                    >
-                        <span className="relative z-10">닫기</span>
-                        <span className="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-full opacity-0 transition-all duration-300">
-                            닫기
-                        </span>
-                    </button>
-                </div>
+                {/* Conditionally render the close button based on confirmationAtom.isOpen */}
+                {!confirmModalState.isOpen && (
+                    <div className="flex-shrink-0 flex items-center justify-center p-4 border-t border-black bg-white">
+                        <button
+                            onClick={() => closeModal(false)}
+                            className={`defaultButton touch-manipulation ${isClosing ? 'closing' : ''}`}
+                            disabled={isClosing}
+                        >
+                            <span className="relative z-10">닫기</span>
+                            <span className="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-full opacity-0 transition-all duration-300">
+                                닫기
+                            </span>
+                        </button>
+                    </div>
+                )}
             </div>
         </div>
     );
