@@ -4,7 +4,7 @@ import { Outlet, useLocation } from "react-router-dom";
 import { Footer } from "./Footer.jsx";
 import { Navbar } from "./Navbar.jsx";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
-import "./transition.css"; // Import the CSS file for animations
+import "./transition.css";
 
 export const Layout = () => {
     const location = useLocation();

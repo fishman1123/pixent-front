@@ -8,6 +8,7 @@ import { useRecoilState } from 'recoil';
 import { checkboxDataAtom } from '../../recoil/checkboxDataAtom.jsx';
 import { checkboxSelectionsAtom } from '../../recoil/checkboxSelectionsAtom.jsx';
 import { InputInfoButton } from "../inputInfo/InputInfoButton.jsx";
+import {ProcedureButton} from "../ProcedureButton.jsx";
 
 export const InfoInput = () => {
     const [checkboxData, setCheckboxData] = useRecoilState(checkboxDataAtom);
@@ -99,7 +100,7 @@ export const InfoInput = () => {
             <Checkbox componentId={1} />
             <InputTextCenter />
             <Checkbox componentId={2} />
-            <InputInfoButton />
+            <ProcedureButton text="다음페이지" route="/inputTwo" subText="테스트 중입니다."/>
         </div>
     );
 };

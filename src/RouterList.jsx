@@ -6,6 +6,7 @@ import { Input } from './components/pages/Input.jsx';
 import SecuredRoute from "./components/SecuredRoute.jsx";
 import {InfoInput} from "./components/pages/InfoInput.jsx";
 import {Modal} from "./components/Modal.jsx";
+import {InfoInputTwo} from "./components/pages/InfoInputTwo.jsx";
 
 export const RouterList = [
     {
@@ -36,7 +37,7 @@ export const RouterList = [
             },
             {
                 path: 'inputTwo',
-                element: <SecuredRoute><InfoInput/></SecuredRoute>
+                element: <SecuredRoute><InfoInputTwo/></SecuredRoute>
             },
 
         ],

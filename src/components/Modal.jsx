@@ -62,7 +62,7 @@ export const Modal = ({ title, onClose, children }) => {
                 <div className="flex-shrink-0 flex items-center justify-between p-4 border-b border-black">
                     <h3 className="text-xl font-bold text-black">{title}</h3>
                     <button
-                        onClick={() => closeModal(true)} // Skip delay on header close button click
+                        onClick={() => closeModal(true)}
                         className="text-black hover:text-gray-700 transition-colors duration-300 p-2 touch-manipulation"
                     >
                         <svg
@@ -87,7 +87,7 @@ export const Modal = ({ title, onClose, children }) => {
 
                 <div className="flex-shrink-0 flex items-center justify-center p-4 border-t border-black bg-white">
                     <button
-                        onClick={() => closeModal(false)} // Keep delay on footer button click
+                        onClick={() => closeModal(false)}
                         className={`defaultButton touch-manipulation ${isClosing ? 'closing' : ''}`}
                         disabled={isClosing}
                     >

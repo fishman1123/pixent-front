@@ -13,7 +13,7 @@ export const InputInfoButton = () => {
             ...prevState,
             currentPage: 'input',
         }));
-        navigate('/basic');
+        navigate('/inputTwo');
     };
 
     return (

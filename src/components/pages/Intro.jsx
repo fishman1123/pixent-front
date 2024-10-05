@@ -11,7 +11,7 @@ export const Intro = () => {
     useEffect(() => {
         setUserState((prevState) => ({
             ...prevState,
-            currentPage: 'intro',
+            currentPage: '/intro',
         }));
     }, [setUserState]);
 

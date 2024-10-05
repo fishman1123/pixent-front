@@ -9,7 +9,7 @@ export const userAtoms = atom({
         securityNumber: null,
         userLanguage: 'Korean', // Default language set to Korean
         userImageName: null,
-        currentPage: "intro",
+        currentPage: "/intro",
     },
 });
 
