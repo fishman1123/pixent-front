@@ -10,7 +10,7 @@ export const InfoInputTwo = () => {
         <div className="flex-col justify-center items-center min-h-screen w-full text-center">
             <InputTextTwoImageUpload/>
             <InputTwoTextUpload/>
-            <UploadButton/>
+
         </div>
     )
 }

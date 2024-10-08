@@ -22,10 +22,11 @@ export const Modal = ({ title, onClose, children }) => {
         const delay = skipDelay ? 0 : 800;
         setTimeout(() => {
             setIsVisible(false);
+            setModalState({ isOpen: false });
+            onClose();
+
             setTimeout(() => {
-                onClose();
                 setIsClosing(false);
-                setModalState({ isOpen: false });
             }, 300);
         }, delay);
     };
@@ -57,7 +58,7 @@ export const Modal = ({ title, onClose, children }) => {
         >
             <div
                 ref={modalRef}
-                className={`relative w-full max-w-[460px] h-[85vh] bg-white border border-black shadow-2xl overflow-hidden transition-all duration-300 ease-in-out ${
+                className={`relative w-full max-w-[460px] h-[95vh] bg-white border border-black shadow-2xl overflow-hidden transition-all duration-300 ease-in-out ${
                     isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
                 } flex flex-col`}
             >
