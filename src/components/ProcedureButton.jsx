@@ -125,13 +125,15 @@ export const ProcedureButton = ({ text, route, subText, confirm }) => {
 
                     <div className="flex flex-col justify-between mt-4">
                         <div>
-                            <button onClick={handleConfirm} className="defaultButton mb-4">
-                                Confirm
+                            <button onClick={handleConfirm} className="defaultButton mb-4 w-full max-w-[285px]">
+                                <span className="text">Confirm</span>
+                                <span>Confirm</span>
                             </button>
                         </div>
                         <div>
-                            <button onClick={handleCancel} className="defaultButton">
-                                Cancel
+                        <button onClick={handleCancel} className="defaultButton w-full max-w-[285px]">
+                            <span className="text">Cancel</span>
+                            <span>Cancel</span>
                             </button>
                         </div>
                     </div>

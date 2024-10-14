@@ -19,7 +19,7 @@ export const InfoInput = () => {
     const confirmationState = useRecoilValue(confirmationAtom);
 
     useEffect(() => {
-        // Dummy data initialization
+        // Dummy data example
         const dummyData = [
             {
                 id: 1,
@@ -121,7 +121,7 @@ export const InfoInput = () => {
         ];
         setCheckboxData(dummyData);
 
-        // Initialize checkboxSelectionsAtom based on dummyData
+        // atom logic
         const initialSelections = {};
         dummyData.forEach(option => {
             initialSelections[option.id] = null;
