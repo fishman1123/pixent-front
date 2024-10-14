@@ -122,6 +122,25 @@ export const TranslateButton = () => {
                                 </label>
                             </div>
                         </li>
+                        <li>
+                            <div className="flex items-center">
+                                <input
+                                    id="default-radio-4"
+                                    type="radio"
+                                    name="language-radio"
+                                    value="English"
+                                    checked={userState.userLanguage === 'English'}
+                                    onChange={() => handleLanguageChange('English')}
+                                    className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
+                                />
+                                <label
+                                    htmlFor="default-radio-3"
+                                    className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                                >
+                                    Japanese
+                                </label>
+                            </div>
+                        </li>
                     </ul>
                 </div>
             )}
