@@ -16,7 +16,6 @@ export const ResultChart = ({
                                 inputFresh,
                                 inputSpicy,
                             }) => {
-    // Define the order of the scents, starting with "Watery"
     const scentOrder = ['Watery', 'Floral', 'Citrus', 'Spicy', 'Woody', 'Fresh'];
 
     const [profile, setProfile] = useState({
@@ -130,26 +129,26 @@ export const ResultChart = ({
                     </RadarChart>
                 </ResponsiveContainer>
             </div>
-            <div className="space-y-4">
-                {scentOrder.map((key) => (
-                    <div key={key} className="flex items-center">
-                        <label htmlFor={key} className="w-20">
-                            {key}
-                        </label>
-                        <input
-                            type="range"
-                            id={key}
-                            name={key}
-                            min="0"
-                            max="100"
-                            value={profile[key]}
-                            onChange={handleSliderChange}
-                            className="w-full mx-2"
-                        />
-                        <span className="w-10 text-right">{profile[key]}</span>
-                    </div>
-                ))}
-            </div>
+            {/*<div className="space-y-4">*/}
+            {/*    {scentOrder.map((key) => (*/}
+            {/*        <div key={key} className="flex items-center">*/}
+            {/*            <label htmlFor={key} className="w-20">*/}
+            {/*                {key}*/}
+            {/*            </label>*/}
+            {/*            <input*/}
+            {/*                type="range"*/}
+            {/*                id={key}*/}
+            {/*                name={key}*/}
+            {/*                min="0"*/}
+            {/*                max="100"*/}
+            {/*                value={profile[key]}*/}
+            {/*                onChange={handleSliderChange}*/}
+            {/*                className="w-full mx-2"*/}
+            {/*            />*/}
+            {/*            <span className="w-10 text-right">{profile[key]}</span>*/}
+            {/*        </div>*/}
+            {/*    ))}*/}
+            {/*</div>*/}
         </div>
     );
 };

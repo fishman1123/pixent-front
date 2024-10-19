@@ -5,6 +5,7 @@ export const ResultPage = () => {
         {
             id: 1,
             name: "카리나",
+            reportTitle: "카랑카랑한 동백나무",
             topNote: "Top: 장미",
             middleNote: "Middle: 은행나무",
             baseNote: "Base: 해바라기",
