@@ -6,10 +6,8 @@ export const InputTextTop = () => {
                 <div className='text-left'>
                     <div className='font-bold text-4xl'>PREFERENCE</div>
                     <div className='font-bold text-lg mt-8 mb-2'>PREFERRED SCENTS</div>
-
                 </div>
             </div>
         </div>
-
     )
 }

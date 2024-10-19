@@ -8,6 +8,7 @@ import { InfoInput } from "./components/pages/InfoInput.jsx";
 import { Modal } from "./components/Modal.jsx";
 import { InfoInputTwo } from "./components/pages/InfoInputTwo.jsx";
 import { WrongPath } from "./components/pages/WrongPath.jsx";
+import {ResultPage} from "./components/pages/ResultPage.jsx";
 
 export const RouterList = [
     {
@@ -18,7 +19,6 @@ export const RouterList = [
                 index: true,
                 element: <Intro />,
             },
-            // Wildcard route for handling unknown paths under '/'
             {
                 path: '*',
                 element: <WrongPath />,
@@ -49,7 +49,6 @@ export const RouterList = [
                     </SecuredRoute>
                 ),
             },
-            // Wildcard route for handling unknown paths under '/basic', '/input', etc.
             {
                 path: '*',
                 element: <WrongPath />,
@@ -61,7 +60,7 @@ export const RouterList = [
         element: <Layout />,
         children: [
             {
-                index: true, // Changed from path: '' to index for consistency
+                index: true,
                 element: <Input />,
             },
             {
@@ -80,14 +79,20 @@ export const RouterList = [
                     </SecuredRoute>
                 ),
             },
-            // Wildcard route for handling unknown paths under '/result'
+            {
+                path: 'final',
+                element: (
+                    <SecuredRoute>
+                        <ResultPage />
+                    </SecuredRoute>
+                )
+            },
             {
                 path: '*',
                 element: <WrongPath />,
             },
         ],
     },
-    // Optional: Global wildcard route for any other undefined paths
     {
         path: '*',
         element: <WrongPath />,

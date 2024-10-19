@@ -103,7 +103,7 @@ export const InputTextTwoImageUpload = () => {
                     </div>
                 </div>
                 <div className="mt-4 w-full max-w-[460px]">
-                    <DataButton text="분석하기" apiRoute="/basic" subText="테스트중입니다" confirm={false} />
+                    <DataButton text="분석하기" apiRoute="/result/final" subText="테스트중입니다" confirm={false} />
                 </div>
             </div>
         </div>
