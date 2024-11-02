@@ -1,17 +1,20 @@
+// src/components/intro/SerialNumberBox.jsx
 import React, { useState } from 'react';
 import { FaArrowRight } from 'react-icons/fa';
-import {useNavigate} from "react-router-dom";
-import {useSetRecoilState} from "recoil";
-import {userAtoms} from "../../recoil/userAtoms.jsx";
+import { useNavigate } from "react-router-dom";
+import { useSetRecoilState } from "recoil";
+import { userAtoms } from "../../recoil/userAtoms.jsx";
+import { useTranslation } from 'react-i18next';
 
 export const SerialNumberBox = () => {
 
+    const { t } = useTranslation();
     const setUserState = useSetRecoilState(userAtoms);
     const [serialNumber, setSerialNumber] = useState("");
     const [errorMessage, setErrorMessage] = useState("");
     const navigate = useNavigate();
 
-    // regex patterns
+    // Regex patterns
     const serialNumberPattern = /^[a-zA-Z0-9]{6,12}$/;
     const sqlInjectionPattern = /('|"|;|--|\b(SELECT|UPDATE|DELETE|INSERT|WHERE|DROP|EXEC)\b)/i;
 
@@ -21,9 +24,9 @@ export const SerialNumberBox = () => {
 
         // Check for SQL injection and serial number validity
         if (sqlInjectionPattern.test(value)) {
-            setErrorMessage("특수문자는 허용 하지않습니다.");
+            setErrorMessage(t("Special characters are not allowed."));
         } else if (!serialNumberPattern.test(value)) {
-            setErrorMessage("시리얼 넘버는 6자 이상 12자 이하입니다.");
+            setErrorMessage(t("Serial number must be between 6 and 12 characters."));
         } else {
             setErrorMessage("");
         }
@@ -36,7 +39,7 @@ export const SerialNumberBox = () => {
 
     const handleSubmit = () => {
         if (!serialNumber) {
-            setErrorMessage("시리얼 넘버를 입력해 주세요.");  // Show error message for blank input
+            setErrorMessage(t("Please enter the serial number."));  // Show error message for blank input
         } else if (!errorMessage && serialNumber) {
             setUserState((prevState) => ({
                 ...prevState,
@@ -54,7 +57,7 @@ export const SerialNumberBox = () => {
                     value={serialNumber}
                     onChange={handleSerialNumberChange}
                     className={`border ${errorMessage ? 'border-red-500 border-2' : 'border-black border-2'} p-2.5 w-full text-gray-700 placeholder-gray-500 focus:outline-none`}
-                    placeholder="Serial Code here"
+                    placeholder={t("Enter Serial Code")}
                 />
                 <button
                     onClick={handleSubmit}

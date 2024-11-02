@@ -25,7 +25,7 @@ export const InputTextTwoImageUpload = () => {
         };
 
         return (
-            <div className="flex w-full max-w-[460px] mt-4 gap-2">
+            <div className="flex justify-center w-full max-w-[460px] mt-4 gap-2">
                 {options.map((option) => (
                     <button
                         key={option}

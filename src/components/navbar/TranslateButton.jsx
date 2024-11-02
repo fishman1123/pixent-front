@@ -1,23 +1,22 @@
-import { useState, useEffect, useRef } from "react";
+// src/components/TranslateButton.jsx
+import React, { useState, useEffect, useRef } from 'react';
 import { useRecoilState } from 'recoil';
 import { userAtoms } from '../../recoil/userAtoms';
+import { useTranslation } from 'react-i18next';
 import translatorIcon from '../../assets/translate.svg';
-import backArrowIcon from '../../assets/leftarrow.svg';
 
 export const TranslateButton = () => {
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-    const [userState, setUserState] = useRecoilState(userAtoms); // Recoil state
+    const [userState, setUserState] = useRecoilState(userAtoms);
     const dropdownRef = useRef(null);
+    const { i18n } = useTranslation();
 
-    // Check and set default language if null
-    useEffect(() => {
-        if (!userState.userLanguage) {
-            setUserState(prevState => ({
-                ...prevState,
-                userLanguage: 'Korean', // Set default to Korean if userLanguage is null
-            }));
-        }
-    }, [userState.userLanguage, setUserState]);
+    const languageOptions = [
+        { code: 'ko', label: '한국어' },
+        { code: 'zh', label: '中文' },
+        { code: 'ja', label: '日本語' },
+        { code: 'en', label: 'English' },
+    ];
 
     const toggleDropdown = () => {
         setIsDropdownOpen(!isDropdownOpen);
@@ -38,12 +37,18 @@ export const TranslateButton = () => {
     }, [dropdownRef]);
 
     // Handle language change
-    const handleLanguageChange = (language) => {
+    const handleLanguageChange = (languageCode) => {
+        // Update Recoil state
         setUserState(prevState => ({
             ...prevState,
-            userLanguage: language, // Update Recoil state
+            userLanguage: languageCode,
         }));
-        setIsDropdownOpen(false); // Close dropdown after selection
+        // Change language in i18n
+        i18n.changeLanguage(languageCode);
+        // Persist the selection in localStorage
+        localStorage.setItem('language', languageCode);
+        // Close the dropdown
+        setIsDropdownOpen(false);
     };
 
     return (
@@ -65,82 +70,27 @@ export const TranslateButton = () => {
             {isDropdownOpen && (
                 <div className="z-10 absolute left-0 mt-2 w-48 bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600">
                     <ul className="p-3 space-y-3 text-sm text-gray-700 dark:text-gray-200">
-                        <li>
-                            <div className="flex items-center">
-                                <input
-                                    id="default-radio-1"
-                                    type="radio"
-                                    name="language-radio"
-                                    value="Korean"
-                                    checked={userState.userLanguage === 'Korean'}
-                                    onChange={() => handleLanguageChange('Korean')}
-                                    className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
-                                />
-                                <label
-                                    htmlFor="default-radio-1"
-                                    className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-                                >
-                                    한국어
-                                </label>
-                            </div>
-                        </li>
-                        <li>
-                            <div className="flex items-center">
-                                <input
-                                    id="default-radio-2"
-                                    type="radio"
-                                    name="language-radio"
-                                    value="Chinese"
-                                    checked={userState.userLanguage === 'Chinese'}
-                                    onChange={() => handleLanguageChange('Chinese')}
-                                    className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
-                                />
-                                <label
-                                    htmlFor="default-radio-2"
-                                    className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-                                >
-                                    Chinese
-                                </label>
-                            </div>
-                        </li>
-                        <li>
-                            <div className="flex items-center">
-                                <input
-                                    id="default-radio-3"
-                                    type="radio"
-                                    name="language-radio"
-                                    value="Japanese"
-                                    checked={userState.userLanguage === 'Japanese'}
-                                    onChange={() => handleLanguageChange('Japanese')}
-                                    className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
-                                />
-                                <label
-                                    htmlFor="default-radio-3"
-                                    className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-                                >
-                                    Japanese
-                                </label>
-                            </div>
-                        </li>
-                        <li>
-                            <div className="flex items-center">
-                                <input
-                                    id="default-radio-4"
-                                    type="radio"
-                                    name="language-radio"
-                                    value="English"
-                                    checked={userState.userLanguage === 'English'}
-                                    onChange={() => handleLanguageChange('English')}
-                                    className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
-                                />
-                                <label
-                                    htmlFor="default-radio-3"
-                                    className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-                                >
-                                    Japanese
-                                </label>
-                            </div>
-                        </li>
+                        {languageOptions.map(({ code, label }) => (
+                            <li key={code}>
+                                <div className="flex items-center">
+                                    <input
+                                        id={`language-radio-${code}`}
+                                        type="radio"
+                                        name="language-radio"
+                                        value={code}
+                                        checked={userState.userLanguage === code}
+                                        onChange={() => handleLanguageChange(code)}
+                                        className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500"
+                                    />
+                                    <label
+                                        htmlFor={`language-radio-${code}`}
+                                        className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                                    >
+                                        {label}
+                                    </label>
+                                </div>
+                            </li>
+                        ))}
                     </ul>
                 </div>
             )}
