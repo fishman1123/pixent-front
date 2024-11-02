@@ -10,5 +10,13 @@
   "Special characters are not allowed.": "Special characters are not allowed.",
   "Serial number must be between 6 and 12 characters.": "Serial number must be between 6 and 12 characters.",
   "Please enter the serial number.": "Please enter the serial number.",
-  "Enter Serial Code": "Enter Serial Code"
+  "Enter Serial Code": "Enter Serial Code",
+  "tipbox.serialCodeOneTimeUse": "Serial codes are for one-time use.",
+  "tipbox.noSerialCode": "If you don't have a serial code,",
+  "tipbox.contactStaff": "please contact the staff.",
+  "tipbox.doNotRefresh": "Do not refresh while generating the report.",
+  "tipbox.accidentalRefresh": "If you accidentally refreshed or closed the browser,",
+  "tipbox.referToFollowing": "Please refer to the following for the serial code",
+  "tipbox.orderInfo": "Order details / Order number / Order confirmation email",
+  "tipbox.assistanceContactStaff": "For assistance, please contact the staff."
 }

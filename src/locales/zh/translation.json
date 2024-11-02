@@ -10,5 +10,13 @@
   "Special characters are not allowed.": "不允许特殊字符。",
   "Serial number must be between 6 and 12 characters.": "序列号必须在6到12个字符之间。",
   "Please enter the serial number.": "请输入序列号。",
-  "Enter Serial Code": "请输入序列码"
+  "Enter Serial Code": "请输入序列码",
+  "tipbox.serialCodeOneTimeUse": "序列码仅可使用一次。",
+  "tipbox.noSerialCode": "如果您没有序列码，",
+  "tipbox.contactStaff": "请联系工作人员。",
+  "tipbox.doNotRefresh": "生成报告时请勿刷新。",
+  "tipbox.accidentalRefresh": "如果您不小心刷新或关闭了浏览器，",
+  "tipbox.referToFollowing": "请参考以下内容获取序列码",
+  "tipbox.orderInfo": "订单详情 / 订单编号 / 订单确认邮件",
+  "tipbox.assistanceContactStaff": "如需帮助，请联系工作人员。"
 }

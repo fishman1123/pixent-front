@@ -10,5 +10,13 @@
   "Special characters are not allowed.": "특수문자는 허용하지 않습니다.",
   "Serial number must be between 6 and 12 characters.": "시리얼 넘버는 6자 이상 12자 이하입니다.",
   "Please enter the serial number.": "시리얼 넘버를 입력해 주세요.",
-  "Enter Serial Code": "시리얼 코드를 입력해 주세요"
+  "Enter Serial Code": "시리얼 코드를 입력해 주세요",
+  "tipbox.serialCodeOneTimeUse": "시리얼 코드는 일회성입니다.",
+  "tipbox.noSerialCode": "만약 시리얼 코드가 없다면,",
+  "tipbox.contactStaff": "직원에게 문의 부탁드립니다.",
+  "tipbox.doNotRefresh": "보고서 생성 중에 새로고침을 하시면 안 됩니다.",
+  "tipbox.accidentalRefresh": "실수로 새로고침/브라우저를 닫으셨다면,",
+  "tipbox.referToFollowing": "시리얼 코드는 아래의 사항들을 참고하세요",
+  "tipbox.orderInfo": "주문내역 / 주문번호 / 주문알림 이메일",
+  "tipbox.assistanceContactStaff": "도움이 필요하시면 직원에게 문의 부탁드립니다."
 }
