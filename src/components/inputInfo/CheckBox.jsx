@@ -1,5 +1,6 @@
-// CheckBox.jsx
+// src/components/inputInfo/Checkbox.jsx
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next'; // Added for translations
 import "./CheckboxGrid.css";
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { checkboxDataAtom } from '../../recoil/checkboxDataAtom.jsx';
@@ -8,6 +9,7 @@ import { Modal } from '../Modal'; // Adjust the import path as needed
 import { GraphComponent } from '../GraphComponent'; // Adjust the import path as needed
 
 export const Checkbox = ({ componentId }) => {
+    const { t } = useTranslation(); // Initialize translation function
     const options = useRecoilValue(checkboxDataAtom); // Options for checkboxes
     const [confirmationState, setConfirmationState] = useRecoilState(confirmationAtom); // Manage selections in confirmationAtom
 
@@ -90,25 +92,33 @@ export const Checkbox = ({ componentId }) => {
                     title={selectedOptionData.label}
                     onClose={() => setIsModalOpen(false)}
                 >
-                    <p className="text-base leading-relaxed text-black">
-                        {selectedOptionData.description}
-                    </p>
-                    {selectedOptionData.additionalInfo && (
-                        <p className="text-base leading-relaxed text-black">
-                            <strong className="text-lg">이런 사람들한테 어울려요</strong>
-                            <ul className="list-disc pl-5 mt-2">
-                                {selectedOptionData.additionalInfo.map((info, index) => (
-                                    <li key={index}>{info}</li>
-                                ))}
-                            </ul>
-                        </p>
-                    )}
-                    {selectedOptionData.chartData && (
-                        <GraphComponent
-                            data={selectedOptionData.chartData}
-                            label={selectedOptionData.label}
-                        />
-                    )}
+                    <div className="modal-content flex flex-col space-y-6">
+                        <div className="description-section">
+                            <p className="description-text">
+                                {selectedOptionData.description}
+                            </p>
+                            {selectedOptionData.additionalInfo && (
+                                <div className="additional-info mt-4">
+                                    <strong className="info-title block mb-2 ">
+                                        {t('modal.suitableFor')} {/* Changed to translation key */}
+                                    </strong>
+                                    <ul className="info-list list-disc pl-5 text-[12px]">
+                                        {selectedOptionData.additionalInfo.map((info, index) => (
+                                            <li key={index}>{info}</li>
+                                        ))}
+                                    </ul>
+                                </div>
+                            )}
+                        </div>
+                        {selectedOptionData.chartData && (
+                            <div className="graph-component mt-6">
+                                <GraphComponent
+                                    data={selectedOptionData.chartData}
+                                    label={selectedOptionData.label}
+                                />
+                            </div>
+                        )}
+                    </div>
                 </Modal>
             )}
         </>

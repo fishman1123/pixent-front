@@ -47,6 +47,7 @@ export const TranslateButton = () => {
         i18n.changeLanguage(languageCode);
         // Persist the selection in localStorage
         localStorage.setItem('language', languageCode);
+
         // Close the dropdown
         setIsDropdownOpen(false);
     };

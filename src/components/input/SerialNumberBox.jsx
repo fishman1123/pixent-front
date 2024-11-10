@@ -50,7 +50,7 @@ export const SerialNumberBox = () => {
     };
 
     return (
-        <div className={`mt-12 pl-5 pr-5 ${!errorMessage ? 'mb-14' : ''}`}>
+        <div className={`mt-12 pl-5 pr-5 ${!errorMessage ? 'mb-[51px]' : ''}`}>
             <div className="flex items-center">
                 <input
                     type="text"
@@ -68,7 +68,7 @@ export const SerialNumberBox = () => {
                 </button>
             </div>
             {errorMessage && (
-                <p className="mt-2 text-sm text-red-600 mb-7">{errorMessage}</p>
+                <p className="mt-2 text-[10px] text-red-600 mb-7">{errorMessage}</p>
             )}
         </div>
     );

@@ -3,6 +3,7 @@ import { useRecoilState } from 'recoil';
 import { modalTriggerAtom } from '../recoil/modalTriggerAtom';
 import './intro/IntroButton.css';
 import { confirmationAtom } from "../recoil/confirmationAtom.jsx";
+import {userAtoms} from "../recoil/userAtoms.jsx";
 
 export const Modal = ({ title, onClose, children }) => {
     const [isVisible, setIsVisible] = useState(false);
@@ -10,6 +11,7 @@ export const Modal = ({ title, onClose, children }) => {
     const modalRef = useRef(null);
     const [modalState, setModalState] = useRecoilState(modalTriggerAtom);
     const [confirmModalState] = useRecoilState(confirmationAtom); // Get the confirmation state
+    const [userModalState] = useRecoilState(userAtoms); // Get the confirmation state
 
     useEffect(() => {
         setIsVisible(true);
@@ -62,7 +64,7 @@ export const Modal = ({ title, onClose, children }) => {
                     isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
                 } flex flex-col`}
             >
-                <div className="flex-shrink-0 flex items-center justify-between p-4 border-b border-black">
+                <div className="flex-shrink-0 flex items-center justify-between p-4 border-b border-black pl-6">
                     <h3 className="text-xl font-bold text-black">{title}</h3>
                     <button
                         onClick={() => closeModal(true)}

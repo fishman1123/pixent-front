@@ -1,3 +1,4 @@
+// src/components/ProcedureButton.jsx
 import React, { useState } from 'react';
 import { useRecoilState, useSetRecoilState } from 'recoil';
 import { userAtoms } from '../recoil/userAtoms';
@@ -6,18 +7,21 @@ import { useNavigate } from 'react-router-dom';
 import { Modal } from './Modal.jsx';
 import './ProcedureButton.css';
 import { modalTriggerAtom } from "../recoil/modalTriggerAtom.jsx";
+import { useTranslation } from "react-i18next";
 
 export const ProcedureButton = ({ text, route, subText, confirm }) => {
+    const { t } = useTranslation(); // Access the translation function
     const setUserState = useSetRecoilState(userAtoms);
     const navigate = useNavigate();
     const [confirmationState, setConfirmationState] = useRecoilState(confirmationAtom);
     const [modalState, setModalState] = useRecoilState(modalTriggerAtom);
-    const [isButtonDisabled, setButtonDisabled] = useState(false); // New state for disabling the button
+    const [userState] = useRecoilState(userAtoms);
+    const [isButtonDisabled, setButtonDisabled] = useState(false); // State to disable the button during processing
 
     const handleButtonClick = () => {
-        if (isButtonDisabled) return; // Prevent click if button is disabled
+        if (isButtonDisabled) return; // Prevent multiple clicks
 
-        setButtonDisabled(true); // Disable the button on click
+        setButtonDisabled(true); // Disable the button
 
         if (confirm) {
             setConfirmationState((prevState) => ({
@@ -28,9 +32,9 @@ export const ProcedureButton = ({ text, route, subText, confirm }) => {
             setTimeout(() => {
                 setUserState((prevState) => ({
                     ...prevState,
-                    currentPage: route, // Update the state
+                    currentPage: route, // Update the current page
                 }));
-                navigate(route); // Navigate after the delay
+                navigate(route); // Navigate to the specified route
 
                 setButtonDisabled(false); // Re-enable the button after navigation
             }, 700);
@@ -40,8 +44,9 @@ export const ProcedureButton = ({ text, route, subText, confirm }) => {
     const handleConfirm = () => {
         setConfirmationState((prevState) => ({
             ...prevState,
-            isOpen: false, // Close the modal before navigating
+            isOpen: false, // Close the modal
             isConfirm: true,
+
         }));
         setModalState({ isOpen: false });
 
@@ -67,13 +72,13 @@ export const ProcedureButton = ({ text, route, subText, confirm }) => {
 
     return (
         <div className="flex justify-center">
-            {/* Only show the button when the modal is NOT open */}
+            {/* Display the button only when the modal is not open */}
             {!confirmationState.isOpen && (
                 <button
                     className="defaultButton"
                     role="button"
                     onClick={handleButtonClick}
-                    disabled={isButtonDisabled} // Disable the button when isButtonDisabled is true
+                    disabled={isButtonDisabled} // Disable the button when processing
                 >
                     <span className="text">{text}</span>
                     <span>{subText}</span>
@@ -81,59 +86,60 @@ export const ProcedureButton = ({ text, route, subText, confirm }) => {
             )}
 
             {confirmationState.isOpen && (
-                <Modal title="Confirm Your Choices" onClose={handleCancel}>
-                    <p>Do you want to proceed with the current selections?</p>
+                <Modal title={t('confirmationModal.title')} onClose={handleCancel}>
+                    <p>{t('confirmationModal.proceedQuestion')}</p>
 
-                    {/* Render Preferred Scents */}
+                    {/* Preferred Scents Section */}
                     <div className="mt-4">
-                        <h3 className="text-lg font-bold">PREFERRED SCENTS</h3>
+                        <h3 className="text-lg font-bold">{t('confirmationModal.preferredScents')}</h3>
                         {confirmationState.preferences.preferred.length > 0 ? (
                             confirmationState.preferences.preferred.map((scent, index) => (
                                 <div key={index} className="mb-4">
-                                    <p className="font-semibold">{scent.label}</p>
-                                    <p className="text-gray-600">{scent.description}</p>
+                                    <p className="font-semibold">{t(scent.label)}</p>
+                                    <p className="text-gray-600">{t(scent.description)}</p>
                                 </div>
                             ))
                         ) : (
-                            <p className="text-gray-600">No preferred scents selected.</p>
+                            <p className="text-gray-600">{t('confirmationModal.noPreferredScents')}</p>
                         )}
                     </div>
 
-                    {/* Render Disliked Scents */}
+                    {/* Disliked Scents Section */}
                     <div className="mt-4">
-                        <h3 className="text-lg font-bold">DISLIKED SCENTS</h3>
+                        <h3 className="text-lg font-bold">{t('confirmationModal.dislikedScents')}</h3>
                         {confirmationState.preferences.disliked.length > 0 ? (
                             confirmationState.preferences.disliked.map((scent, index) => (
                                 <div key={index} className="mb-4">
-                                    <p className="font-semibold">{scent.label}</p>
-                                    <p className="text-gray-600">{scent.description}</p>
+                                    <p className="font-semibold">{t(scent.label)}</p>
+                                    <p className="text-gray-600">{t(scent.description)}</p>
                                 </div>
                             ))
                         ) : (
-                            <p className="text-gray-600">No disliked scents selected.</p>
+                            <p className="text-gray-600">{t('confirmationModal.noDislikedScents')}</p>
                         )}
                     </div>
 
-                    {/* Description on how the preferences will be used */}
+                    {/* How We Use Preferences Section */}
                     <div className="mt-4">
-                        <h3 className="text-lg font-bold">HOW WE USE YOUR PREFERENCES</h3>
+                        <h3 className="text-lg font-bold">{t('confirmationModal.howWeUsePreferences')}</h3>
                         <ul className="list-disc pl-5">
-                            <li>Recommendations will focus on your preferred scent categories.</li>
-                            <li>Scents from disliked categories will be excluded from recommendations.</li>
+                            <li>{t('confirmationModal.usePreference1')}</li>
+                            <li>{t('confirmationModal.usePreference2')}</li>
                         </ul>
                     </div>
 
+                    {/* Confirmation and Cancellation Buttons */}
                     <div className="flex flex-col justify-between mt-4">
                         <div className="flex justify-center">
                             <button onClick={handleConfirm} className="defaultButton mb-4 w-full max-w-[285px]">
-                                <span className="text">Confirm</span>
-                                <span>Confirm</span>
+                                <span className="text">{t('confirmationModal.confirm')}</span>
+                                <span>{t('confirmationModal.confirm')}</span>
                             </button>
                         </div>
                         <div className="flex justify-center">
                             <button onClick={handleCancel} className="defaultButton w-full max-w-[285px]">
-                                <span className="text">Cancel</span>
-                                <span>Cancel</span>
+                                <span className="text">{t('confirmationModal.cancel')}</span>
+                                <span>{t('confirmationModal.cancel')}</span>
                             </button>
                         </div>
                     </div>
