@@ -7,6 +7,7 @@ import { userAtoms } from '../recoil/userAtoms.jsx';
 import { responseDataAtom } from '../recoil/responseDataAtom';
 import AxiosInstance from '../api/axiosInstance';
 import { useNavigate } from 'react-router-dom';
+import { useCallback } from 'react';
 
 export const useReportSubmit = () => {
     const userState = useRecoilValue(userAtoms);
@@ -14,7 +15,7 @@ export const useReportSubmit = () => {
     const setResponseData = useSetRecoilState(responseDataAtom);
     const navigate = useNavigate();
 
-    const submitData = async () => {
+    const submitData = useCallback(async () => {
         const formData = new FormData();
 
         const { preferred, disliked } = confirmationState.preferences;
@@ -57,10 +58,9 @@ export const useReportSubmit = () => {
         const response = await AxiosInstance.post('/api/image', formData);
 
         return response.data;
-    };
+    }, [confirmationState.preferences, userState]);
 
-    const mutation = useMutation({
-        mutationFn: submitData,
+    const mutation = useMutation(submitData, {
         onSuccess: (responseData) => {
             console.log('Data submitted successfully:', responseData);
             setResponseData(responseData); // Store response data in Recoil atom
@@ -81,5 +81,5 @@ export const useReportSubmit = () => {
         },
     });
 
-    return mutation; // Return the entire mutation object
+    return mutation; // Return the mutation object
 };

@@ -201,7 +201,7 @@ export const InputTextTwoCombineUpload = () => {
                         </div>
                         {isError && (
                             <div className="mt-2 text-red-500">
-                                {error.message || 'An error occurred during submission.'}
+                                {error?.message || 'An error occurred during submission.'}
                             </div>
                         )}
                     </div>
