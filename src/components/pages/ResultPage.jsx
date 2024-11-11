@@ -103,8 +103,8 @@ export const ResultPage = () => {
                     </div>
                 )}
             </div>
-            <div>
-                <div><h1>ANALYSIS</h1></div>
+            <div className="mt-[80px]">
+                <div className="text-left">ANALYSIS</div>
                 <div className="relative flex items-center justify-center w-full my-8">
                     <div className="h-[2px] w-full bg-black ml-[20px]"/>
                     <div className="h-[2px] w-full bg-black mr-[20px]"/>
