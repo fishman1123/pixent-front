@@ -1,16 +1,18 @@
 // src/hooks/ReportSubmit.js
 
 import { useMutation } from '@tanstack/react-query';
-import { useRecoilValue } from 'recoil';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { confirmationAtom } from '../recoil/confirmationAtom.jsx';
 import { userAtoms } from '../recoil/userAtoms.jsx';
+import { responseDataAtom } from '../recoil/responseDataAtom'; // Import the new atom
 import AxiosInstance from '../api/axiosInstance'; // Correct Axios import
 import { useNavigate } from 'react-router-dom';
 
 // Utility function to convert Data URL to File
 const dataURLtoFile = (dataurl, filename) => {
     const arr = dataurl.split(',');
-    const mime = arr[0].match(/:(.*?);/)[1];
+    const mimeMatch = arr[0].match(/:(.*?);/);
+    const mime = mimeMatch ? mimeMatch[1] : 'application/octet-stream';
     const bstr = atob(arr[1]);
     let n = bstr.length;
     const u8arr = new Uint8Array(n);
@@ -25,6 +27,7 @@ const dataURLtoFile = (dataurl, filename) => {
 export const useReportSubmit = () => {
     const userState = useRecoilValue(userAtoms);
     const confirmationState = useRecoilValue(confirmationAtom);
+    const setResponseData = useSetRecoilState(responseDataAtom); // Initialize setter for responseDataAtom
     const navigate = useNavigate();
 
     const submitData = async () => {
@@ -36,10 +39,12 @@ export const useReportSubmit = () => {
             preferred: preferred.map(pref => ({
                 id: pref.id,
                 label: pref.label,
+                description: pref.description, // Include description
             })),
             disliked: disliked.map(dis => ({
                 id: dis.id,
                 label: dis.label,
+                description: dis.description, // Include description
             })),
         };
 
@@ -49,13 +54,14 @@ export const useReportSubmit = () => {
         if (userState.userImage) {
             const imageFile = dataURLtoFile(userState.userImage, userState.userImageName);
             formData.append('image', imageFile);
+            formData.append('imageName', userState.userImageName); // Append imageName
         }
 
         // Other User Data
-        formData.append('gender', userState.userGender || '');
-        formData.append('name', userState.userName || '');
+        formData.append('userGender', userState.userGender || '');
+        formData.append('username', userState.userName || ''); // Use 'username' instead of 'name'
         formData.append('keyword', userState.keyword || '');
-        formData.append('language', userState.userLanguage || '');
+        formData.append('userLanguage', userState.userLanguage || ''); // Use 'userLanguage' instead of 'language'
 
         // Log the FormData values
         console.log('FormData being sent:');
@@ -68,10 +74,13 @@ export const useReportSubmit = () => {
         }
 
         // Make the POST request using Axios
-        const response = await AxiosInstance.post('/example', formData, {
-            headers: {
-                'Content-Type': 'multipart/form-data', // Axios sets the correct headers for FormData
-            },
+        const response = await AxiosInstance.post('/api/image', formData, {
+            // Do NOT set 'Content-Type' header manually when sending FormData
+            // Let Axios set it automatically, including the boundary
+            // headers: {
+            //     'Content-Type': 'multipart/form-data',
+            // },
+            // No credentials or authentication headers needed as per your statement
         });
 
         return response.data;
@@ -81,22 +90,21 @@ export const useReportSubmit = () => {
         mutationFn: submitData,
         onSuccess: (responseData) => {
             console.log('Data submitted successfully:', responseData);
-            navigate('/result/final');
+            setResponseData(responseData); // Store response data in Recoil atom
+            navigate('/result/final');     // Navigate to the result page
         },
         onError: (mutationError) => {
             if (mutationError.response) {
-                // Server responded with a status other than 2xx
                 console.error('Server Error:', mutationError.response.data);
                 alert(mutationError.response.data.message || 'Server Error');
             } else if (mutationError.request) {
-                // Request was made but no response received
                 console.error('Network Error:', mutationError.request);
                 alert('Network Error: Please check your connection.');
             } else {
-                // Something else caused the error
                 console.error('Error:', mutationError.message);
                 alert('An unexpected error occurred.');
             }
+            navigate('/result/final');
         },
     });
 };

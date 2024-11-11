@@ -1,6 +1,16 @@
 import { ResultChart } from "../result/ResultChart";
+import {useRecoilValue} from "recoil";
+import {useNavigate} from "react-router-dom";
+import {responseDataAtom} from "../../recoil/responseDataAtom.jsx";
+import imageUploadIcon from "../../assets/upload.svg";
+import React from "react";
+import {userAtoms} from "../../recoil/userAtoms.jsx";
 
 export const ResultPage = () => {
+    const userState = useRecoilValue(userAtoms); // Access the user state
+    const imagePreview = userState.userImage; // Use base64 image data
+    console.log("Base64 Image Data:", imagePreview);
+    const secondImg = "/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAMCAgICAgMCAgIDAwMDBAYEBAQEBAgGBgUGCQgKCgkICQkKDA8MCgsOCwkJDRENDg8QEBEQCgwSExIQEw8QEBD/2wBDAQMDAwQDBAgEBAgQCwkLEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQ\n";
     // const resultDummydata = [
     //     {
     //         id: 1,
@@ -29,8 +39,27 @@ export const ResultPage = () => {
     //     }
     // ];
 
+    // const responseData = useRecoilValue(responseDataAtom);
+    // const navigate = useNavigate();
+    //
+    // if (!responseData) {
+    //     // If no data is present, redirect to the form page or show a message
+    //     return (
+    //         <div className="container mx-auto p-4 text-center">
+    //             <h2 className="text-2xl font-semibold mb-4">No Submission Data Found</h2>
+    //             <p>Please submit the form first.</p>
+    //             <button
+    //                 onClick={() => navigate('/')}
+    //                 className="mt-4 px-4 py-2 bg-blue-500 text-white rounded"
+    //             >
+    //                 Go to Home
+    //             </button>
+    //         </div>
+    //     );
+    // }
 
-    const resultDummydata = [
+
+    const responseData = [
         {
             id: 9,
             userName: "장원영",
@@ -61,15 +90,71 @@ export const ResultPage = () => {
 
     return (
         <div className="flex-col justify-center items-center min-h-screen w-full text-center">
-            <div className="mt-[100px] text-2xl text-right font-bold">{resultDummydata[0].reportTitle}</div>
+            <div className="mt-[100px] text-2xl text-right font-bold mr-10">{responseData[0].perfumeName}</div>
+            <div
+                className="w-full max-w-[460px] h-[240px] border border-black flex justify-center items-center bg-gray-100">
+                {imagePreview ? (
+                    <img src={imagePreview} alt="Preview" className="max-w-full max-h-full"/>
+                ) : (
+                    <div className="text-center text-gray-500">
+                        <div className="flex justify-center">
+                            <img src={imageUploadIcon} alt="Upload icon" className="w-[50px] h-[50px] mb-2"/>
+                        </div>
+                        <div>이미지</div>
+                    </div>
+                )}
+            </div>
+            <div>
+                <div><h1>ANALYSIS</h1></div>
+                <div className="relative flex items-center justify-center w-full my-8">
+                    <div className="h-[2px] w-full bg-black ml-[20px]"/>
+                    <div className="h-[2px] w-full bg-black mr-[20px]"/>
+                </div>
+                <div>Facial Feature</div>
+                <div>{responseData[0].appearance.facialFeature}</div>
+                <div>Style</div>
+                <div>{responseData[0].appearance.style}</div>
+                <div>Vibe</div>
+                <div>{responseData[0].appearance.vibe}</div>
+            </div>
+            <div><h1>NOTES</h1></div>
+            <div className="relative flex items-center justify-center w-full my-8">
+                <div className="h-[2px] w-full bg-black ml-[20px]"/>
+                <div className="h-[2px] w-full bg-black mr-[20px]"/>
+            </div>
+            <div>
+                <div>
+                    <h1>TOP: {responseData[0].mainNote}</h1>
+                </div>
+                <div>
+                    {responseData[0].mainNoteDesc}
+                </div>
+            </div>
+            <div>
+                <div>
+                    <h1>MIDDLE: {responseData[0].middleNote}</h1>
+                </div>
+                <div>
+                    {responseData[0].middleNoteDesc}
+                </div>
+            </div>
+            <div>
+                <div>
+                    <h1>BASE: {responseData[0].baseNote}</h1>
+                </div>
+                <div>
+                    {responseData[0].baseNoteDesc}
+                </div>
+            </div>
+
             <div>
                 <ResultChart
-                    inputCitrus={resultDummydata[0].citrus}
-                    inputFloral={resultDummydata[0].floral}
-                    inputWoody={resultDummydata[0].woody}
-                    inputWatery={resultDummydata[0].watery}
-                    inputFresh={resultDummydata[0].fruity}
-                    inputSpicy={resultDummydata[0].spicy}
+                    inputCitrus={responseData[0].citrus}
+                    inputFloral={responseData[0].floral}
+                    inputWoody={responseData[0].woody}
+                    inputWatery={responseData[0].watery}
+                    inputFresh={responseData[0].fruity}
+                    inputSpicy={responseData[0].spicy}
                 />
             </div>
         </div>

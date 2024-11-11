@@ -30,7 +30,10 @@ export const InputTextTwoCombineUpload = () => {
         return new Promise((resolve, reject) => {
             const reader = new FileReader();
             reader.readAsDataURL(file);
-            reader.onload = () => resolve(reader.result);
+            reader.onload = () => {
+                console.log("Base64 Conversion Result:", reader.result);
+                resolve(reader.result);
+            };
             reader.onerror = error => reject(error);
         });
     };
@@ -58,15 +61,13 @@ export const InputTextTwoCombineUpload = () => {
     const handleSubmit = async () => {
         if (isLoading) return;
 
-        let base64Image = null;
+        // Prepare the form data
+        const formData = new FormData();
+        formData.append("userName", userName.trim() !== '' ? userName : null);
+        formData.append("userGender", userGender !== '' ? userGender : null);
+        formData.append("keyword", keyword.trim() !== '' ? keyword : null);
         if (image) {
-            try {
-                base64Image = await convertToBase64(image);
-            } catch (error) {
-                console.error('Error converting image to base64:', error);
-                alert(t('modal.imageConversionError'));
-                return;
-            }
+            formData.append("userImage", image, image.name); // Add the image directly
         }
 
         const updatedUserState = {
@@ -74,7 +75,6 @@ export const InputTextTwoCombineUpload = () => {
             userGender: userGender !== '' ? userGender : null,
             keyword: keyword.trim() !== '' ? keyword : null,
             userImageName: image ? image.name : null,
-            userImage: base64Image,
             isAuthenticated: true,
         };
 
@@ -86,7 +86,7 @@ export const InputTextTwoCombineUpload = () => {
             ...updatedUserState,
         }));
 
-        mutate();
+        mutate(formData); // Pass formData to the mutation function
     };
 
     const TempCheckbox = ({ options, selectedOption, onSelect }) => {
