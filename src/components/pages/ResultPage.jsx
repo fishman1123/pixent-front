@@ -10,7 +10,6 @@ export const ResultPage = () => {
     const userState = useRecoilValue(userAtoms); // Access the user state
     const imagePreview = userState.userImage; // Use base64 image data
     console.log("Base64 Image Data:", imagePreview);
-    const secondImg = "/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAMCAgICAgMCAgIDAwMDBAYEBAQEBAgGBgUGCQgKCgkICQkKDA8MCgsOCwkJDRENDg8QEBEQCgwSExIQEw8QEBD/2wBDAQMDAwQDBAgEBAgQCwkLEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQ\n";
     // const resultDummydata = [
     //     {
     //         id: 1,

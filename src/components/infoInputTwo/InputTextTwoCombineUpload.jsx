@@ -26,17 +26,6 @@ export const InputTextTwoCombineUpload = () => {
     // Use the custom React Query hook
     const { mutate, isLoading, isError, error } = useReportSubmit();
 
-    const convertToBase64 = (file) => {
-        return new Promise((resolve, reject) => {
-            const reader = new FileReader();
-            reader.readAsDataURL(file);
-            reader.onload = () => {
-                console.log("Base64 Conversion Result:", reader.result);
-                resolve(reader.result);
-            };
-            reader.onerror = error => reject(error);
-        });
-    };
 
     const handleImageChange = async (event) => {
         const file = event.target.files[0];
@@ -49,8 +38,23 @@ export const InputTextTwoCombineUpload = () => {
                 };
                 const compressedFile = await imageCompression(file, options);
                 setImage(compressedFile);
-                const previewUrl = URL.createObjectURL(compressedFile);
-                setImagePreview(previewUrl);
+
+                // Convert the compressed file to base64
+                const reader = new FileReader();
+                reader.readAsDataURL(compressedFile);
+                reader.onload = () => {
+                    const base64Image = reader.result;
+
+                    // Set the image in userAtoms as base64
+                    setUserState((prevState) => ({
+                        ...prevState,
+                        userImage: base64Image, // Store the base64 string in userAtoms
+                        userImageName: file.name, // Store image name for reference
+                    }));
+
+                    // Update preview
+                    setImagePreview(base64Image);
+                };
             } catch (error) {
                 console.error('Error compressing image:', error);
                 alert('Failed to compress image.');

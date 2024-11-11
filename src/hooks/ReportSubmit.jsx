@@ -64,7 +64,7 @@ export const useReportSubmit = () => {
         formData.append('userLanguage', userState.userLanguage || ''); // Use 'userLanguage' instead of 'language'
 
         // Log the FormData values
-        console.log('FormData being sent:');
+        console.log('FormData being sent:', formData);
         for (let [key, value] of formData.entries()) {
             if (value instanceof File) {
                 console.log(`${key}:`, value.name);
