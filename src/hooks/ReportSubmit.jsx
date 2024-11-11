@@ -60,7 +60,8 @@ export const useReportSubmit = () => {
         return response.data;
     }, [confirmationState.preferences, userState]);
 
-    const mutation = useMutation(submitData, {
+    const mutation = useMutation({
+        mutationFn: submitData, // Update here
         onSuccess: (responseData) => {
             console.log('Data submitted successfully:', responseData);
             setResponseData(responseData); // Store response data in Recoil atom
