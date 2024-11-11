@@ -30,7 +30,7 @@ export const useReportSubmit = () => {
             })),
         };
 
-        formData.append('preferences', JSON.stringify(preferences));
+        formData.append('preference', JSON.stringify(preferences));
 
         // Add Image File directly
         if (userState.userImage) {
