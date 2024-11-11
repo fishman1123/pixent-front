@@ -23,12 +23,10 @@ export const useReportSubmit = () => {
             preferred: preferred.map(pref => ({
                 id: pref.id,
                 label: pref.label,
-                description: pref.description, // Include description
             })),
             disliked: disliked.map(dis => ({
                 id: dis.id,
                 label: dis.label,
-                description: dis.description, // Include description
             })),
         };
 
@@ -40,10 +38,10 @@ export const useReportSubmit = () => {
         }
 
         // Other User Data
-        formData.append('userGender', userState.userGender || '');
-        formData.append('username', userState.userName || ''); // Use 'username' instead of 'name'
+        formData.append('gender', userState.userGender || '');
+        formData.append('name', userState.userName || ''); // Use 'username' instead of 'name'
         formData.append('keyword', userState.keyword || '');
-        formData.append('userLanguage', userState.userLanguage || ''); // Use 'userLanguage' instead of 'language'
+        formData.append('language', userState.userLanguage || ''); // Use 'userLanguage' instead of 'language'
 
         // Log the FormData values for debugging
         console.log('FormData being sent:', formData);
