@@ -5,30 +5,22 @@ import {responseDataAtom} from "../../recoil/responseDataAtom.jsx";
 import imageUploadIcon from "../../assets/upload.svg";
 import React from "react";
 import {userAtoms} from "../../recoil/userAtoms.jsx";
+import Loading from "./Loading.jsx";
 
 export const ResultPage = () => {
     const responseData = useRecoilValue(responseDataAtom);
     const navigate = useNavigate();
 
 
-    // const responseData = useRecoilValue(responseDataAtom);
-    // const navigate = useNavigate();
-    //
-    // if (!responseData) {
-    //     // If no data is present, redirect to the form page or show a message
-    //     return (
-    //         <div className="container mx-auto p-4 text-center">
-    //             <h2 className="text-2xl font-semibold mb-4">No Submission Data Found</h2>
-    //             <p>Please submit the form first.</p>
-    //             <button
-    //                 onClick={() => navigate('/')}
-    //                 className="mt-4 px-4 py-2 bg-blue-500 text-white rounded"
-    //             >
-    //                 Go to Home
-    //             </button>
-    //         </div>
-    //     );
-    // }
+
+    if (!responseData) {
+        // Show a loading animation
+        return (
+            <div className="flex justify-center items-center min-h-screen">
+                <Loading />
+            </div>
+        );
+    }
 
 
     // const responseData = [

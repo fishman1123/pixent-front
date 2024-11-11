@@ -1,3 +1,5 @@
+// src/components/InputTextTwoCombineUpload.jsx
+
 import React, { useState } from 'react';
 import imageUploadIcon from '../../assets/upload.svg';
 import { DataButton } from "../DataButton.jsx";
@@ -18,7 +20,7 @@ export const InputTextTwoCombineUpload = () => {
     const [keyword, setKeyword] = useState('');
     const [userName, setUserName] = useState('');
     const [userGender, setUserGender] = useState('');
-    const [errors, setErrors] = useState({ userName: false, userGender: false, imageError: false }); // Track validation errors
+    const [errors, setErrors] = useState({ userName: false, userGender: false, imageError: false });
 
     const { mutate, isLoading, isError, error } = useReportSubmit();
 
@@ -44,7 +46,7 @@ export const InputTextTwoCombineUpload = () => {
                 reader.onload = () => {
                     const base64Image = reader.result;
                     setImagePreview(base64Image);
-                    setErrors((prevErrors) => ({ ...prevErrors, imageError: false })); // Reset image error
+                    setErrors((prevErrors) => ({ ...prevErrors, imageError: false }));
                 };
             } catch (error) {
                 console.error('Error compressing image:', error);
@@ -58,7 +60,7 @@ export const InputTextTwoCombineUpload = () => {
         const newErrors = {
             userName: userName.trim() === '',
             userGender: userGender === '',
-            imageError: !imagePreview, // Check if an image is selected
+            imageError: !imagePreview,
         };
         setErrors(newErrors);
 
@@ -68,8 +70,8 @@ export const InputTextTwoCombineUpload = () => {
         }
 
         const updatedUserState = {
-            userName: userName.trim() !== '' ? userName : null,
-            userGender: userGender !== '' ? userGender : null,
+            userName: userName.trim(),
+            userGender: userGender,
             keyword: keyword.trim() !== '' ? keyword : null,
             isAuthenticated: true,
         };

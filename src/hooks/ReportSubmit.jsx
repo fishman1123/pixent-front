@@ -64,7 +64,7 @@ export const useReportSubmit = () => {
         onSuccess: (responseData) => {
             console.log('Data submitted successfully:', responseData);
             setResponseData(responseData); // Store response data in Recoil atom
-            navigate('/result/final');     // Navigate to the result page
+            navigate('/result');     // Navigate to the result page
         },
         onError: (mutationError) => {
             if (mutationError.response) {
