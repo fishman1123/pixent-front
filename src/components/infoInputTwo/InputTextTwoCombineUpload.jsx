@@ -21,8 +21,9 @@ export const InputTextTwoCombineUpload = () => {
     const [userName, setUserName] = useState('');
     const [userGender, setUserGender] = useState('');
     const [errors, setErrors] = useState({ userName: false, userGender: false, imageError: false });
+    const [isSubmitting, setIsSubmitting] = useState(false); // Added this line
 
-    const { mutate, isLoading, isError, error } = useReportSubmit();
+    const { mutate, isError, error } = useReportSubmit();
 
     const handleImageChange = async (event) => {
         const file = event.target.files[0];
@@ -81,7 +82,13 @@ export const InputTextTwoCombineUpload = () => {
             ...updatedUserState,
         }));
 
-        mutate();
+        setIsSubmitting(true); // Set isSubmitting to true immediately
+
+        mutate(undefined, {
+            onError: () => {
+                setIsSubmitting(false); // Reset isSubmitting if there's an error
+            },
+        });
     };
 
     const TempCheckbox = ({ options, selectedOption, onSelect }) => {
@@ -119,6 +126,8 @@ export const InputTextTwoCombineUpload = () => {
     const handleGenderSelect = (selectedGender) => {
         setUserGender(selectedGender);
     };
+
+    const isLoading = isSubmitting; // Use isSubmitting to control loading state
 
     return (
         <>
