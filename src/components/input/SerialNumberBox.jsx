@@ -1,5 +1,4 @@
-// src/components/intro/SerialNumberBox.jsx
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FaArrowRight } from 'react-icons/fa';
 import { useNavigate } from "react-router-dom";
 import { useSetRecoilState } from "recoil";
@@ -7,7 +6,6 @@ import { userAtoms } from "../../recoil/userAtoms.jsx";
 import { useTranslation } from 'react-i18next';
 
 export const SerialNumberBox = () => {
-
     const { t } = useTranslation();
     const setUserState = useSetRecoilState(userAtoms);
     const [serialNumber, setSerialNumber] = useState("");
@@ -17,6 +15,14 @@ export const SerialNumberBox = () => {
     // Regex patterns
     const serialNumberPattern = /^[a-zA-Z0-9]{6,12}$/;
     const sqlInjectionPattern = /('|"|;|--|\b(SELECT|UPDATE|DELETE|INSERT|WHERE|DROP|EXEC)\b)/i;
+
+    // useEffect to update user state when component mounts
+    useEffect(() => {
+        setUserState((prevState) => ({
+            ...prevState,
+            currentPage: 'input',
+        }));
+    }, [setUserState]);
 
     const handleSerialNumberChange = (e) => {
         const value = e.target.value;
@@ -31,11 +37,6 @@ export const SerialNumberBox = () => {
             setErrorMessage("");
         }
     };
-
-    setUserState((prevState) => ({
-        ...prevState,
-        currentPage: 'input',
-    }));
 
     const handleSubmit = () => {
         if (!serialNumber) {

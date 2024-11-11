@@ -1,5 +1,3 @@
-// src/components/InputTextTwoCombineUpload.jsx
-
 import React, { useState } from 'react';
 import imageUploadIcon from '../../assets/upload.svg';
 import { DataButton } from "../DataButton.jsx";
@@ -8,7 +6,7 @@ import { userAtoms } from "../../recoil/userAtoms.jsx";
 import { confirmationAtom } from "../../recoil/confirmationAtom.jsx";
 import { useTranslation } from "react-i18next";
 import { useReportSubmit } from '../../hooks/ReportSubmit';
-import { useNavigate } from 'react-router-dom';
+import LoadingAnimation from '../pages/Loading.jsx';
 import imageCompression from 'browser-image-compression';
 
 export const InputTextTwoCombineUpload = () => {
@@ -20,9 +18,8 @@ export const InputTextTwoCombineUpload = () => {
     const [keyword, setKeyword] = useState('');
     const [userName, setUserName] = useState('');
     const [userGender, setUserGender] = useState('');
-    const navigate = useNavigate();
+    const [errors, setErrors] = useState({ userName: false, userGender: false, imageError: false }); // Track validation errors
 
-    // Use the custom React Query hook
     const { mutate, isLoading, isError, error } = useReportSubmit();
 
     const handleImageChange = async (event) => {
@@ -36,19 +33,18 @@ export const InputTextTwoCombineUpload = () => {
                 };
                 const compressedFile = await imageCompression(file, options);
 
-                // Store the compressed file (File object) in Recoil state
                 setUserState((prevState) => ({
                     ...prevState,
-                    userImage: compressedFile, // Store the File object
-                    userImageName: compressedFile.name, // Store image name for reference
+                    userImage: compressedFile,
+                    userImageName: compressedFile.name,
                 }));
 
-                // Generate base64 string for image preview only
                 const reader = new FileReader();
                 reader.readAsDataURL(compressedFile);
                 reader.onload = () => {
                     const base64Image = reader.result;
-                    setImagePreview(base64Image); // Update preview
+                    setImagePreview(base64Image);
+                    setErrors((prevErrors) => ({ ...prevErrors, imageError: false })); // Reset image error
                 };
             } catch (error) {
                 console.error('Error compressing image:', error);
@@ -58,7 +54,18 @@ export const InputTextTwoCombineUpload = () => {
     };
 
     const handleSubmit = async () => {
-        if (isLoading) return;
+        // Check for validation errors
+        const newErrors = {
+            userName: userName.trim() === '',
+            userGender: userGender === '',
+            imageError: !imagePreview, // Check if an image is selected
+        };
+        setErrors(newErrors);
+
+        // If any field is invalid, stop submission
+        if (newErrors.userName || newErrors.userGender || newErrors.imageError) {
+            return;
+        }
 
         const updatedUserState = {
             userName: userName.trim() !== '' ? userName : null,
@@ -67,15 +74,11 @@ export const InputTextTwoCombineUpload = () => {
             isAuthenticated: true,
         };
 
-        // Log updated user data before updating Recoil state
-        console.log("User data being sent to Recoil state:", updatedUserState);
-
         setUserState(prevState => ({
             ...prevState,
             ...updatedUserState,
         }));
 
-        // Call mutate without parameters; formData will be constructed in the submitData function
         mutate();
     };
 
@@ -88,15 +91,16 @@ export const InputTextTwoCombineUpload = () => {
         return (
             <div className="flex justify-center w-full max-w-[460px] mt-4 gap-2">
                 {options.map((option) => (
-                    <button
-                        key={option}
-                        className={`flex-1 p-3 text-center border border-black transition-all duration-300 ${
-                            selectedOption === option ? 'bg-black text-white' : 'bg-gray-100 text-black'
-                        }`}
-                        onClick={() => handleClick(option)}
-                    >
-                        {option}
-                    </button>
+                    <div key={option} className="group flex-1">
+                        <button
+                            className={`p-3 min-w-[100px] w-full h-[50px] text-center border border-black transition-colors duration-500 ease-out focus:bg-black focus:text-white ${
+                                selectedOption === option ? 'bg-black text-white' : 'bg-gray-100 text-black'
+                            } group-focus:bg-black group-focus:text-white`}
+                            onClick={() => handleClick(option)}
+                        >
+                            {option}
+                        </button>
+                    </div>
                 ))}
             </div>
         );
@@ -115,80 +119,92 @@ export const InputTextTwoCombineUpload = () => {
     };
 
     return (
-        <div className="mt-5">
-            <div className="font-bold text-4xl">{t('userProfile.title')}</div>
-            <div className="mt-4 flex flex-col justify-center items-center">
-                <div
-                    className="w-full max-w-[460px] h-[240px] border border-black flex justify-center items-center bg-gray-100">
-                    {imagePreview ? (
-                        <img src={imagePreview} alt="Preview" className="max-w-full max-h-full" />
-                    ) : (
-                        <div className="text-center text-gray-500">
-                            <div className="flex justify-center">
-                                <img src={imageUploadIcon} alt="Upload icon" className="w-[50px] h-[50px] mb-2" />
+        <>
+            {isLoading && <LoadingAnimation />}
+            {!isLoading && (
+                <div className="pt-4">
+                    <div className="font-bold text-4xl">{t('userProfile.title')}</div>
+                    <div className="mt-4 flex flex-col justify-center items-center">
+                        <div className="w-full max-w-[460px] h-[240px] border border-black flex justify-center items-center bg-gray-100">
+                            {imagePreview ? (
+                                <img src={imagePreview} alt="Preview" className="max-w-full max-h-full" />
+                            ) : (
+                                <div className="text-center text-gray-500">
+                                    <div className="flex justify-center">
+                                        <img src={imageUploadIcon} alt="Upload icon" className="w-[50px] h-[50px] mb-2" />
+                                    </div>
+                                    <div>{t('userProfile.uploadYourImage')}</div>
+                                </div>
+                            )}
+                        </div>
+                        {!errors.imageError && <span className="h-[24px]"></span>}
+                        {errors.imageError && <span className="text-red-700 font-bold">* Please upload an image</span>}
+                        <div className="mt-4 w-full max-w-[460px]">
+                            <div>
+                                <input
+                                    type="file"
+                                    accept="image/*"
+                                    onChange={handleImageChange}
+                                    className="hidden"
+                                    id="image-upload"
+                                />
+                                <label
+                                    htmlFor="image-upload"
+                                    className="bg-black text-white text-center py-2 px-4 cursor-pointer block"
+                                >
+                                    {t('userProfile.uploadButton')}
+                                </label>
                             </div>
-                            <div>{t('userProfile.uploadYourImage')}</div>
+                            <div className="w-full max-w-[460px]">
+                                <div className="font-bold text-left mt-6">
+                                    {t('userProfile.name')}
+                                    {errors.userName && <span className="text-red-700"> *Required</span>}
+                                </div>
+                                <input
+                                    type="text"
+                                    onChange={handleNameChange}
+                                    value={userName}
+                                    className="w-full border border-black p-2 mt-2"
+                                />
+                                <div className="font-bold text-left mt-6">
+                                    {t('userProfile.gender')}
+                                    {errors.userGender && <span className="text-red-700"> *Required</span>}
+                                </div>
+                                <div className="w-full">
+                                    <TempCheckbox
+                                        options={targetOptions}
+                                        selectedOption={userGender}
+                                        onSelect={handleGenderSelect}
+                                    />
+                                </div>
+                                <div>
+                                    <div className="font-bold text-left mt-6">{t('userProfile.keywords')}</div>
+                                    <input
+                                        type="text"
+                                        value={keyword}
+                                        onChange={handleKeywordChange}
+                                        placeholder={t('userProfile.keywordsPlaceholder')}
+                                        className="w-full border border-black p-2 mt-2"
+                                    />
+                                </div>
+                            </div>
                         </div>
-                    )}
-                </div>
-                <div className="mt-4 w-full max-w-[460px]">
-                    <div>
-                        <input
-                            type="file"
-                            accept="image/*"
-                            onChange={handleImageChange}
-                            className="hidden"
-                            id="image-upload"
-                        />
-                        <label
-                            htmlFor="image-upload"
-                            className="bg-black text-white text-center py-2 px-4 cursor-pointer block"
-                        >
-                            {t('userProfile.uploadButton')}
-                        </label>
-                    </div>
-                    <div className="w-full max-w-[460px]">
-                        <div className="font-bold text-left mt-6">{t('userProfile.name')}</div>
-                        <input
-                            type="text"
-                            onChange={handleNameChange}
-                            value={userName}
-                            className="w-full border border-black p-2 mt-2"
-                        />
-                        <div className="font-bold text-left mt-6">{t('userProfile.gender')}</div>
-                        <div className="w-full">
-                            <TempCheckbox
-                                options={targetOptions}
-                                selectedOption={userGender}
-                                onSelect={handleGenderSelect}
+                        <div className="mt-4 w-full max-w-[460px]">
+                            <DataButton
+                                text={t('userProfile.submitButton')}
+                                subText={isLoading ? t('userProfile.submitting') : ''}
+                                onClick={handleSubmit}
+                                disabled={isLoading}
                             />
                         </div>
-                        <div>
-                            <div className="font-bold text-left mt-6">{t('userProfile.keywords')}</div>
-                            <input
-                                type="text"
-                                value={keyword}
-                                onChange={handleKeywordChange}
-                                placeholder={t('userProfile.keywordsPlaceholder')}
-                                className="w-full border border-black p-2 mt-2"
-                            />
-                        </div>
+                        {isError && (
+                            <div className="mt-2 text-red-500">
+                                {error.message || 'An error occurred during submission.'}
+                            </div>
+                        )}
                     </div>
                 </div>
-                <div className="mt-4 w-full max-w-[460px]">
-                    <DataButton
-                        text={t('userProfile.submitButton')}
-                        subText={isLoading ? t('userProfile.submitting') : ''}
-                        onClick={handleSubmit}
-                        disabled={isLoading}
-                    />
-                </div>
-                {isError && (
-                    <div className="mt-2 text-red-500">
-                        {error.message || 'An error occurred during submission.'}
-                    </div>
-                )}
-            </div>
-        </div>
+            )}
+        </>
     );
 };

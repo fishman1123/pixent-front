@@ -47,7 +47,7 @@ export const Modal = ({ title, onClose, children }) => {
 
     const handleOutsideClick = (e) => {
         if (modalRef.current && !modalRef.current.contains(e.target)) {
-            closeModal(true); // Skip delay on outside click
+            closeModal(true);
         }
     };
 

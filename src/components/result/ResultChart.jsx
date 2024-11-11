@@ -72,9 +72,9 @@ export const ResultChart = ({
     return (
         <div className="w-full max-w-md mx-auto p-4">
             <h2 className="text-2xl font-bold mb-4">SCENT PROFILE</h2>
-            <p className="mb-6 text-gray-600">
-                테스트중, 수치조정 없앨예정
-            </p>
+            {/*<p className="mb-6 text-gray-600">*/}
+            {/*    테스트중, 수치조정 없앨예정*/}
+            {/*</p>*/}
             <div className="h-64 w-full mb-6">
                 <ResponsiveContainer width="100%" height="100%">
                     <RadarChart

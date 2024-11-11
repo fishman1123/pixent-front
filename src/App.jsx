@@ -11,7 +11,7 @@ import 'flowbite';
 
 import './i18n'; // Ensure this path is correct
 import { userAtoms, defaultUserState } from './recoil/userAtoms';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query'; // Import from @tanstack/react-query
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 const router = createBrowserRouter(RouterList);
 const queryClient = new QueryClient();

@@ -34,7 +34,7 @@ export const Menu = ({ isOpen, toggleMenu }) => {
                 }`}
                 style={{ height: "60vh" }}
             >
-                <div className="pt-[100px] pl-2">
+                <div className="pt-[30px] pl-2">
                     <h2 className="text-lg font-bold">Menu</h2>
                     <ul className="mt-4">
                         <li className="py-2">

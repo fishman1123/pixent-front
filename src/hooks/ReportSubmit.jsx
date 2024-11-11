@@ -4,14 +4,14 @@ import { useMutation } from '@tanstack/react-query';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { confirmationAtom } from '../recoil/confirmationAtom.jsx';
 import { userAtoms } from '../recoil/userAtoms.jsx';
-import { responseDataAtom } from '../recoil/responseDataAtom'; // Import the new atom
-import AxiosInstance from '../api/axiosInstance'; // Correct Axios import
+import { responseDataAtom } from '../recoil/responseDataAtom';
+import AxiosInstance from '../api/axiosInstance';
 import { useNavigate } from 'react-router-dom';
 
 export const useReportSubmit = () => {
     const userState = useRecoilValue(userAtoms);
     const confirmationState = useRecoilValue(confirmationAtom);
-    const setResponseData = useSetRecoilState(responseDataAtom); // Initialize setter for responseDataAtom
+    const setResponseData = useSetRecoilState(responseDataAtom);
     const navigate = useNavigate();
 
     const submitData = async () => {
@@ -39,9 +39,9 @@ export const useReportSubmit = () => {
 
         // Other User Data
         formData.append('gender', userState.userGender || '');
-        formData.append('name', userState.userName || ''); // Use 'username' instead of 'name'
+        formData.append('name', userState.userName || '');
         formData.append('keyword', userState.keyword || '');
-        formData.append('language', userState.userLanguage || ''); // Use 'userLanguage' instead of 'language'
+        formData.append('language', userState.userLanguage || '');
 
         // Log the FormData values for debugging
         console.log('FormData being sent:', formData);
@@ -59,7 +59,7 @@ export const useReportSubmit = () => {
         return response.data;
     };
 
-    return useMutation({
+    const mutation = useMutation({
         mutationFn: submitData,
         onSuccess: (responseData) => {
             console.log('Data submitted successfully:', responseData);
@@ -77,7 +77,9 @@ export const useReportSubmit = () => {
                 console.error('Error:', mutationError.message);
                 alert('An unexpected error occurred.');
             }
-            navigate('/result/final');
+            navigate('/result');
         },
     });
+
+    return mutation; // Return the entire mutation object
 };
