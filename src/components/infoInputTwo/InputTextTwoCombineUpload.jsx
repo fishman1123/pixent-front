@@ -13,7 +13,6 @@ import imageCompression from 'browser-image-compression';
 
 export const InputTextTwoCombineUpload = () => {
     const { t } = useTranslation();
-    const [image, setImage] = useState(null);
     const [imagePreview, setImagePreview] = useState(null);
     const targetOptions = [t('genderOptions.male'), t('genderOptions.female'), t('genderOptions.other')];
     const setUserState = useSetRecoilState(userAtoms);
@@ -26,7 +25,6 @@ export const InputTextTwoCombineUpload = () => {
     // Use the custom React Query hook
     const { mutate, isLoading, isError, error } = useReportSubmit();
 
-
     const handleImageChange = async (event) => {
         const file = event.target.files[0];
         if (file) {
@@ -37,23 +35,20 @@ export const InputTextTwoCombineUpload = () => {
                     useWebWorker: true,
                 };
                 const compressedFile = await imageCompression(file, options);
-                setImage(compressedFile);
 
-                // Convert the compressed file to base64
+                // Store the compressed file (File object) in Recoil state
+                setUserState((prevState) => ({
+                    ...prevState,
+                    userImage: compressedFile, // Store the File object
+                    userImageName: compressedFile.name, // Store image name for reference
+                }));
+
+                // Generate base64 string for image preview only
                 const reader = new FileReader();
                 reader.readAsDataURL(compressedFile);
                 reader.onload = () => {
                     const base64Image = reader.result;
-
-                    // Set the image in userAtoms as base64
-                    setUserState((prevState) => ({
-                        ...prevState,
-                        userImage: base64Image, // Store the base64 string in userAtoms
-                        userImageName: file.name, // Store image name for reference
-                    }));
-
-                    // Update preview
-                    setImagePreview(base64Image);
+                    setImagePreview(base64Image); // Update preview
                 };
             } catch (error) {
                 console.error('Error compressing image:', error);
@@ -65,20 +60,10 @@ export const InputTextTwoCombineUpload = () => {
     const handleSubmit = async () => {
         if (isLoading) return;
 
-        // Prepare the form data
-        const formData = new FormData();
-        formData.append("userName", userName.trim() !== '' ? userName : null);
-        formData.append("userGender", userGender !== '' ? userGender : null);
-        formData.append("keyword", keyword.trim() !== '' ? keyword : null);
-        if (image) {
-            formData.append("userImage", image, image.name); // Add the image directly
-        }
-
         const updatedUserState = {
             userName: userName.trim() !== '' ? userName : null,
             userGender: userGender !== '' ? userGender : null,
             keyword: keyword.trim() !== '' ? keyword : null,
-            userImageName: image ? image.name : null,
             isAuthenticated: true,
         };
 
@@ -90,7 +75,8 @@ export const InputTextTwoCombineUpload = () => {
             ...updatedUserState,
         }));
 
-        mutate(formData); // Pass formData to the mutation function
+        // Call mutate without parameters; formData will be constructed in the submitData function
+        mutate();
     };
 
     const TempCheckbox = ({ options, selectedOption, onSelect }) => {

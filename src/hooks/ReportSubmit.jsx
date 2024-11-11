@@ -8,22 +8,6 @@ import { responseDataAtom } from '../recoil/responseDataAtom'; // Import the new
 import AxiosInstance from '../api/axiosInstance'; // Correct Axios import
 import { useNavigate } from 'react-router-dom';
 
-// Utility function to convert Data URL to File
-const dataURLtoFile = (dataurl, filename) => {
-    const arr = dataurl.split(',');
-    const mimeMatch = arr[0].match(/:(.*?);/);
-    const mime = mimeMatch ? mimeMatch[1] : 'application/octet-stream';
-    const bstr = atob(arr[1]);
-    let n = bstr.length;
-    const u8arr = new Uint8Array(n);
-
-    while (n--) {
-        u8arr[n] = bstr.charCodeAt(n);
-    }
-
-    return new File([u8arr], filename, { type: mime });
-};
-
 export const useReportSubmit = () => {
     const userState = useRecoilValue(userAtoms);
     const confirmationState = useRecoilValue(confirmationAtom);
@@ -50,11 +34,9 @@ export const useReportSubmit = () => {
 
         formData.append('preferences', JSON.stringify(preferences));
 
-        // Add Image File and Image Name
+        // Add Image File directly
         if (userState.userImage) {
-            const imageFile = dataURLtoFile(userState.userImage, userState.userImageName);
-            formData.append('image', imageFile);
-            formData.append('imageName', userState.userImageName); // Append imageName
+            formData.append('image', userState.userImage, userState.userImage.name);
         }
 
         // Other User Data
@@ -63,7 +45,7 @@ export const useReportSubmit = () => {
         formData.append('keyword', userState.keyword || '');
         formData.append('userLanguage', userState.userLanguage || ''); // Use 'userLanguage' instead of 'language'
 
-        // Log the FormData values
+        // Log the FormData values for debugging
         console.log('FormData being sent:', formData);
         for (let [key, value] of formData.entries()) {
             if (value instanceof File) {
@@ -74,14 +56,7 @@ export const useReportSubmit = () => {
         }
 
         // Make the POST request using Axios
-        const response = await AxiosInstance.post('/api/image', formData, {
-            // Do NOT set 'Content-Type' header manually when sending FormData
-            // Let Axios set it automatically, including the boundary
-            // headers: {
-            //     'Content-Type': 'multipart/form-data',
-            // },
-            // No credentials or authentication headers needed as per your statement
-        });
+        const response = await AxiosInstance.post('/api/image', formData);
 
         return response.data;
     };

@@ -14,7 +14,6 @@ const AxiosInstance = axios.create({
 
 
 
-// Optional: Add response interceptors
 AxiosInstance.interceptors.response.use(
     (response) => response,
     (error) => {
