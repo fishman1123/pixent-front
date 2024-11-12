@@ -54,7 +54,7 @@ export const RouterList = [
                 ],
             },
             {
-                element: <ResultLayout />, // Nest ResultLayout
+                element: <ResultLayout />,
                 children: [
                     {
                         path: 'result',
@@ -66,6 +66,7 @@ export const RouterList = [
                     },
                 ],
             },
+
             {
                 path: '*',
                 element: <WrongPath />,

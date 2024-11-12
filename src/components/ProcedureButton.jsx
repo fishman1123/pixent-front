@@ -72,7 +72,6 @@ export const ProcedureButton = ({ text, route, subText, confirm }) => {
 
     return (
         <div className="flex justify-center">
-            {/* Display the button only when the modal is not open */}
             {!confirmationState.isOpen && (
                 <button
                     className="defaultButton"
@@ -126,7 +125,6 @@ export const ProcedureButton = ({ text, route, subText, confirm }) => {
                         </ul>
                     </div>
 
-                    {/* Confirmation and Cancellation Buttons */}
                     <div className="flex flex-col justify-between mt-4">
                         <div className="flex justify-center">
                             <button onClick={handleConfirm} className="defaultButton mb-4 w-full max-w-[285px]">

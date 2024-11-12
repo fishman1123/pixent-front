@@ -12,14 +12,14 @@ export const ResultChart = ({
                                 inputCitrus,
                                 inputFloral,
                                 inputWoody,
-                                inputWatery,
+                                inputMusk,
                                 inputFresh,
                                 inputSpicy,
                             }) => {
     const scentOrder = ['Watery', 'Floral', 'Citrus', 'Spicy', 'Woody', 'Fresh'];
 
     const [profile, setProfile] = useState({
-        Watery: inputWatery,
+        Musk: inputMusk,
         Floral: inputFloral,
         Citrus: inputCitrus,
         Spicy: inputSpicy,

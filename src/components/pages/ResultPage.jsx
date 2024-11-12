@@ -7,6 +7,8 @@ import { responseDataAtom } from "../../recoil/responseDataAtom.jsx";
 import imageUploadIcon from "../../assets/upload.svg";
 import React from "react";
 import Loading from "./Loading.jsx";
+import {ProcedureButton} from "../ProcedureButton.jsx";
+import {RedirectButton} from "../RedirectButton.jsx";
 
 export const ResultPage = () => {
     const responseData = useRecoilValue(responseDataAtom);
@@ -99,10 +101,15 @@ export const ResultPage = () => {
                         inputCitrus={responseData.citrus}
                         inputFloral={responseData.floral}
                         inputWoody={responseData.woody}
-                        inputWatery={responseData.musk}
+                        inputMusk={responseData.musk}
                         inputFresh={responseData.fruity}
                         inputSpicy={responseData.spicy}
                     />
+                </div>
+                <div className="mt-8 mb-10">
+                    <div>
+                        <RedirectButton text="홈으로" subText="이동하기" delay={1000}/>
+                    </div>
                 </div>
             </div>
         </div>
