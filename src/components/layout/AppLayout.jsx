@@ -10,6 +10,7 @@ export const AppLayout = () => {
     const location = useLocation();
 
     const isResultPage = useMatch('/result/*');
+    const isFinalPage = useMatch('/inputTwo/*');
 
     useEffect(() => {
         window.scrollTo(0, 0);
@@ -17,8 +18,7 @@ export const AppLayout = () => {
 
     return (
         <div className="relative min-h-screen max-w-[480px] mx-auto">
-            {/* Conditionally render the Navbar */}
-            {!isResultPage && <Navbar />}
+            {!isResultPage && !isFinalPage && <Navbar />}
 
             <TransitionGroup component={null}>
                 <CSSTransition

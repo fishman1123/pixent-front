@@ -44,7 +44,7 @@ export const ProcedureButton = ({ text, route, subText, confirm }) => {
     const handleConfirm = () => {
         setConfirmationState((prevState) => ({
             ...prevState,
-            isOpen: false, // Close the modal
+            isOpen: false,
             isConfirm: true,
 
         }));
@@ -104,7 +104,6 @@ export const ProcedureButton = ({ text, route, subText, confirm }) => {
                         )}
                     </div>
 
-                    {/* Disliked Scents Section */}
                     <div className="mt-4">
                         <h3 className="text-lg font-bold">{t('confirmationModal.dislikedScents')}</h3>
                         {confirmationState.preferences.disliked.length > 0 ? (
@@ -119,10 +118,9 @@ export const ProcedureButton = ({ text, route, subText, confirm }) => {
                         )}
                     </div>
 
-                    {/* How We Use Preferences Section */}
                     <div className="mt-4">
                         <h3 className="text-lg font-bold">{t('confirmationModal.howWeUsePreferences')}</h3>
-                        <ul className="list-disc pl-5">
+                        <ul className="list-disc pl-5 text-[14px]">
                             <li>{t('confirmationModal.usePreference1')}</li>
                             <li>{t('confirmationModal.usePreference2')}</li>
                         </ul>

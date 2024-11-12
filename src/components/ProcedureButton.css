@@ -95,7 +95,7 @@
     padding: 60px 16px;
     text-decoration: none;
     cursor: pointer;
-    background: url('src/assets/img.png') no-repeat center center;
+    background: url('/img.png') no-repeat center center;
     background-size: cover;
     width: 160px;
     height: 200px;
