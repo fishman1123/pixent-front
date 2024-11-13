@@ -76,7 +76,7 @@ export const Checkbox = ({ componentId }) => {
                                         onMouseLeave={() => setVisiblePopoverId(null)}
                                     >
                                         <svg
-                                            className="w-4 h-4 ms-2 text-gray-400 hover:text-gray-500"
+                                            className="w-4 h-3 ms-1 text-gray-400 hover:text-gray-500"
                                             aria-hidden="true"
                                             fill="currentColor"
                                             viewBox="0 0 20 20"

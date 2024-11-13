@@ -6,7 +6,7 @@ export const RedirectButton = ({ text, subText, delay = 2000 }) => {
     const [isButtonDisabled, setButtonDisabled] = useState(false);
 
     const handleButtonClick = () => {
-        if (isButtonDisabled) return; // Prevent multiple clicks
+        if (isButtonDisabled) return;
 
         setButtonDisabled(true);
 
