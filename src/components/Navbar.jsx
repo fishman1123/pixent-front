@@ -6,12 +6,14 @@ import { BackButton } from './navbar/BackButton.jsx';
 import { userAtoms } from '../recoil/userAtoms';
 import { modalTriggerAtom } from '../recoil/modalTriggerAtom';
 import { confirmationAtom } from '../recoil/confirmationAtom.jsx';
+import {useNavigate} from "react-router-dom";
 
 export const Navbar = () => {
     const [isOpen, setIsOpen] = useState(false);
     const { currentPage } = useRecoilValue(userAtoms);
     const modalState = useRecoilValue(modalTriggerAtom);
     const confirmationState = useRecoilValue(confirmationAtom);
+    const navigate = useNavigate();
 
     const toggleMenu = () => {
         setIsOpen(!isOpen);
@@ -23,7 +25,7 @@ export const Navbar = () => {
                 <div className="max-w-[480px] mx-auto bg-white flex items-center justify-between p-5">
                     {currentPage === '/intro' ? <TranslateButton /> : <BackButton />}
                     <div className="flex-1 text-[24px] font-headerTitle text-center">
-                        AC'SCENT
+                        <button onClick={()=>navigate("/")}>AC'SCENT</button>
                     </div>
                     <Menu isOpen={isOpen} toggleMenu={toggleMenu} />
                 </div>
