@@ -16,7 +16,7 @@ export const ResultChart = ({
                                 inputFresh,
                                 inputSpicy,
                             }) => {
-    const scentOrder = ['Watery', 'Floral', 'Citrus', 'Spicy', 'Woody', 'Fresh'];
+    const scentOrder = ['Musk', 'Floral', 'Citrus', 'Spicy', 'Woody', 'Fresh'];
 
     const [profile, setProfile] = useState({
         Musk: inputMusk,
