@@ -86,7 +86,6 @@ export const ResultChart = ({
                         endAngle={-270}
                     >
                         <PolarGrid />
-                        {/* Customize the tick to adjust dy for the fourth label */}
                         <PolarAngleAxis
                             dataKey="subject"
                             tick={(props) => {
