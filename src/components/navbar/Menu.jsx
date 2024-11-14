@@ -36,17 +36,17 @@ export const Menu = ({ isOpen, toggleMenu }) => {
             >
                 <div className="pt-[30px] pl-2">
                     <h2 className="text-lg font-bold">Menu</h2>
-                    <ul className="mt-4">
-                        <li className="py-2">
-                            <a href="#">Home</a>
-                        </li>
-                        <li className="py-2">
-                            <a href="#">About</a>
-                        </li>
-                        <li className="py-2">
-                            <a href="#">Contact</a>
-                        </li>
-                    </ul>
+                    {/*<ul className="mt-4">*/}
+                    {/*    <li className="py-2">*/}
+                    {/*        <a href="#">Home</a>*/}
+                    {/*    </li>*/}
+                    {/*    <li className="py-2">*/}
+                    {/*        <a href="#">About</a>*/}
+                    {/*    </li>*/}
+                    {/*    <li className="py-2">*/}
+                    {/*        <a href="#">Contact</a>*/}
+                    {/*    </li>*/}
+                    {/*</ul>*/}
                 </div>
             </div>
         </>

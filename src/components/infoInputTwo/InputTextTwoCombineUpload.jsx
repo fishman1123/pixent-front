@@ -200,7 +200,7 @@ export const InputTextTwoCombineUpload = () => {
                                 </div>
                             </div>
                         </div>
-                        <div className="mt-4 w-full max-w-[460px]">
+                        <div className="mt-4 w-full max-w-[460px] mb-10">
                             <DataButton
                                 text={t('userProfile.submitButton')}
                                 subText={isLoading ? t('userProfile.submitting') : ''}

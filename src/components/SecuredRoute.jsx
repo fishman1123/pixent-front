@@ -7,7 +7,7 @@ const SecuredRoute = ({ children }) => {
     const userState = useRecoilValue(userAtoms);
 
     if (!userState.isAuthenticated) {
-        return <Navigate to="/" />;
+        return <Navigate to="/" replace />;
     }
 
     return children;

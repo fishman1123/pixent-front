@@ -1,21 +1,47 @@
 // src/pages/ResultPage.jsx
 
 import { ResultChart } from "../result/ResultChart";
-import { useRecoilValue } from "recoil";
+import {useRecoilState, useRecoilValue, useSetRecoilState} from "recoil";
 import { useNavigate } from "react-router-dom";
 import { responseDataAtom } from "../../recoil/responseDataAtom.jsx";
 import imageUploadIcon from "../../assets/upload.svg";
-import React from "react";
+import React, {useEffect} from "react";
 import Loading from "./Loading.jsx";
 import {ProcedureButton} from "../ProcedureButton.jsx";
 import {RedirectButton} from "../RedirectButton.jsx";
+import {userAtoms} from "../../recoil/userAtoms.jsx";
 
 export const ResultPage = () => {
-    const responseData = useRecoilValue(responseDataAtom);
+    const [responseData, setResponseData] = useRecoilState(responseDataAtom);
+    const setUserState = useSetRecoilState(userAtoms);
     const navigate = useNavigate();
 
+    useEffect(() => {
+        // Push a new state to the history stack
+        history.pushState(null, '', '/');
+
+        // Function to handle backward navigation
+        const handlePopState = () => {
+            // Set isAuthenticated to false
+            setUserState((prevState) => ({
+                ...prevState,
+                isAuthenticated: false,
+            }));
+            // Clear response data
+            setResponseData(null);
+            // Navigate to home
+            navigate('/', { replace: true });
+        };
+
+        window.onpopstate = handlePopState;
+
+        return () => {
+            // Reset the onpopstate handler
+            window.onpopstate = null;
+        };
+    }, [setUserState, setResponseData, navigate]);
+
     if (!responseData) {
-        // Show a loading animation
         return (
             <div className="flex justify-center items-center min-h-screen">
                 <Loading />
@@ -25,7 +51,7 @@ export const ResultPage = () => {
 
     return (
         <div className="flex flex-col justify-center items-center min-h-screen w-full text-center">
-            <div className="mt-[40px] text-[36px] text-right font-bold mr-8">
+            <div className="mb-[80px] ml-[140px] text-[36px] text-right font-bold">
                 {responseData.perfumeName}
             </div>
             <div className="w-full h-auto flex justify-center items-center">
