@@ -21,7 +21,7 @@ export const Preference = () => {
                     hoveredButton={hoveredButton}
                     setHoveredButton={setHoveredButton}
                     isTouchDevice={isTouchDevice}
-                    route="/input"
+                    route="/inputTwo"
                 />
             </div>
             <div className="pt-2">
@@ -34,7 +34,7 @@ export const Preference = () => {
                     hoveredButton={hoveredButton}
                     setHoveredButton={setHoveredButton}
                     isTouchDevice={isTouchDevice}
-                    route="/inputTwo"
+                    route="/input"
                 />
             </div>
         </div>
