@@ -1,6 +1,8 @@
 // src/components/ErrorBoundary.jsx
 
 import React from 'react';
+import { setRecoil } from 'recoil-nexus';
+import { errorModalAtom } from '../recoil/errorModalAtom';
 
 class ErrorBoundary extends React.Component {
     constructor(props) {
@@ -9,21 +11,22 @@ class ErrorBoundary extends React.Component {
     }
 
     static getDerivedStateFromError(error) {
-        // Update state so the next render shows the fallback UI
+        // Optional: Update state so the next render shows the fallback UI
         return { hasError: true };
     }
 
     componentDidCatch(error, errorInfo) {
-        // You can log the error to an error reporting service
+        // Log the error
         console.error('Uncaught error:', error, errorInfo);
+
+        // Set the error message in Recoil state
+        setRecoil(errorModalAtom, {
+            isOpen: true,
+            message: error.message || 'An unexpected error occurred.',
+        });
     }
 
     render() {
-        if (this.state.hasError) {
-            // You can render any custom fallback UI
-            return <h1>Something went wrong.</h1>;
-        }
-
         return this.props.children;
     }
 }

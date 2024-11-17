@@ -1,6 +1,6 @@
 import React from 'react';
 import { useRecoilState } from 'recoil';
-import { alertMessageState } from '../recoil/alertAtoms';
+import { alertMessageState } from '../recoil/errorModalAtom.jsx';
 
 export const Alert = () => {
     const [message, setMessage] = useRecoilState(alertMessageState);

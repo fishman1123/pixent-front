@@ -3,15 +3,16 @@ import { useRecoilState } from 'recoil';
 import { modalTriggerAtom } from '../recoil/modalTriggerAtom';
 import './intro/IntroButton.css';
 import { confirmationAtom } from "../recoil/confirmationAtom.jsx";
-import {userAtoms} from "../recoil/userAtoms.jsx";
+import {useLocation} from "react-router-dom";
 
 export const Modal = ({ title, onClose, children }) => {
     const [isVisible, setIsVisible] = useState(false);
     const [isClosing, setIsClosing] = useState(false);
     const modalRef = useRef(null);
     const [modalState, setModalState] = useRecoilState(modalTriggerAtom);
-    const [confirmModalState] = useRecoilState(confirmationAtom); // Get the confirmation state
-    const [userModalState] = useRecoilState(userAtoms); // Get the confirmation state
+    const [confirmModalState] = useRecoilState(confirmationAtom);
+    const location = useLocation();
+
 
     useEffect(() => {
         setIsVisible(true);
@@ -90,7 +91,6 @@ export const Modal = ({ title, onClose, children }) => {
 
                 <div className="flex-grow p-4 space-y-4 overflow-y-auto touch-pan-y">{children}</div>
 
-                {/* Conditionally render the close button based on confirmationAtom.isOpen */}
                 {!confirmModalState.isOpen && (
                     <div className="flex-shrink-0 flex items-center justify-center p-4 border-t border-black bg-white">
                         <button
@@ -105,6 +105,8 @@ export const Modal = ({ title, onClose, children }) => {
                         </button>
                     </div>
                 )}
+
+
             </div>
         </div>
     );

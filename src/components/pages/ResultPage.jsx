@@ -36,18 +36,17 @@ export const ResultPage = () => {
         window.onpopstate = handlePopState;
 
         return () => {
-            // Reset the onpopstate handler
             window.onpopstate = null;
         };
     }, [setUserState, setResponseData, navigate]);
 
-    if (!responseData) {
-        return (
-            <div className="flex justify-center items-center min-h-screen">
-                <Loading />
-            </div>
-        );
-    }
+    // if (!responseData) {
+    //     return (
+    //         <div className="flex justify-center items-center min-h-screen">
+    //             <Loading />
+    //         </div>
+    //     );
+    // }
 
     return (
         <div className="flex flex-col justify-center items-center min-h-screen w-full text-center">

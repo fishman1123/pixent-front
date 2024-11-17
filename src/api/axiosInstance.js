@@ -1,27 +1,31 @@
 // src/api/axiosInstance.js
 
 import axios from 'axios';
-import config from '../config'; // Ensure this path is correct
+import config from '../config';
+import { setRecoil } from 'recoil-nexus'; // Import setRecoil
+import { errorModalAtom } from '../recoil/errorModalAtom'; // Import your errorModalAtom
 
 // Create a singleton Axios instance
 const AxiosInstance = axios.create({
-    baseURL: config.API_BASE_URL, // Define API_BASE_URL in your config
-    // headers: {
-    //     'Content-Type': 'application/json', // Adjust as needed
-    // },
-
+    baseURL: config.API_BASE_URL,
 });
-
-
 
 AxiosInstance.interceptors.response.use(
     (response) => response,
     (error) => {
-        // Handle global response errors
-        if (error.response && error.response.status === 401) {
-            // For example, redirect to login on unauthorized
-            window.location.href = '/login';
+        let errorMessage = '';
+
+        if (error.response) {
+            console.error('Server Error:', error.response.data);
+            errorMessage = error.response.data.message || 'Server Error';
+        } else if (error.request) {
+            console.error('Network Error:', error.request);
+            errorMessage = 'Network Error: Please check your connection.';
+        } else {
+            console.error('Error:', error.message);
+            errorMessage = 'An unexpected error occurred.';
         }
+
         return Promise.reject(error);
     }
 );

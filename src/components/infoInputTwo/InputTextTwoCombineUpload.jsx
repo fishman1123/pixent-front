@@ -57,7 +57,6 @@ export const InputTextTwoCombineUpload = () => {
     };
 
     const handleSubmit = async () => {
-        // Check for validation errors
         const newErrors = {
             userName: userName.trim() === '',
             userGender: userGender === '',
@@ -82,11 +81,11 @@ export const InputTextTwoCombineUpload = () => {
             ...updatedUserState,
         }));
 
-        setIsSubmitting(true); // Set isSubmitting to true immediately
+        setIsSubmitting(true);
 
         mutate(undefined, {
             onError: () => {
-                setIsSubmitting(false); // Reset isSubmitting if there's an error
+                setIsSubmitting(false);
             },
         });
     };
@@ -208,11 +207,6 @@ export const InputTextTwoCombineUpload = () => {
                                 disabled={isLoading}
                             />
                         </div>
-                        {isError && (
-                            <div className="mt-2 text-red-500">
-                                {error?.message || 'An error occurred during submission.'}
-                            </div>
-                        )}
                     </div>
                 </div>
             )}
