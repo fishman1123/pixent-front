@@ -13,8 +13,10 @@ export const SerialNumberBox = () => {
     const navigate = useNavigate();
 
     // Regex patterns
-    const serialNumberPattern = /^[a-zA-Z0-9]{6,12}$/;
+    // const serialNumberPattern = /^[a-zA-Z0-9]{6,12}$/;
+    const serialNumberPattern = 1;
     const sqlInjectionPattern = /('|"|;|--|\b(SELECT|UPDATE|DELETE|INSERT|WHERE|DROP|EXEC)\b)/i;
+
 
     // useEffect to update user state when component mounts
     useEffect(() => {
@@ -28,12 +30,13 @@ export const SerialNumberBox = () => {
         const value = e.target.value;
         setSerialNumber(value);
 
-        // Check for SQL injection and serial number validity
         if (sqlInjectionPattern.test(value)) {
             setErrorMessage(t("Special characters are not allowed."));
-        } else if (!serialNumberPattern.test(value)) {
-            setErrorMessage(t("Serial number must be between 6 and 12 characters."));
-        } else {
+        }
+        // else if (!serialNumberPattern.test(value)) {
+        //     setErrorMessage(t("Serial number must be between 6 and 12 characters."));
+        // }
+        else {
             setErrorMessage("");
         }
     };
@@ -46,7 +49,7 @@ export const SerialNumberBox = () => {
                 ...prevState,
                 isAuthenticated: true,
             }));
-            navigate('/input');
+            navigate('/which');
         }
     };
 

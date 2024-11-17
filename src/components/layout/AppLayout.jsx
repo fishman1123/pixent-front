@@ -5,6 +5,7 @@ import { Outlet, useLocation, useMatch } from 'react-router-dom';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import '../transition.css';
 import { Navbar } from "../Navbar.jsx";
+import {Footer} from "../Footer.jsx";
 
 export const AppLayout = () => {
     const location = useLocation();
@@ -30,6 +31,7 @@ export const AppLayout = () => {
                     <Outlet />
                 </CSSTransition>
             </TransitionGroup>
+            <Footer />
         </div>
     );
 };

@@ -16,10 +16,8 @@ export const Checkbox = ({ componentId }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedOptionData, setSelectedOptionData] = useState(null);
 
-    // State to manage which popover is visible
     const [visiblePopoverId, setVisiblePopoverId] = useState(null);
 
-    // Handle checkbox selection and update the confirmationAtom based on componentId
     const handleCheckboxChange = (optionId) => {
         const selectedOption = options.find(option => option.id === optionId);
 
@@ -65,11 +63,9 @@ export const Checkbox = ({ componentId }) => {
                             <div className="label-and-button">
                                 <span
                                     onClick={() => openModal(option)}
-                                    style={{ cursor: 'pointer', textDecoration: 'underline' }}
+                                    style={{cursor: 'pointer', textDecoration: 'underline'}}
                                 >
                                     {option.label}
-                                </span>
-                                <div style={{ position: 'relative', display: 'inline-block' }}>
                                     <button
                                         type="button"
                                         onMouseEnter={() => setVisiblePopoverId(option.id)}
@@ -93,8 +89,37 @@ export const Checkbox = ({ componentId }) => {
                                                 clipRule="evenodd"
                                             ></path>
                                         </svg>
-                                        <span className="sr-only">Show information</span>
+                                        <span
+                                            className="sr-only">Show information</span>
                                     </button>
+                                </span>
+                                <div style={{position: 'relative', display: 'inline-block'}}>
+                                    {/*<button*/}
+                                    {/*    type="button"*/}
+                                    {/*    onMouseEnter={() => setVisiblePopoverId(option.id)}*/}
+                                    {/*    onMouseLeave={() => setVisiblePopoverId(null)}*/}
+                                    {/*>*/}
+                                    {/*    <svg*/}
+                                    {/*        className="w-4 h-3 ms-1 text-gray-400 hover:text-gray-500"*/}
+                                    {/*        aria-hidden="true"*/}
+                                    {/*        fill="currentColor"*/}
+                                    {/*        viewBox="0 0 20 20"*/}
+                                    {/*        xmlns="http://www.w3.org/2000/svg"*/}
+                                    {/*    >*/}
+                                    {/*        <path*/}
+                                    {/*            fillRule="evenodd"*/}
+                                    {/*            d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0*/}
+                                    {/*            00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001*/}
+                                    {/*            3.001 0 01-2 2.83V11a1 1 0*/}
+                                    {/*            11-2 0v-1a1 1 0 011-1 1 1*/}
+                                    {/*            0 100-2zm0 8a1 1 0 100-2*/}
+                                    {/*            1 1 0 000 2z"*/}
+                                    {/*            clipRule="evenodd"*/}
+                                    {/*        ></path>*/}
+                                    {/*    </svg>*/}
+                                    {/*    <span*/}
+                                    {/*        className="sr-only">Show information</span>*/}
+                                    {/*</button>*/}
                                     {/*{isPopoverVisible && (*/}
                                     {/*    <div*/}
                                     {/*        role="tooltip"*/}

@@ -141,7 +141,7 @@ export const InfoInput = () => {
             <Checkbox componentId={1} />
             <InputTextCenter />
             <Checkbox componentId={2} />
-            <div className="mb-5">
+            <div className="mt-10 mb-5 ">
                 <ProcedureButton
                     text={t('Next')}
                     route="/inputTwo"

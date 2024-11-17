@@ -12,6 +12,7 @@ import { MainLayout } from "./components/layout/MainLayout.jsx";
 import { ResultLayout } from "./components/layout/ResultLayout.jsx";
 import { AppLayout } from "./components/layout/AppLayout.jsx"; // Import AppLayout
 import LoadingAnimation from "./components/pages/Loading.jsx";
+import {Preference} from "./components/pages/Preference.jsx";
 
 export const RouterList = [
     {
@@ -28,6 +29,14 @@ export const RouterList = [
                     {
                         path: 'basic',
                         element: <Input />,
+                    },
+                    {
+                        path: 'which',
+                        element: (
+                            <SecuredRoute>
+                                <Preference />
+                            </SecuredRoute>
+                        ),
                     },
                     {
                         path: 'input',

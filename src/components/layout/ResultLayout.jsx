@@ -17,7 +17,6 @@ export const ResultLayout = () => {
             <div className="relative z-10 mt-[20px]">
                 <Outlet />
             </div>
-            <Footer />
         </div>
     );
 };
