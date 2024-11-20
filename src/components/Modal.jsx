@@ -21,7 +21,6 @@ export const Modal = ({ title, onClose, children }) => {
 
     const closeModal = (skipDelay = false) => {
         setIsClosing(true);
-        // animation trigger
         const delay = skipDelay ? 0 : 800;
         setTimeout(() => {
             setIsVisible(false);

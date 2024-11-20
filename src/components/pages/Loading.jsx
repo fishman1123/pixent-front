@@ -1,167 +1,130 @@
-// src/components/LoadingAnimation.jsx
-
-import React, { useEffect, useState, useRef } from 'react';
-
-const TypewriterEffect = ({ text, onComplete }) => {
-    const [displayedText, setDisplayedText] = useState('');
-    const [currentIndex, setCurrentIndex] = useState(0);
-    const [opacity, setOpacity] = useState(1);
-
-    useEffect(() => {
-        if (currentIndex < text.length) {
-            const timer = setTimeout(() => {
-                setDisplayedText(prev => prev + text[currentIndex]);
-                setCurrentIndex(prev => prev + 1);
-            }, 100);
-
-            return () => clearTimeout(timer);
-        } else if (onComplete) {
-            const fadeOutTimer = setTimeout(() => {
-                setOpacity(0);
-            }, 2000);
-
-            const completeTimer = setTimeout(() => {
-                onComplete();
-            }, 3000);
-
-            return () => {
-                clearTimeout(fadeOutTimer);
-                clearTimeout(completeTimer);
-            };
-        }
-    }, [currentIndex, text, onComplete]);
-
-    return (
-        <div
-            className="h-20 flex items-center justify-center transition-opacity duration-1000"
-            style={{ opacity }}
-        >
-            {displayedText}
-        </div>
-    );
-};
-
-const SmokeEffect = () => {
-    const canvasRef = useRef(null);
-    const particlesRef = useRef([]);
-
-    useEffect(() => {
-        const canvas = canvasRef.current;
-        const ctx = canvas.getContext('2d');
-
-        const resizeCanvas = () => {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        };
-
-        window.addEventListener('resize', resizeCanvas);
-        resizeCanvas();
-
-        const createSmoke = (x, y) => {
-            for (let i = 0; i < 50; i++) {
-                particlesRef.current.push({
-                    x,
-                    y,
-                    radius: Math.random() * 20 + 5,
-                    color: `rgba(200, 200, 200, ${Math.random() * 0.3})`,
-                    velocity: {
-                        x: Math.random() * 6 - 3,
-                        y: Math.random() * 6 - 3
-                    },
-                    life: 100
-                });
-            }
-        };
-
-        const animate = () => {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-            particlesRef.current.forEach((particle, index) => {
-                ctx.beginPath();
-                ctx.arc(particle.x, particle.y, particle.radius, 0, Math.PI * 2);
-                ctx.fillStyle = particle.color;
-                ctx.fill();
-
-                particle.x += particle.velocity.x;
-                particle.y += particle.velocity.y;
-                particle.radius *= 0.99;
-                particle.life--;
-
-                if (particle.life <= 0 || particle.radius < 0.1) {
-                    particlesRef.current.splice(index, 1);
-                }
-            });
-
-            requestAnimationFrame(animate);
-        };
-
-        animate();
-
-        const handleTouch = (e) => {
-            const rect = canvas.getBoundingClientRect();
-            const x = e.touches[0].clientX - rect.left;
-            const y = e.touches[0].clientY - rect.top;
-            createSmoke(x, y);
-        };
-
-        canvas.addEventListener('touchstart', handleTouch);
-
-        return () => {
-            window.removeEventListener('resize', resizeCanvas);
-            canvas.removeEventListener('touchstart', handleTouch);
-        };
-    }, []);
-
-    return <canvas ref={canvasRef} className="absolute top-0 left-0 w-full h-full" />;
-};
+import { useState, useEffect } from 'react';
 
 const Loading = () => {
-    const [quoteIndex, setQuoteIndex] = useState(0);
-    const [isTyping, setIsTyping] = useState(true);
+    const [currentLang, setCurrentLang] = useState('ko');
+    const [animate, setAnimate] = useState(true);
 
-    const quotes = [
-        "향기는 보이지 않는 옷이다.\n - C.N. 릴란드 -",
-        "향수는 말보다 더 설득력 있게 말한다.\n - 패트릭 쥐스킨트 -",
-        "향기는 기억의 가장 확실한 방아쇠다.\n - 다이앤 애커먼 -",
-        "좋은 향수는 우리의 영혼을 달래고\n상상력을 자극한다.",
-        "당신의 향기는 당신의 서명이\n되어야 한다.",
-        "향수는 침묵의 언어다.\n - 장 폴 게를랭 -",
-        "향기로운 삶을 살아라.\n그것이 곧 당신의 유산이 될 것이다.",
-        "향수는 기억의 풍경을 그린다.",
-        "당신의 향기가 당신의 존재를\n알리게 하라.",
-        "향기는 시간을 초월하는 마법이다."
-    ];
+    useEffect(() => {
+        setAnimate(false);
+        const timeout = setTimeout(() => setAnimate(true), 100);
+        return () => clearTimeout(timeout);
+    }, [currentLang]);
 
-    const handleTypingComplete = () => {
-        setIsTyping(false);
-        setTimeout(() => {
-            setQuoteIndex((prevIndex) => (prevIndex + 1) % quotes.length);
-            setIsTyping(true);
-        }, 1000);
+    const notices = {
+        ko: [
+            '반드시 사람 이미지를 업로드하세요',
+            '한 명만 나온 이미지만 가능합니다',
+            '새로고침 시 분석 결과 삭제됨',
+            '분석 결과는 반드시 캡쳐 저장'
+        ],
+        en: [
+            'Must upload a human photo',
+            'Only one person per image allowed',
+            'Results deleted upon refresh',
+            'Please capture the results'
+        ],
+        ja: [
+            '必ず人物の画像をアップロード',
+            '一人のみの画像が必要です',
+            '更新すると結果は削除されます',
+            '結果を必ずキャプチャしてください'
+        ],
+        zh: [
+            '必须上传人物图片',
+            '仅限一人的图片',
+            '刷新页面将删除分析结果',
+            '请务必截图保存分析结果'
+        ]
     };
 
     return (
-        <div className="fixed inset-0 z-50 flex flex-col items-center justify-between bg-white text-black font-serif p-4 overflow-hidden">
-            <SmokeEffect />
-            <div className="text-4xl font-bold mt-8 z-10" style={{ fontFamily: 'Times New Roman, serif' }}>AC'SCENT</div>
-            <div className="flex flex-col items-center z-10">
-                <div className="w-24 h-24 mb-8 flex items-center justify-center">
-                    <div className="w-full h-full border-t-4 border-r-4 border-black rounded-full animate-spin"></div>
+        <div className="w-full max-w-lg mx-auto p-5 min-h-screen">
+            {/* Header */}
+            <div className="flex justify-between items-center mb-12">
+                <h1 className="text-2xl md:text-3xl font-bold tracking-wider">
+                    ANALYZING
+                </h1>
+                <div className="flex gap-1">
+                    {['ko', 'en', 'ja', 'zh'].map((lang) => (
+                        <button
+                            key={lang}
+                            onClick={() => setCurrentLang(lang)}
+                            className={`px-2 py-1 text-xs border border-black transition-colors duration-300
+                ${currentLang === lang ? 'bg-black text-white' : 'bg-white text-black hover:bg-gray-100'}`}
+                        >
+                            {lang.toUpperCase()}
+                        </button>
+                    ))}
                 </div>
-                <div className="text-xl mb-4">ANALYZING...</div>
             </div>
-            <div className="text-center text-sm text-gray-600 mb-8 w-full z-10">
-                {!isTyping && (
-                    <div className="h-[80px] w-full"></div>
-                )}
-                {isTyping && (
-                    <TypewriterEffect
-                        key={quoteIndex}
-                        text={quotes[quoteIndex]}
-                        onComplete={handleTypingComplete}
-                    />
-                )}
+
+            {/* Loading Bar Container */}
+            <div className="relative w-full h-px bg-gray-200 mb-8 overflow-hidden">
+                <div className="absolute top-0 left-0 h-full w-1/3 bg-black loading-bar" />
             </div>
+
+            {/* Notice Box */}
+            <div className="relative border-2 border-black p-4 mt-8">
+                <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 flex flex-col items-center">
+                    <div className="bg-white px-3 py-1 text-xs tracking-widest uppercase font-bold">
+                        Important Notice
+                    </div>
+                    <div className="w-8 h-px bg-black mt-2" />
+                </div>
+
+                <div className="mt-6 space-y-4">
+                    {animate && notices[currentLang].map((notice, index) => (
+                        <div
+                            key={`${currentLang}-${index}`}
+                            className="notice-item relative bg-gray-50 p-3 pl-6"
+                            style={{
+                                opacity: 0,
+                                animation: `fadeIn 0.8s ease-out forwards ${index * 0.4}s`
+                            }}
+                        >
+                            <div className="absolute left-0 top-1/2 -translate-x-1/2 -translate-y-1/2 w-4 h-4 bg-black text-white rounded-full flex items-center justify-center text-xs">
+                                !
+                            </div>
+                            <p className="text-sm whitespace-nowrap overflow-hidden text-ellipsis">
+                                {notice}
+                            </p>
+                        </div>
+                    ))}
+                </div>
+            </div>
+
+            <style jsx global>{`
+        @keyframes loading {
+          0% {
+            transform: translateX(-100%);
+          }
+          100% {
+            transform: translateX(400%);
+          }
+        }
+
+        .loading-bar {
+          animation: loading 2.5s infinite linear;
+          will-change: transform;
+          backface-visibility: hidden;
+        }
+
+        @keyframes fadeIn {
+          0% {
+            opacity: 0;
+            transform: translateY(15px);
+          }
+          100% {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+
+        .notice-item {
+          will-change: transform, opacity;
+          backface-visibility: hidden;
+        }
+      `}</style>
         </div>
     );
 };

@@ -10,6 +10,8 @@ import { useTranslation } from "react-i18next";
 import { useReportSubmit } from '../../hooks/ReportSubmit';
 import LoadingAnimation from '../pages/Loading.jsx';
 import imageCompression from 'browser-image-compression';
+import {PersonalAgreement} from "./PersonalAgreement.jsx";
+import {Modal} from "../Modal.jsx";
 
 export const InputTextTwoCombineUpload = () => {
     const { t } = useTranslation();
@@ -20,10 +22,16 @@ export const InputTextTwoCombineUpload = () => {
     const [keyword, setKeyword] = useState('');
     const [userName, setUserName] = useState('');
     const [userGender, setUserGender] = useState('');
+    const [isCheckboxChecked, setIsCheckboxChecked] = useState(false); // Checkbox validation state
     const [errors, setErrors] = useState({ userName: false, userGender: false, imageError: false });
-    const [isSubmitting, setIsSubmitting] = useState(false); // Added this line
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [isAgreementModalOpen, setIsAgreementModalOpen] = useState(false);
 
     const { mutate, isError, error } = useReportSubmit();
+
+    const handleCheckboxChange = () => {
+        setIsCheckboxChecked((prev) => !prev);
+    };
 
     const handleImageChange = async (event) => {
         const file = event.target.files[0];
@@ -64,8 +72,10 @@ export const InputTextTwoCombineUpload = () => {
         };
         setErrors(newErrors);
 
-        // If any field is invalid, stop submission
-        if (newErrors.userName || newErrors.userGender || newErrors.imageError) {
+        if (newErrors.userName || newErrors.userGender || newErrors.imageError || !isCheckboxChecked) {
+            if (!isCheckboxChecked) {
+                alert('개인정보에 대한 동의서 확인을 체크해주세요.');
+            }
             return;
         }
 
@@ -76,7 +86,7 @@ export const InputTextTwoCombineUpload = () => {
             isAuthenticated: true,
         };
 
-        setUserState(prevState => ({
+        setUserState((prevState) => ({
             ...prevState,
             ...updatedUserState,
         }));
@@ -126,13 +136,13 @@ export const InputTextTwoCombineUpload = () => {
         setUserGender(selectedGender);
     };
 
-    const isLoading = isSubmitting; // Use isSubmitting to control loading state
+    const isLoading = isSubmitting;
 
     return (
         <>
             {isLoading && <LoadingAnimation />}
             {!isLoading && (
-                <div className="pt-4">
+                <div>
                     <div className="font-bold text-4xl">{t('userProfile.title')}</div>
                     <div className="mt-4 flex flex-col justify-center items-center">
                         <div className="w-full max-w-[460px] h-[240px] border border-black flex justify-center items-center bg-gray-100">
@@ -199,6 +209,32 @@ export const InputTextTwoCombineUpload = () => {
                                 </div>
                             </div>
                         </div>
+                        <div className="mt-6">
+                                <div className="flex">
+                                    <div className="checkbox-wrapper" style={{'--size': '30px'}}>
+                                        <input
+                                            type="checkbox"
+                                            id="agree-checkbox"
+                                            checked={isCheckboxChecked}
+                                            onChange={handleCheckboxChange}
+                                        />
+                                        <label htmlFor="agree-checkbox">
+                                            <svg viewBox="0 0 50 50">
+                                                <path d="M5 30 L 20 45 L 45 5"></path>
+                                            </svg>
+                                        </label>
+                                    </div>
+                                    <div className="ml-2">
+                                        {/*if user click  span tag then the modal need to show up*/}
+                                        <span
+                                            onClick={() => setIsAgreementModalOpen(true)}
+                                            className="underline cursor-pointer"
+                                        >
+                                        개인정보 제공에 동의합니다
+                                    </span>
+                                    </div>
+                                </div>
+                        </div>
                         <div className="mt-4 w-full max-w-[460px] mb-10">
                             <DataButton
                                 text={t('userProfile.submitButton')}
@@ -207,6 +243,11 @@ export const InputTextTwoCombineUpload = () => {
                                 disabled={isLoading}
                             />
                         </div>
+                        {isAgreementModalOpen && (
+                            <Modal title="개인정보처리방침" onClose={() => setIsAgreementModalOpen(false)}>
+                                <PersonalAgreement />
+                            </Modal>
+                        )}
                     </div>
                 </div>
             )}
