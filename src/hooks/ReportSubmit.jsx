@@ -56,6 +56,20 @@ export const useReportSubmit = () => {
                 console.log(`${key}:`, value);
             }
         }
+        console.log('--- FormData being prepared for submission ---');
+        const loggedData = {};
+        for (let [key, value] of formData.entries()) {
+            if (value instanceof File) {
+                console.log(`${key}: (File) ${value.name}`); // Log file name
+                loggedData[key] = `(File) ${value.name}`;
+            } else {
+                console.log(`${key}: ${value}`); // Log other values
+                loggedData[key] = value;
+            }
+        }
+        console.log('Combined FormData:', loggedData);
+        console.log('--- End of FormData log ---');
+
 
         const response = await AxiosInstance.post('/api/image', formData);
 
@@ -86,5 +100,5 @@ export const useReportSubmit = () => {
         },
     });
 
-    return mutation; // Return the mutation object
+    return mutation;
 };

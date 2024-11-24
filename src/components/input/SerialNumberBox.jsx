@@ -5,12 +5,13 @@ import { useSetRecoilState } from "recoil";
 import { userAtoms } from "../../recoil/userAtoms.jsx";
 import { useTranslation } from 'react-i18next';
 
-export const SerialNumberBox = () => {
+export const SerialNumberBox = ({ path, isViewer }) => {
     const { t } = useTranslation();
     const setUserState = useSetRecoilState(userAtoms);
     const [serialNumber, setSerialNumber] = useState("");
     const [errorMessage, setErrorMessage] = useState("");
     const navigate = useNavigate();
+    const targetPath = path;
 
     // Regex patterns
     // const serialNumberPattern = /^[a-zA-Z0-9]{6,12}$/;
@@ -49,7 +50,19 @@ export const SerialNumberBox = () => {
                 ...prevState,
                 isAuthenticated: true,
             }));
-            navigate('/which');
+            navigate(targetPath);
+        }
+    };
+
+    const handleViewerSubmit = () => {
+        if (!serialNumber) {
+            setErrorMessage(t("Please enter the serial number."));  // Show error message for blank input
+        } else if (!errorMessage && serialNumber) {
+            setUserState((prevState) => ({
+                ...prevState,
+                isAuthenticated: true,
+            }));
+            navigate(targetPath + '/' + serialNumber);
         }
     };
 
@@ -64,7 +77,7 @@ export const SerialNumberBox = () => {
                     placeholder={t("Enter Serial Code")}
                 />
                 <button
-                    onClick={handleSubmit}
+                    onClick={isViewer ? handleViewerSubmit : handleSubmit}
                     className="bg-black text-white p-[16px] focus:outline-none"
                     disabled={!!errorMessage}
                 >

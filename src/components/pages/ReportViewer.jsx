@@ -1,7 +1,21 @@
+import {SerialNumberBox} from "../input/SerialNumberBox.jsx";
+import {useEffect} from "react";
+import {Outlet, useLocation, useNavigation} from "react-router-dom";
+import {TopTextBox} from "../input/TopTextBox.jsx";
 
 
 export const ReportViewer = () => {
 
+
+    const navigate = useNavigation();
+    const location = useLocation();
+    const isChildRoute = location.pathname !== '/report'
+    // useEffect(() => {
+    //     history.pushState(null, '', '/');
+    //     return () => {
+    //         window.onpopstate = null;
+    //     };
+    // }, [navigate]);
     const dummyData = {
         "id": 451,
         "userName": "카리나",
@@ -30,12 +44,15 @@ export const ReportViewer = () => {
         "woody": 80,
         "musk": 30,
         "fruity": 10,
-        "spicy": 70
+        "spicy": 70,
+        "uuid": "xxxxxxxxx"
     }
 
     return (
         <div>
-
+            {!isChildRoute && <TopTextBox/>}
+            {!isChildRoute && <SerialNumberBox path='/report' isViewer={true} />}
+            <Outlet />
         </div>
     )
 }

@@ -13,6 +13,8 @@ import { ResultLayout } from "./components/layout/ResultLayout.jsx";
 import { AppLayout } from "./components/layout/AppLayout.jsx"; // Import AppLayout
 import LoadingAnimation from "./components/pages/Loading.jsx";
 import {Preference} from "./components/pages/Preference.jsx";
+import {ReportViewer} from "./components/pages/ReportViewer.jsx";
+import {ReportViewerResult} from "./components/pages/ReportViewerResult.jsx";
 
 export const RouterList = [
     {
@@ -60,6 +62,21 @@ export const RouterList = [
                             <LoadingAnimation />
                         ),
                     },
+                    {
+                        path: 'report',
+                        element: (
+                            <ReportViewer/>
+                        ),
+                        children: [
+                            {
+                                path: ':id',
+                                element: (
+                                    <ReportViewerResult /> // Optionally a different or enhanced version
+                                )
+                            }
+                        ]
+                    }
+
                 ],
             },
             {

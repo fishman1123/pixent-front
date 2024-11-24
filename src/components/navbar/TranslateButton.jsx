@@ -22,7 +22,6 @@ export const TranslateButton = () => {
         setIsDropdownOpen(!isDropdownOpen);
     };
 
-    // Close dropdown if user clicks outside of it
     useEffect(() => {
         const handleClickOutside = (event) => {
             if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -36,16 +35,12 @@ export const TranslateButton = () => {
         };
     }, [dropdownRef]);
 
-    // Handle language change
     const handleLanguageChange = (languageCode) => {
-        // Update Recoil state
         setUserState(prevState => ({
             ...prevState,
             userLanguage: languageCode,
         }));
-        // Change language in i18n
         i18n.changeLanguage(languageCode);
-        // Persist the selection in localStorage
         localStorage.setItem('language', languageCode);
 
         // Close the dropdown

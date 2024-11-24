@@ -20,7 +20,7 @@ export const Input = () => {
         <div className="flex-col justify-center items-center min-h-screen w-full text-center" >
             <TopTextBox/>
             <CenterLine/>
-            <SerialNumberBox/>
+            <SerialNumberBox path ="/which" />
             <TipBox/>
         </div>
     );
