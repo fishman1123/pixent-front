@@ -40,6 +40,7 @@ export const ResultPage = () => {
         };
     }, [setUserState, setResponseData, navigate]);
 
+    console.log(responseData);
     // if (!responseData) {
     //     return (
     //         <div className="flex justify-center items-center min-h-screen">
@@ -94,6 +95,7 @@ export const ResultPage = () => {
                         <span className="font-bold">TOP:</span> {responseData.mainNote}
                     </div>
                     <p className="text-[12px]">{responseData.mainNoteDesc}</p>
+                    <p className="text-[12px]">{responseData.mainNoteAnalysis}</p>
                 </div>
                 <div className="text-left mt-4">
                     <div className="flex items-center">
@@ -101,6 +103,7 @@ export const ResultPage = () => {
                         <span className="font-bold">MIDDLE:</span> {responseData.middleNote}
                     </div>
                     <p className="text-[12px]">{responseData.middleNoteDesc}</p>
+                    <p className="text-[12px]">{responseData.middleNoteAnalysis}</p>
                 </div>
                 <div className="text-left mt-4">
                     <div className="flex items-center">
@@ -108,6 +111,7 @@ export const ResultPage = () => {
                         <span className="font-bold">BASE:</span> {responseData.baseNote}
                     </div>
                     <p className="text-[12px]">{responseData.baseNoteDesc}</p>
+                    <p className="text-[12px]">{responseData.baseNoteAnalysis}</p>
                 </div>
                 <div className="text-left">
                     <div>
