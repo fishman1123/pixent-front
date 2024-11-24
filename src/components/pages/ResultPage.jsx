@@ -214,6 +214,29 @@ export const ResultPage = () => {
                   </svg>
                 </span>
                             </button>
+                            <button
+                                onClick={() => {
+                                    const url = `https://www.pixent.co.kr/report/${responseData.uuid}`;
+                                    const text = `Share analysis report created by Pixent!`;
+                                    const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(
+                                        text
+                                    )}&url=${encodeURIComponent(url)}`;
+                                    window.open(twitterUrl, "_blank");
+                                }}
+                                className="text-blue-500 hover:bg-blue-100 rounded-lg p-2 inline-flex items-center justify-center"
+                            >
+                                <svg
+                                    className="w-4 h-4"
+                                    aria-hidden="true"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    fill="currentColor"
+                                    viewBox="0 0 24 24"
+                                >
+                                    <path
+                                        d="M22.46 6c-.77.35-1.6.58-2.46.69a4.4 4.4 0 0 0 1.93-2.43 8.93 8.93 0 0 1-2.82 1.1 4.48 4.48 0 0 0-7.62 4.08A12.72 12.72 0 0 1 3.11 4.7a4.44 4.44 0 0 0-.61 2.26 4.47 4.47 0 0 0 2 3.72 4.43 4.43 0 0 1-2-.56v.06a4.48 4.48 0 0 0 3.57 4.38 4.48 4.48 0 0 1-2 .07 4.47 4.47 0 0 0 4.18 3.1A8.96 8.96 0 0 1 2 20.54a12.64 12.64 0 0 0 6.8 2 12.63 12.63 0 0 0 12.74-12.74c0-.2 0-.39-.01-.58A9.14 9.14 0 0 0 24 4.56a8.92 8.92 0 0 1-2.54.7z"
+                                    />
+                                </svg>
+                            </button>
                             <div
                                 id="tooltip-copy-url-button"
                                 role="tooltip"
