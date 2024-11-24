@@ -1,6 +1,6 @@
 // src/App.jsx
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
@@ -26,16 +26,37 @@ const initializeUserState = ({ set }) => {
     set(userAtoms, { ...defaultUserState, userLanguage: savedLanguage });
 };
 
-createRoot(document.getElementById('root')).render(
-    <StrictMode>
+function setScreenSize() {
+    let vh = window.innerHeight * 0.01;
+    document.documentElement.style.setProperty("--vh", `${vh}px`);
+}
+
+function App() {
+    useEffect(() => {
+        setScreenSize();
+
+        window.addEventListener("resize", setScreenSize);
+
+        return () => {
+            window.removeEventListener("resize", setScreenSize);
+        };
+    }, []);
+
+    return (
         <RecoilRoot initializeState={initializeUserState}>
             <RecoilNexus />
             <QueryClientProvider client={queryClient}>
                 <ErrorBoundary>
                     <RouterProvider router={router} />
                 </ErrorBoundary>
-                <ErrorModal /> {/* Include ErrorModal here */}
+                <ErrorModal />
             </QueryClientProvider>
         </RecoilRoot>
+    );
+}
+
+createRoot(document.getElementById('root')).render(
+    <StrictMode>
+        <App />
     </StrictMode>
 );
