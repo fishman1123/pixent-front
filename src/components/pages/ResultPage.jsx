@@ -167,7 +167,7 @@ export const ResultPage = () => {
                 </div>
                 <div className="flex justify-center">
                     <div className="w-full max-w-[16rem]">
-                        <div className="flex items-center border border-black p-2">
+                        <div className="flex items-center">
                             <label htmlFor="copy-url-input" className="sr-only">
                                 Copy URL
                             </label>
