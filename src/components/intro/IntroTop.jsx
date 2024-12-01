@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 export const IntroTop = () => {
     const { t } = useTranslation();
 
+
     return (
         <div className="flex-1 content-center h-full min-h-[300px] w-full bg-white text-black mt-[140px] font-introTitle">
             <div className="text-xl">{t('DISCOVER')}</div>
@@ -15,7 +16,7 @@ export const IntroTop = () => {
             </div>
             <ProcedureButton
                 text={t('Start Analysis')} // Pass translated text
-                route="/basic"
+                route="/which"
                 subText={t('Test in progress')} // Pass translated subtext
                 confirm={false}
             />

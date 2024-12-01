@@ -39,7 +39,6 @@ const Loading = () => {
 
     return (
         <div className="w-full max-w-lg mx-auto p-5 min-h-screen">
-            {/* Header */}
             <div className="flex justify-between items-center mb-12">
                 <h1 className="text-2xl md:text-3xl font-bold tracking-wider">
                     ANALYZING
@@ -58,12 +57,10 @@ const Loading = () => {
                 </div>
             </div>
 
-            {/* Loading Bar Container */}
             <div className="relative w-full h-px bg-gray-200 mb-8 overflow-hidden">
                 <div className="absolute top-0 left-0 h-full w-1/3 bg-black loading-bar" />
             </div>
 
-            {/* Notice Box */}
             <div className="relative border-2 border-black p-4 mt-8">
                 <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 flex flex-col items-center">
                     <div className="bg-white px-3 py-1 text-xs tracking-widest uppercase font-bold">
@@ -94,37 +91,37 @@ const Loading = () => {
             </div>
 
             <style jsx global>{`
-        @keyframes loading {
-          0% {
-            transform: translateX(-100%);
-          }
-          100% {
-            transform: translateX(400%);
-          }
-        }
+                @keyframes loading {
+                    0% {
+                        transform: translateX(-100%);
+                    }
+                    100% {
+                        transform: translateX(400%);
+                    }
+                }
 
-        .loading-bar {
-          animation: loading 2.5s infinite linear;
-          will-change: transform;
-          backface-visibility: hidden;
-        }
+                .loading-bar {
+                    animation: loading 2.5s infinite linear;
+                    will-change: transform;
+                    backface-visibility: hidden;
+                }
 
-        @keyframes fadeIn {
-          0% {
-            opacity: 0;
-            transform: translateY(15px);
-          }
-          100% {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
+                @keyframes fadeIn {
+                    0% {
+                        opacity: 0;
+                        transform: translateY(15px);
+                    }
+                    100% {
+                        opacity: 1;
+                        transform: translateY(0);
+                    }
+                }
 
-        .notice-item {
-          will-change: transform, opacity;
-          backface-visibility: hidden;
-        }
-      `}</style>
+                .notice-item {
+                    will-change: transform, opacity;
+                    backface-visibility: hidden;
+                }
+            `}</style>
         </div>
     );
 };

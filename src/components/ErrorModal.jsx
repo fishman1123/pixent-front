@@ -54,7 +54,8 @@ const ErrorModal = () => {
                 onClick={(e) => e.stopPropagation()}
             >
                 <h2 className="text-xl font-bold mb-4">Error</h2>
-                <p>{errorModalState.message}</p>
+                {/*<p>{errorModalState.message}</p>*/}
+                <p>이미지에 문제가 있는것 같습니다, 문의 부탁 드립니다.</p>
                 <div className="mt-4 flex justify-end">
                     <button
                         onClick={handleClose}

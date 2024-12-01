@@ -91,5 +91,17 @@
     "usePreference2": "讨厌的香味类别将从推荐中排除。",
     "confirm": "确认",
     "cancel": "取消"
+  },
+  "pureAI": {
+    "title": "PURE AI ANALYSIS",
+    "mainText": "仅通过图片推荐香水",
+    "subText1": "AI分析图片的情感",
+    "subText2": "为您找到最适合的香水"
+  },
+  "aiPreference": {
+    "title": "AI + PREFERENCES",
+    "mainText": "在图片分析中反映偏好",
+    "subText1": "AI的图片分析结果",
+    "subText2": "结合您偏好的香水特性"
   }
 }

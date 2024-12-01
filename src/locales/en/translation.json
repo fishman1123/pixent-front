@@ -91,5 +91,17 @@
     "usePreference2": "Scents from disliked categories will be excluded from recommendations.",
     "confirm": "Confirm",
     "cancel": "Cancel"
+  },
+  "pureAI": {
+    "title": "PURE AI ANALYSIS",
+    "mainText": "Get fragrance recommendations with just an image",
+    "subText1": "AI analyzes the emotions of the image",
+    "subText2": "to find the most suitable fragrance for you"
+  },
+  "aiPreference": {
+    "title": "AI + PREFERENCES",
+    "mainText": "Reflect preferences in image analysis",
+    "subText1": "AI analyzes the image and",
+    "subText2": "incorporates your preferred fragrance characteristics"
   }
 }

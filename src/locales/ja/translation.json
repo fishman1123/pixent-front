@@ -91,5 +91,17 @@
     "usePreference2": "嫌いなカテゴリの香りはおすすめから除外されます。",
     "confirm": "確認",
     "cancel": "キャンセル"
+  },
+  "pureAI": {
+    "title": "PURE AI ANALYSIS",
+    "mainText": "画像だけで香水をおすすめ",
+    "subText1": "AIが画像の感情を分析し",
+    "subText2": "最も適した香りを見つけます"
+  },
+  "aiPreference": {
+    "title": "AI + PREFERENCES",
+    "mainText": "画像分析に好みを反映",
+    "subText1": "AIの画像分析結果に",
+    "subText2": "好みの香りの特性を反映します"
   }
 }
