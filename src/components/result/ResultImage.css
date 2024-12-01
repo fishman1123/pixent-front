@@ -1,0 +1,64 @@
+.resultImageContainer {
+    width: 100%; /* Adjust the size as needed */
+    height: auto;
+    margin: 0 auto;
+}
+
+.resultImageSelectButton {
+    position: relative;
+    overflow: hidden;
+    display: inline-block;
+    padding: 0;
+    cursor: pointer;
+    width: 100%;
+    height: 100%;
+    background: white;
+    background-size: cover;
+    user-select: none;
+    text-align: center;
+}
+
+.resultImageSelectButton .content {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.resultImageSelectButton .userImage {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0; /* Initially hidden */
+    transition: opacity 300ms ease;
+}
+
+.resultImageSelectButton .perfumeName,
+.resultImageSelectButton .clickText {
+    position: absolute;
+    /*left: 50%;*/
+    transform: translateX(-50%);
+    color: black;
+    font-family: 'Times New Roman', serif;
+    /*font-weight: bold;*/
+    opacity: 1; /* Initially visible */
+    transition: opacity 300ms ease;
+}
+
+.resultImageSelectButton .perfumeName {
+    top: 40%; /* Adjust to position the perfumeName */
+    font-size: 40px;
+}
+
+.resultImageSelectButton .clickText {
+    top: 55%; /* Adjust to position the "CLICK" text below perfumeName */
+    font-size: 20px;
+}
+
+.resultImageSelectButton.showImage .userImage {
+    opacity: 1; /* Show the image */
+}
+
+.resultImageSelectButton.showImage .perfumeName,
+.resultImageSelectButton.showImage .clickText {
+    opacity: 0; /* Hide the perfume name and "CLICK" text */
+}

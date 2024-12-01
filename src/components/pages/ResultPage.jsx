@@ -7,7 +7,7 @@ import { responseDataAtom } from "../../recoil/responseDataAtom.jsx";
 import imageUploadIcon from "../../assets/upload.svg";
 import React, { useEffect, useState } from "react";
 import Loading from "./Loading.jsx";
-import { ProcedureButton } from "../ProcedureButton.jsx";
+import { ImagePerfumeButton } from '../result/ImagePerfumeButton.jsx'
 import { RedirectButton } from "../RedirectButton.jsx";
 import { userAtoms } from "../../recoil/userAtoms.jsx";
 
@@ -59,15 +59,14 @@ export const ResultPage = () => {
 
     return (
         <div className="flex flex-col justify-center items-center min-h-screen w-full text-center">
-            <div className="mb-[80px] ml-[140px] text-[36px] text-right font-bold">
-                {responseData.perfumeName}
-            </div>
+            {/*<div className="mb-[80px] ml-[140px] text-[36px] text-right font-bold">*/}
+            {/*    {responseData.perfumeName}*/}
+            {/*</div>*/}
             <div className="w-full h-auto flex justify-center items-center">
                 {responseData.userImageUrl ? (
-                    <img
-                        src={responseData.userImageUrl}
-                        alt="User Image"
-                        className="max-w-full max-h-full"
+                    <ImagePerfumeButton
+                        imageUrl={responseData.userImageUrl}
+                        perfumeName={responseData.perfumeName}
                     />
                 ) : (
                     <div className="text-center text-gray-500">
@@ -82,12 +81,15 @@ export const ResultPage = () => {
                     </div>
                 )}
             </div>
+
+
             <div className="mx-5">
                 <div className="mt-[80px]">
+
                     <div className="text-left text-[18px] font-bold">ANALYSIS</div>
                     <div className="relative flex items-center justify-center w-full mt-3 mb-5">
-                        <div className="h-[1px] w-full bg-black ml-[1px]" />
-                        <div className="h-[1px] w-full bg-black mr-[5px]" />
+                        <div className="h-[1px] w-full bg-black ml-[1px]"/>
+                        <div className="h-[1px] w-full bg-black mr-[5px]"/>
                     </div>
                     <div className="text-left">
                         <h2 className="font-bold text-[14px] pb-2">Facial Feature</h2>
@@ -100,12 +102,16 @@ export const ResultPage = () => {
                         <p className="text-[12px]">{responseData.appearance.vibe}</p>
                     </div>
                 </div>
+
                 <div>
-                    <div className="text-left text-[18px] font-bold mt-8">NOTES</div>
+                    <div className="text-left text-[18px] font-bold mt-8">
+                        {responseData.perfumeName} NOTES
+                    </div>
                 </div>
+
                 <div className="relative flex items-center justify-center w-full mt-3 mb-5">
-                    <div className="h-[1px] w-full bg-black ml-[1px]" />
-                    <div className="h-[1px] w-full bg-black mr-[5px]" />
+                    <div className="h-[1px] w-full bg-black ml-[1px]"/>
+                    <div className="h-[1px] w-full bg-black mr-[5px]"/>
                 </div>
                 <div className="text-left">
                     <div className="flex items-center">
@@ -148,8 +154,8 @@ export const ResultPage = () => {
                         <div className="text-[18px] font-bold mt-14">PROFILES</div>
                     </div>
                     <div className="relative flex items-center justify-center w-full mt-3 mb-5">
-                        <div className="h-[1px] w-full bg-black ml-[1px]" />
-                        <div className="h-[1px] w-full bg-black mr-[5px]" />
+                        <div className="h-[1px] w-full bg-black ml-[1px]"/>
+                        <div className="h-[1px] w-full bg-black mr-[5px]"/>
                     </div>
                     <div>
                         <p className="text-[12px]">{responseData.profile}</p>
