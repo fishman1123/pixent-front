@@ -20,9 +20,6 @@ export const ReportViewerResult = () => {
 
     return (
         <div className="flex flex-col justify-center items-center min-h-screen w-full text-center">
-            <div className="mb-[80px] ml-[140px] text-[36px] text-right font-bold">
-                {responseData.perfumeName}
-            </div>
             <div className="w-full h-auto flex justify-center items-center">
                 {responseData.userImageUrl ? (
                     <ImagePerfumeButton
@@ -40,7 +37,6 @@ export const ReportViewerResult = () => {
                         </div>
                         <div>No Image Available</div>
                     </div>
-
                 )}
 
             </div>
