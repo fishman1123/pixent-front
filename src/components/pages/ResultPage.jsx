@@ -62,24 +62,38 @@ export const ResultPage = () => {
             {/*<div className="mb-[80px] ml-[140px] text-[36px] text-right font-bold">*/}
             {/*    {responseData.perfumeName}*/}
             {/*</div>*/}
-            <div className="w-full h-auto flex justify-center items-center">
+            <div className="w-full h-auto flex flex-col justify-center items-center">
+                {/*{responseData.userImageUrl ? (*/}
+                {/*    <ImagePerfumeButton*/}
+                {/*        imageUrl={responseData.userImageUrl}*/}
+                {/*        perfumeName={responseData.perfumeName}*/}
+                {/*    />*/}
+                {/*) : (*/}
+                {/*    <div className="text-center text-gray-500">*/}
+                {/*        <div className="flex justify-center">*/}
+                {/*            <img*/}
+                {/*                src={imageUploadIcon}*/}
+                {/*                alt="Upload icon"*/}
+                {/*                className="w-[50px] h-[50px] mb-2"*/}
+                {/*            />*/}
+                {/*        </div>*/}
+                {/*        <div>No Image Available</div>*/}
+                {/*    </div>*/}
+                {/*)}*/}
                 {responseData.userImageUrl ? (
-                    <ImagePerfumeButton
-                        imageUrl={responseData.userImageUrl}
-                        perfumeName={responseData.perfumeName}
-                    />
+                    <img src={responseData.userImageUrl} alt="User Image" className="max-w-full max-h-full"/>
+
                 ) : (
                     <div className="text-center text-gray-500">
                         <div className="flex justify-center">
-                            <img
-                                src={imageUploadIcon}
-                                alt="Upload icon"
-                                className="w-[50px] h-[50px] mb-2"
-                            />
+                            <img src={imageUploadIcon} alt="Upload icon" className="w-[50px] h-[50px] mb-2"/>
                         </div>
                         <div>No Image Available</div>
                     </div>
                 )}
+                <div className='mt-12'>
+                    <p className='font-headerTitle text-[40px]'>{responseData.perfumeName}</p>
+                </div>
             </div>
 
 
