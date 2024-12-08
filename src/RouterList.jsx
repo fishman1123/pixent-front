@@ -15,6 +15,8 @@ import LoadingAnimation from "./components/pages/Loading.jsx";
 import {Preference} from "./components/pages/Preference.jsx";
 import {ReportViewer} from "./components/pages/ReportViewer.jsx";
 import {ReportViewerResult} from "./components/pages/ReportViewerResult.jsx";
+import { AdminRoute } from "./components/SecuredRoute.jsx";
+import {Admin} from "./components/pages/Admin.jsx";
 
 export const RouterList = [
     {
@@ -57,6 +59,12 @@ export const RouterList = [
                         ),
                     },
                     {
+                        path: '🌚',
+                        element: (
+                            <Admin />
+                        )
+                    },
+                    {
                         path: 'loading',
                         element: (
                             <LoadingAnimation />
@@ -92,6 +100,7 @@ export const RouterList = [
                     },
                 ],
             },
+
 
             {
                 path: '*',

@@ -27,7 +27,6 @@ export const Menu = ({ isOpen, toggleMenu }) => {
                 />
             </button>
 
-            {/* Menu Content */}
             <div
                 className={`fixed top-0 w-full bg-white transform transition-transform duration-300 z-20 ${
                     isOpen ? "translate-y-0" : "-translate-y-full"
@@ -36,17 +35,17 @@ export const Menu = ({ isOpen, toggleMenu }) => {
             >
                 <div className="pt-[30px] pl-2">
                     <h2 className="text-lg font-bold">Menu</h2>
-                    {/*<ul className="mt-4">*/}
-                    {/*    <li className="py-2">*/}
-                    {/*        <a href="#">Home</a>*/}
-                    {/*    </li>*/}
-                    {/*    <li className="py-2">*/}
-                    {/*        <a href="#">About</a>*/}
-                    {/*    </li>*/}
-                    {/*    <li className="py-2">*/}
-                    {/*        <a href="#">Contact</a>*/}
-                    {/*    </li>*/}
-                    {/*</ul>*/}
+                    <ul className="mt-4">
+                        <li className="py-2">
+                            <a href="/admin">Admin</a>
+                        </li>
+                        {/*<li className="py-2">*/}
+                        {/*    <a href="#">About</a>*/}
+                        {/*</li>*/}
+                        {/*<li className="py-2">*/}
+                        {/*    <a href="#">Contact</a>*/}
+                        {/*</li>*/}
+                    </ul>
                 </div>
             </div>
         </>

@@ -199,8 +199,6 @@ export const ResultPage = () => {
                                 disabled
                                 readOnly
                             />
-
-
                             <button
                                 onClick={handleCopy}
                                 data-tooltip-target="tooltip-copy-url-button"
@@ -257,29 +255,14 @@ export const ResultPage = () => {
                                     />
                                 </svg>
                             </button>
-                            <div
-                                id="tooltip-copy-url-button"
-                                role="tooltip"
-                                className="absolute z-10 inline-block px-3 py-2 text-sm font-medium text-white bg-gray-900 rounded-lg shadow-sm opacity-0 transition-opacity duration-300 tooltip"
-                            >
-                <span
-                    id="default-tooltip-message"
-                    className={copySuccess ? "hidden" : ""}
-                >
-                  Copy to clipboard
-                </span>
-                                <span
-                                    id="success-tooltip-message"
-                                    className={copySuccess ? "" : "hidden"}
-                                >
-                  Copied!
-                </span>
+                            <div id="tooltip-copy-url-button" role="tooltip" className="absolute z-10 inline-block px-3 py-2 text-sm font-medium text-white bg-gray-900 rounded-lg shadow-sm opacity-0 transition-opacity duration-300 tooltip">
+                                <span id="default-tooltip-message" className={copySuccess ? "hidden" : ""}>Copy to clipboard</span>
+                                <span id="success-tooltip-message" className={copySuccess ? "" : "hidden"}>Copied!</span>
                                 <div className="tooltip-arrow" data-popper-arrow></div>
                             </div>
                         </div>
                     </div>
                 </div>
-
                 <div className="mt-8 mb-10">
                     <div>
                         <RedirectButton text="홈으로" subText="이동하기" delay={1000}/>

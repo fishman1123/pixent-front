@@ -2,8 +2,6 @@
 
 import axios from 'axios';
 import config from '../config';
-import { setRecoil } from 'recoil-nexus'; // Import setRecoil
-import { errorModalAtom } from '../recoil/errorModalAtom'; // Import your errorModalAtom
 
 // Create a singleton Axios instance
 const AxiosInstance = axios.create({
