@@ -11,7 +11,7 @@ export const RedirectButton = ({ text, subText, delay = 2000 }) => {
         setButtonDisabled(true);
 
         setTimeout(() => {
-            window.location.href = 'https://acscent.co.kr';
+            window.location.href = 'https://acscent.co.kr/shop_view/?idx=199';
             setButtonDisabled(false);
         }, delay);
     };
