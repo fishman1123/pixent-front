@@ -48,24 +48,19 @@ export const PrintReport = () => {
         <div ref={rootRef} className="w-screen h-screen bg-black flex items-center justify-center scrollbar-hide">
             <div ref={appRef} className="bg-white relative">
                 <div className="w-full h-full flex flex-col">
-                    {/* Title */}
-                    <div className="text-center py-4">
-                        <h1 className="text-4xl font-bold tracking-widest">AC'SCENT3</h1>
-                        <h2 className="text-2xl mt-2">{data.perfumeName}</h2>
+                    <div className="text-right pr-3 py-4">
+                        <h1 className=" text-4xl font-bold tracking-widest">{data.perfumeName}</h1>
                     </div>
 
-                    {/* Top Images Section */}
                     <div className="flex w-full px-4 mb-8">
-                        {/* User image on the left if available */}
-                        <div className="w-1/2 h-96 mr-4 flex items-center justify-center">
+                        <div className="w-1/2 h-[280px] mr-4 flex items-center justify-center">
                             {data.userImageUrl ? (
                                 <img src={data.userImageUrl} alt="User" className="max-h-full max-w-full"/>
                             ) : (
                                 <div>No Image</div>
                             )}
                         </div>
-                        {/* Result Chart on the right */}
-                        <div className="w-1/2 h-96 flex items-center justify-center">
+                        <div className="w-1/2 h-[280px] flex items-center justify-center">
                             <ResultChart
                                 inputCitrus={data.citrus}
                                 inputFloral={data.floral}
@@ -77,76 +72,100 @@ export const PrintReport = () => {
                         </div>
                     </div>
 
-                    {/* Content Section */}
-                    <div className="flex w-full px-4 mb-6">
-                        {/* Left Column */}
-                        <div className="w-1/2 pr-4">
+                    <div className="flex w-full px-4 mb-2">
+                        <div className="w-1/2">
                             <div className="mb-6">
                                 <h2 className="font-bold text-xl mb-2">ANALYSIS</h2>
                                 <div className="w-full h-px bg-black"></div>
                             </div>
 
                             <div className="mb-8">
-                                <h3 className="font-medium mb-3">Facial Feature</h3>
+                                <div>
+                                    <h3 className="font-medium mb-3 text-[22px] inline-block border-b-4 border-black">Facial Feature</h3>
+                                </div>
+
                                 <div className="w-full h-40 flex items-center justify-center scrollbar-hide">
-                                    <p className="text-sm px-2">{data.appearance.facialFeature}</p>
+                                    <div className='mr-4'>
+                                        <p className="text-[16px] px-2">{data.appearance.facialFeature}</p>
+                                    </div>
                                 </div>
                             </div>
 
                             <div className="mb-8">
-                                <h3 className="font-medium mb-3">Style</h3>
+                                <div>
+                                    <div>
+                                    <h3 className="font-medium mb-3 text-[22px] inline-block border-b-4 border-black">Style</h3>
+                                    </div>
+                                </div>
                                 <div className="w-full h-40 flex items-center justify-center scrollbar-hide">
-                                    <p className="text-sm px-2 ">{data.appearance.style}</p>
+                                    <div className='mr-4'>
+                                    <p className="text-[16px] px-2 ">{data.appearance.style}</p>
+                                    </div>
                                 </div>
                             </div>
 
                             <div className="mb-8">
-                                <h3 className="font-medium mb-3">Vibe</h3>
+                                <div>
+                                    <h3 className="font-medium mb-3 text-[22px] inline-block border-b-4 border-black">Vibe</h3>
+                                </div>
                                 <div className="w-full h-40 flex items-center justify-center scrollbar-hide">
-                                    <p className="text-sm px-2 ">{data.appearance.vibe}</p>
+                                    <div className='mr-4'>
+                                        <p className="text-[16px] px-2 ">{data.appearance.vibe}</p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
 
-                        <div className="w-1/2 pl-4">
+                        <div className="w-1/2 border-black">
                             <div className="mb-6">
-                                <h2 className="font-bold text-xl mb-2">NOTES</h2>
+                                <h2 className="font-bold text-xl mb-2 pl-4">NOTES</h2>
                                 <div className="w-full h-px bg-black"></div>
                             </div>
+                            <div>
+                                <div className="mb-8">
+                                    <div>
+                                        <h3 className="font-medium mb-3 text-[22px] inline-block border-b-4 border-black ml-4">TOP: {data.mainNote}</h3>
+                                    </div>
+                                    <div className="w-full h-40 flex flex-col p-2 scrollbar-hide">
+                                        <div className='mr-4'>
+                                            <p className="text-[16px] pl-4">{data.mainNoteDesc}</p>
+                                            <p className="text-[16px] pl-4">{data.mainNoteAnalysis}</p>
+                                        </div>
 
-                            <div className="mb-8">
-                                <h3 className="font-medium mb-3">TOP: {data.mainNote}</h3>
-                                <div className="w-full h-40 flex flex-col p-2 overflow-auto scrollbar-hide">
-                                    <p className="text-sm">{data.mainNoteDesc}</p>
-                                    <p className="text-sm mt-2">Analysis: {data.mainNoteAnalysis}</p>
+                                    </div>
+                                </div>
+
+                                <div className="mb-8">
+                                    <div>
+                                        <h3 className="font-medium mb-3 text-[22px] inline-block border-b-4 border-black ml-4">MIDDLE: {data.middleNote}</h3>
+                                    </div>
+                                    <div className="w-full h-40 flex flex-col p-2 scrollbar-hide">
+                                        <p className="text-[16px] pl-4"> {data.middleNoteDesc}</p>
+                                        <p className="text-[16px] pl-4">{data.middleNoteAnalysis}</p>
+                                    </div>
+                                </div>
+
+                                <div className="mb-8">
+                                    <div>
+                                        <h3 className="font-medium mb-3 text-[22px] inline-block border-b-4 border-black ml-4">BASE: {data.baseNote}</h3>
+                                    </div>
+                                    <div className="w-full h-40 flex flex-col p-2 scrollbar-hide">
+                                        <p className="text-[15px] pl-4">{data.baseNoteDesc}</p>
+                                        <p className="text-[15px] pl-4">{data.baseNoteAnalysis}</p>
+                                    </div>
                                 </div>
                             </div>
 
-                            <div className="mb-8">
-                                <h3 className="font-medium mb-3">MIDDLE: {data.middleNote}</h3>
-                                <div className="w-full h-40 flex flex-col p-2 overflow-auto scrollbar-hide">
-                                    <p className="text-sm"> {data.middleNoteDesc}</p>
-                                    <p className="text-sm mt-2">Analysis: {data.middleNoteAnalysis}</p>
-                                </div>
-                            </div>
-
-                            <div className="mb-8">
-                                <h3 className="font-medium mb-3">BASE: {data.baseNote}</h3>
-                                <div className="w-full h-40 flex flex-col p-2 overflow-auto scrollbar-hide">
-                                    <p className="text-sm">Desc: {data.baseNoteDesc}</p>
-                                    <p className="text-sm mt-2">Analysis: {data.baseNoteAnalysis}</p>
-                                </div>
-                            </div>
                         </div>
                     </div>
 
                     <div className="w-full px-4 mb-8">
                         <div className="mb-4">
-                            <h2 className="font-bold text-xl mb-2">PROFILES</h2>
+                        <h2 className="font-bold text-xl mb-2">PROFILES</h2>
                             <div className="w-full h-px bg-black"></div>
                         </div>
-                        <div className="w-full h-40 flex items-center justify-center p-2">
-                            <p className="text-sm overflow-auto scrollbar-hide">{data.profile}</p>
+                        <div className="w-full h-[230px] flex items-center justify-center p-2">
+                            <p className="text-[16px] overflow-auto scrollbar-hide">{data.profile}</p>
                         </div>
                     </div>
                 </div>
