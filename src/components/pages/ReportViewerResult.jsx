@@ -1,14 +1,15 @@
 import React from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useGetReportByUuid } from "../../hooks/useGetReportByUuid";
 import imageUploadIcon from "../../assets/upload.svg";
 import { ResultChart } from "../result/ResultChart.jsx";
 import { RedirectButton } from "../RedirectButton.jsx";
-import {ImagePerfumeButton} from "../result/ImagePerfumeButton.jsx";
+import { ImagePerfumeButton } from "../result/ImagePerfumeButton.jsx";
 
 export const ReportViewerResult = () => {
     const { id: uuid } = useParams();
     const { data: responseData, isLoading, isError } = useGetReportByUuid(uuid);
+    const navigate = useNavigate();
 
     if (isLoading) {
         return <div>Loading...</div>;
@@ -18,29 +19,16 @@ export const ReportViewerResult = () => {
         return <div>Error fetching report. Please try again later.</div>;
     }
 
+    const handleSummaryClick = () => {
+        // Navigate to '/summary' and pass responseData via state
+        navigate('/summary', { state: responseData });
+    };
+
     return (
         <div className="flex flex-col justify-center items-center min-h-screen w-full text-center">
             <div className="w-full h-auto flex flex-col justify-center items-center">
-                {/*{responseData.userImageUrl ? (*/}
-                {/*    <ImagePerfumeButton*/}
-                {/*        imageUrl={responseData.userImageUrl}*/}
-                {/*        perfumeName={responseData.perfumeName}*/}
-                {/*    />*/}
-                {/*) : (*/}
-                {/*    <div className="text-center text-gray-500">*/}
-                {/*        <div className="flex justify-center">*/}
-                {/*            <img*/}
-                {/*                src={imageUploadIcon}*/}
-                {/*                alt="Upload icon"*/}
-                {/*                className="w-[50px] h-[50px] mb-2"*/}
-                {/*            />*/}
-                {/*        </div>*/}
-                {/*        <div>No Image Available</div>*/}
-                {/*    </div>*/}
-                {/*)}*/}
                 {responseData.userImageUrl ? (
                     <img src={responseData.userImageUrl} alt="User Image" className="max-w-full max-h-full"/>
-
                 ) : (
                     <div className="text-center text-gray-500">
                         <div className="flex justify-center">
@@ -128,8 +116,16 @@ export const ReportViewerResult = () => {
                 </div>
                 <div className="mt-8 mb-10">
                     <div>
-                        <RedirectButton text="홈으로" subText="이동하기" delay={0}/>
+                        <RedirectButton text="구매하기" subText="이동하기" delay={0} target="https://acscent.co.kr/shop_view/?idx=199"/>
                     </div>
+                </div>
+                <div className='flex justify-end'>
+                    <button
+                        onClick={handleSummaryClick}
+                        className="bg-white text-white px-4 py-2 rounded mt-4"
+                    >
+                        요약본 보기
+                    </button>
                 </div>
             </div>
         </div>

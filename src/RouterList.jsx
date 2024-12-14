@@ -1,5 +1,3 @@
-// RouterList.jsx
-
 import { Intro } from './components/pages/Intro.jsx';
 import { Input } from './components/pages/Input.jsx';
 import SecuredRoute from "./components/SecuredRoute.jsx";
@@ -10,21 +8,25 @@ import { WrongPath } from "./components/pages/WrongPath.jsx";
 import { ResultPage } from "./components/pages/ResultPage.jsx";
 import { MainLayout } from "./components/layout/MainLayout.jsx";
 import { ResultLayout } from "./components/layout/ResultLayout.jsx";
-import { AppLayout } from "./components/layout/AppLayout.jsx"; // Import AppLayout
+import { AppLayout } from "./components/layout/AppLayout.jsx";
 import LoadingAnimation from "./components/pages/Loading.jsx";
-import {Preference} from "./components/pages/Preference.jsx";
-import {ReportViewer} from "./components/pages/ReportViewer.jsx";
-import {ReportViewerResult} from "./components/pages/ReportViewerResult.jsx";
-import { AdminRoute } from "./components/SecuredRoute.jsx";
-import {Admin} from "./components/pages/Admin.jsx";
+import { Preference } from "./components/pages/Preference.jsx";
+import { ReportViewer } from "./components/pages/ReportViewer.jsx";
+import { ReportViewerResult } from "./components/pages/ReportViewerResult.jsx";
+import { Admin } from "./components/pages/Admin.jsx";
+import { PrintReport } from "./components/pages/PrintReport.jsx";
 
 export const RouterList = [
     {
+        path: 'summary',
+        element: <PrintReport />,
+    },
+    {
         path: '/',
-        element: <AppLayout />, // Use AppLayout as the top-level layout
+        element: <AppLayout />, // top-level layout for main site
         children: [
             {
-                element: <MainLayout />, // Nest MainLayout
+                element: <MainLayout />,
                 children: [
                     {
                         index: true,
@@ -60,31 +62,22 @@ export const RouterList = [
                     },
                     {
                         path: '🌚',
-                        element: (
-                            <Admin />
-                        )
+                        element: <Admin />
                     },
                     {
                         path: 'loading',
-                        element: (
-                            <LoadingAnimation />
-                        ),
+                        element: <LoadingAnimation />,
                     },
                     {
                         path: 'report',
-                        element: (
-                            <ReportViewer/>
-                        ),
+                        element: <ReportViewer />,
                         children: [
                             {
                                 path: ':id',
-                                element: (
-                                    <ReportViewerResult /> // Optionally a different or enhanced version
-                                )
+                                element: <ReportViewerResult />
                             }
                         ]
                     }
-
                 ],
             },
             {
@@ -100,12 +93,10 @@ export const RouterList = [
                     },
                 ],
             },
-
-
             {
                 path: '*',
                 element: <WrongPath />,
             },
         ],
-    },
+    }
 ];
