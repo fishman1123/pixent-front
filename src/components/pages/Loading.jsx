@@ -5,6 +5,9 @@ const Loading = () => {
     const [animate, setAnimate] = useState(true);
 
     useEffect(() => {
+        window.scrollTo(0, 0);
+    }, []);
+    useEffect(() => {
         setAnimate(false);
         const timeout = setTimeout(() => setAnimate(true), 100);
         return () => clearTimeout(timeout);
@@ -23,13 +26,13 @@ const Loading = () => {
             'Results deleted upon refresh',
             'Please capture the results'
         ],
-        ja: [
+        jp: [
             '必ず人物の画像をアップロード',
             '一人のみの画像が必要です',
             '更新すると結果は削除されます',
             '結果を必ずキャプチャしてください'
         ],
-        zh: [
+        ch: [
             '必须上传人物图片',
             '仅限一人的图片',
             '刷新页面将删除分析结果',
@@ -44,7 +47,7 @@ const Loading = () => {
                     ANALYZING
                 </h1>
                 <div className="flex gap-1">
-                    {['ko', 'en', 'ja', 'zh'].map((lang) => (
+                    {['ko', 'en', 'jp', 'ch'].map((lang) => (
                         <button
                             key={lang}
                             onClick={() => setCurrentLang(lang)}

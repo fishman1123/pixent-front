@@ -4,6 +4,7 @@ import { userAtoms } from '../../recoil/userAtoms';
 import { IntroTop } from '../intro/IntroTop.jsx';
 import { IntroBottom } from '../intro/IntroBotttom.jsx';
 import { IntroCenter } from '../intro/IntroCenter.jsx';
+import {IntroFooter} from "../intro/IntroFooter.jsx";
 
 export const Intro = () => {
     const setUserState = useSetRecoilState(userAtoms);

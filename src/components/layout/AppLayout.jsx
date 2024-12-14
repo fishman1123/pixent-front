@@ -6,6 +6,7 @@ import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import '../transition.css';
 import { Navbar } from "../Navbar.jsx";
 import {Footer} from "../Footer.jsx";
+import {ExtraFooter} from "../ExtraFooter.jsx";
 
 export const AppLayout = () => {
     const location = useLocation();
@@ -20,7 +21,6 @@ export const AppLayout = () => {
     return (
         <div className="relative min-h-screen max-w-[480px] mx-auto">
             {!isResultPage && !isFinalPage && <Navbar />}
-
             <TransitionGroup component={null}>
                 <CSSTransition
                     key={location.key}
@@ -31,7 +31,11 @@ export const AppLayout = () => {
                     <Outlet />
                 </CSSTransition>
             </TransitionGroup>
-            <Footer />
+            <div className="p-2">
+                <ExtraFooter />
+                <Footer />
+            </div>
+
         </div>
     );
 };

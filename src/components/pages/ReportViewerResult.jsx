@@ -128,7 +128,7 @@ export const ReportViewerResult = () => {
                 </div>
                 <div className="mt-8 mb-10">
                     <div>
-                        <RedirectButton text="홈으로" subText="이동하기" delay={1000}/>
+                        <RedirectButton text="홈으로" subText="이동하기" delay={0}/>
                     </div>
                 </div>
             </div>

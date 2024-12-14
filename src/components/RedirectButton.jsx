@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import './ProcedureButton.css'; // Reuse the same styles as ProcedureButton
 
-export const RedirectButton = ({ text, subText, delay = 2000 }) => {
+export const RedirectButton = ({ text, subText, delay = 0 }) => {
     const [isButtonDisabled, setButtonDisabled] = useState(false);
 
     const handleButtonClick = () => {
@@ -11,7 +11,7 @@ export const RedirectButton = ({ text, subText, delay = 2000 }) => {
         setButtonDisabled(true);
 
         setTimeout(() => {
-            window.location.href = 'https://acscent.co.kr/shop_view/?idx=199';
+            window.open('https://acscent.co.kr/shop_view/?idx=199', '_blank');
             setButtonDisabled(false);
         }, delay);
     };

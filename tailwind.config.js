@@ -15,6 +15,7 @@ export default {
       },
       screens: {
         'responsive': '100vw',
+        'xs': { max: '370px' },
       },
       backgroundColor: {
         'intro': 'white',
