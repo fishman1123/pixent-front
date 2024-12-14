@@ -89,21 +89,21 @@ export const PrintReport = () => {
                             <div className="mb-8">
                                 <h3 className="font-medium mb-3">Facial Feature</h3>
                                 <div className="w-full h-40 flex items-center justify-center scrollbar-hide">
-                                    <p className="text-sm px-2 text-center">{data.appearance.facialFeature}</p>
+                                    <p className="text-sm px-2">{data.appearance.facialFeature}</p>
                                 </div>
                             </div>
 
                             <div className="mb-8">
                                 <h3 className="font-medium mb-3">Style</h3>
                                 <div className="w-full h-40 flex items-center justify-center scrollbar-hide">
-                                    <p className="text-sm px-2 text-center">{data.appearance.style}</p>
+                                    <p className="text-sm px-2 ">{data.appearance.style}</p>
                                 </div>
                             </div>
 
                             <div className="mb-8">
                                 <h3 className="font-medium mb-3">Vibe</h3>
                                 <div className="w-full h-40 flex items-center justify-center scrollbar-hide">
-                                    <p className="text-sm px-2 text-center">{data.appearance.vibe}</p>
+                                    <p className="text-sm px-2 ">{data.appearance.vibe}</p>
                                 </div>
                             </div>
                         </div>
@@ -146,7 +146,7 @@ export const PrintReport = () => {
                             <div className="w-full h-px bg-black"></div>
                         </div>
                         <div className="w-full h-40 flex items-center justify-center p-2">
-                            <p className="text-sm text-center overflow-auto scrollbar-hide">{data.profile}</p>
+                            <p className="text-sm overflow-auto scrollbar-hide">{data.profile}</p>
                         </div>
                     </div>
                 </div>
