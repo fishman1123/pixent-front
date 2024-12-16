@@ -15,6 +15,7 @@ import { ReportViewer } from "./components/pages/ReportViewer.jsx";
 import { ReportViewerResult } from "./components/pages/ReportViewerResult.jsx";
 import { Admin } from "./components/pages/Admin.jsx";
 import { PrintReport } from "./components/pages/PrintReport.jsx";
+import NewLoading from "./components/pages/NewLoading.jsx";
 
 export const RouterList = [
     {
@@ -66,7 +67,7 @@ export const RouterList = [
                     },
                     {
                         path: 'loading',
-                        element: <LoadingAnimation />,
+                        element: <NewLoading />,
                     },
                     {
                         path: 'report',

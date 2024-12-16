@@ -12,6 +12,7 @@ import LoadingAnimation from '../pages/Loading.jsx';
 import imageCompression from 'browser-image-compression';
 import {PersonalAgreement} from "./PersonalAgreement.jsx";
 import {Modal} from "../Modal.jsx";
+import NewLoading from "../pages/NewLoading.jsx";
 
 export const InputTextTwoCombineUpload = () => {
     const { t } = useTranslation();
@@ -140,7 +141,7 @@ export const InputTextTwoCombineUpload = () => {
 
     return (
         <>
-            {isLoading && <LoadingAnimation />}
+            {isLoading && <NewLoading />}
             {!isLoading && (
                 <div>
                     <div className="font-bold text-4xl">{t('userProfile.title')}</div>
