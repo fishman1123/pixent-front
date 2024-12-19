@@ -67,7 +67,7 @@ export const RouterList = [
                     },
                     {
                         path: 'loading',
-                        element: <NewLoading />,
+                        element: <LoadingAnimation />,
                     },
                     {
                         path: 'report',

@@ -180,7 +180,7 @@ const NewLoading = ({ onLoadingComplete }) => {
     const warningImages = ['/warningOne.png', '/warningTwo.png', '/warningThree.png'];
 
     return (
-        <div className="min-h-screen bg-white text-black flex flex-col items-center p-6 pt-8">
+        <div className="min-h-screen bg-white text-black flex flex-col p-6 pt-8">
             <div
                 className="w-full flex flex-col items-start relative mx-auto overflow-hidden"
                 style={{
@@ -224,7 +224,7 @@ const NewLoading = ({ onLoadingComplete }) => {
                 </div>
 
                 {/* Transition Container */}
-                <div className="w-full overflow-hidden relative">
+                <div className="w-full overflow-hidden relative items-start">
                     <div
                         className="transition-transform duration-700 ease-in-out flex"
                         style={{
@@ -258,14 +258,14 @@ const NewLoading = ({ onLoadingComplete }) => {
                                 </div>
 
                                 {/* Notice Content */}
-                                <div className="border border-gray-200 p-6 w-full">
+                                <div className="border border-gray-200 p-6 w-full items-start">
                                     <div className="flex items-baseline gap-3 mb-6">
                                         <span className="text-base tracking-[.3em] font-light">{notice.step}</span>
                                         <h3 className="text-lg font-bold tracking-wide">{notice.title}</h3>
                                     </div>
 
                                     <div className="space-y-4 w-[280px]">
-                                        <div className="w-full break-keep">
+                                        <div className="w-full break-keep items-start">
                                             {notice.mainText && (
                                                 <span className="text-[13px] leading-tight font-light">
                                                     {notice.mainText}{' '}
