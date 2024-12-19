@@ -141,7 +141,7 @@ export const InputTextTwoCombineUpload = () => {
 
     return (
         <>
-            {isLoading && <NewLoading />}
+            {isLoading && <LoadingAnimation />}
             {!isLoading && (
                 <div>
                     <div className="font-bold text-4xl">{t('userProfile.title')}</div>
