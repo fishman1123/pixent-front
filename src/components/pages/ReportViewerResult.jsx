@@ -45,7 +45,7 @@ export const ReportViewerResult = () => {
             <div className="mx-5">
                 <div className="mt-[80px]">
                     <div><p className="text-white text-sm mt-8">
-                        클릭하여 추천 향 확인하기
+                        {/*클릭하여 추천 향 확인하기*/}
                     </p></div>
                     <div className="text-left text-[18px] font-bold">ANALYSIS</div>
                     <div className="relative flex items-center justify-center w-full mt-3 mb-5">

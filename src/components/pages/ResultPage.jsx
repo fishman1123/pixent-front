@@ -111,8 +111,8 @@ export const ResultPage = () => {
                     </p>
                 </div>
             </div>
-
-            <div className="mx-5">
+            {/*fix this to be shrink until 320px*/}
+            <div className='w-full px-4'>
                 {/* ANALYSIS Section */}
                 <div className="mt-[80px]">
                     <div className="text-left text-[18px] font-bold">ANALYSIS</div>
@@ -230,7 +230,7 @@ export const ResultPage = () => {
                                 <input
                                     id="copy-url-input"
                                     type="text"
-                                    className="flex-grow text-gray-500 text-sm focus:ring-blue-500 outline-none border-none"
+                                    className="flex-1 min-w-0 text-gray-500 text-sm focus:ring-blue-500 outline-none border-none"
                                     value={`https://www.pixent.co.kr/report/${responseData?.uuid}`}
                                     disabled
                                     readOnly
@@ -244,42 +244,13 @@ export const ResultPage = () => {
                                     <span
                                         id="default-icon"
                                         className={`flex-shrink-0 ${copySuccess ? "hidden" : ""}`}
-                                    >
-    <img
-        src={CopyIcon}
-        alt="Copy Icon"
-        className="w-4 h-4"
-    />
-  </span>
-
+                                    ><img src={CopyIcon} alt="Copy Icon" className="w-4 h-4"/></span>
                                     {/* CHECK ICON (visible when copySuccess === true) */}
-                                    <span
-                                        id="success-icon"
-                                        className={`flex-shrink-0 ${copySuccess ? "" : "hidden"}`}
-                                    >
-    <svg
-        className="w-4 h-4 text-black"
-        aria-hidden="true"
-        fill="none"
-        viewBox="0 0 16 12"
-    >
-      <path
-          stroke="currentColor"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth="2"
-          d="M1 5.917L5.724 10.5 15 1.5"
-      />
-    </svg>
-  </span>
-
-                                    {/* TEXT THAT CHANGES */}
-                                    <span className="text-sm">
-    {copySuccess ? "Copied!" : "Copy URL"}
-  </span>
+                                    <span id="success-icon" className={`flex-shrink-0 ${copySuccess ? "" : "hidden"}`}>
+                                        <svg className="w-4 h-4 text-black" aria-hidden="true" fill="none" viewBox="0 0 16 12">
+                                            <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M1 5.917L5.724 10.5 15 1.5"/></svg></span>
+                                    <span className="text-sm">{copySuccess ? "Copied!" : "Copy URL"}</span>
                                 </button>
-
-
                                 <button
                                     onClick={() => {
                                         const url = `https://www.pixent.co.kr/report/${responseData?.uuid}`;
@@ -308,16 +279,11 @@ export const ResultPage = () => {
                                     role="tooltip"
                                     className="absolute z-10 inline-block px-3 py-2 text-sm font-medium text-white bg-gray-900 rounded-lg shadow-sm opacity-0 transition-opacity duration-300 tooltip"
                                 >
-        <span id="default-tooltip-message" className={copySuccess ? "hidden" : ""}>
-            Copy to clipboard
-        </span>
-                                    <span id="success-tooltip-message" className={copySuccess ? "" : "hidden"}>
-            Copied!
-        </span>
+                                    <span id="default-tooltip-message" className={copySuccess ? "hidden" : ""}>Copy to clipboard</span>
+                                    <span id="success-tooltip-message" className={copySuccess ? "" : "hidden"}>Copied!</span>
                                     <div className="tooltip-arrow" data-popper-arrow></div>
                                 </div>
                             </div>
-
                             <div className='flex text-gray-400 text-[12px] mb-4'>
                                 제품 구매를 위해서는 반드시 링크를 복사해야 합니다.
                             </div>
