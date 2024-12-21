@@ -1,14 +1,11 @@
 // src/App.jsx
 
 import React, { useEffect } from 'react';
-import { StrictMode } from 'react';
-import { createRoot } from 'react-dom/client';
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import { RecoilRoot } from 'recoil';
 import { RouterList } from './RouterList.jsx';
 import './index.css';
 import 'flowbite';
-
 import './i18n'; // Ensure this path is correct
 import { userAtoms, defaultUserState } from './recoil/userAtoms';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
@@ -34,7 +31,6 @@ function setScreenSize() {
 function App() {
     useEffect(() => {
         setScreenSize();
-
         window.addEventListener("resize", setScreenSize);
 
         return () => {
@@ -55,8 +51,4 @@ function App() {
     );
 }
 
-createRoot(document.getElementById('root')).render(
-    <StrictMode>
-        <App />
-    </StrictMode>
-);
+export default App;

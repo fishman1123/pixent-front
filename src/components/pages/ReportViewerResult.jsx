@@ -116,7 +116,7 @@ export const ReportViewerResult = () => {
                 </div>
                 <div className="mt-8 mb-10">
                     <div>
-                        <RedirectButton text="구매하기" subText="이동하기" delay={0} target="https://acscent.co.kr/shop_view/?idx=199"/>
+                        <RedirectButton text="구하기" subText="이동하기" delay={0} target="https://acscent.co.kr/shop_view/?idx=199"/>
                     </div>
                 </div>
                 <div className='flex justify-end'>

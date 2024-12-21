@@ -71,7 +71,7 @@ export const ResultChart = ({
 
     return (
         <div className="w-full max-w-md mx-auto p-4">
-            <h2 className="text-2xl font-bold mb-4">SCENT PROFILE</h2>
+            <h2 className="text-2xl font-bold mb-4 text-center">SCENT PROFILE</h2>
             {/*<p className="mb-6 text-gray-600">*/}
             {/*    테스트중, 수치조정 없앨예정*/}
             {/*</p>*/}

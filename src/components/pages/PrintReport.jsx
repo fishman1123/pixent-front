@@ -52,33 +52,32 @@ export const PrintReport = () => {
                         <h1 className=" text-4xl font-bold tracking-widest">{data.perfumeName}</h1>
                     </div>
 
-                    <div className="flex w-full px-4 mb-8">
-                        <div className="w-1/2 h-[280px] mr-4 flex items-center justify-center">
-                            {data.userImageUrl ? (
-                                <img src={data.userImageUrl} alt="User" className="max-h-full max-w-full"/>
-                            ) : (
-                                <div>No Image</div>
-                            )}
-                        </div>
-                        <div className="w-1/2 h-[280px] flex items-center justify-center">
-                            <ResultChart
-                                inputCitrus={data.citrus}
-                                inputFloral={data.floral}
-                                inputWoody={data.woody}
-                                inputMusk={data.musk}
-                                inputFresh={data.fruity}
-                                inputSpicy={data.spicy}
-                            />
-                        </div>
-                    </div>
+                    {/*<div className="flex w-full px-4 mb-8">*/}
+                    {/*    <div className="w-1/2 h-[280px] mr-4 flex items-center justify-center">*/}
+                    {/*        {data.userImageUrl ? (*/}
+                    {/*            <img src={data.userImageUrl} alt="User" className="max-h-full max-w-full"/>*/}
+                    {/*        ) : (*/}
+                    {/*            <div>No Image</div>*/}
+                    {/*        )}*/}
+                    {/*    </div>*/}
+                    {/*    <div className="w-1/2 h-[280px] flex items-center justify-center">*/}
+                    {/*        <ResultChart*/}
+                    {/*            inputCitrus={data.citrus}*/}
+                    {/*            inputFloral={data.floral}*/}
+                    {/*            inputWoody={data.woody}*/}
+                    {/*            inputMusk={data.musk}*/}
+                    {/*            inputFresh={data.fruity}*/}
+                    {/*            inputSpicy={data.spicy}*/}
+                    {/*        />*/}
+                    {/*    </div>*/}
+                    {/*</div>*/}
 
                     <div className="flex w-full px-4 mb-2">
                         <div className="w-1/2">
-                            <div className="mb-6">
-                                <h2 className="font-bold text-xl mb-2">ANALYSIS</h2>
-                                <div className="w-full h-px bg-black"></div>
-                            </div>
-
+                            {/*<div className="mb-6">*/}
+                            {/*    <h2 className="font-bold text-xl mb-2">ANALYSIS</h2>*/}
+                            {/*    <div className="w-full h-px bg-black"></div>*/}
+                            {/*</div>*/}
                             <div className="mb-8">
                                 <div>
                                     <h3 className="font-medium mb-3 text-[22px] inline-block border-b-4 border-black">Facial Feature</h3>
@@ -117,10 +116,10 @@ export const PrintReport = () => {
                         </div>
 
                         <div className="w-1/2 border-black">
-                            <div className="mb-6">
-                                <h2 className="font-bold text-xl mb-2 pl-4">NOTES</h2>
-                                <div className="w-full h-px bg-black"></div>
-                            </div>
+                            {/*<div className="mb-6">*/}
+                            {/*    <h2 className="font-bold text-xl mb-2 pl-4">NOTES</h2>*/}
+                            {/*    <div className="w-full h-px bg-black"></div>*/}
+                            {/*</div>*/}
                             <div>
                                 <div className="mb-8">
                                     <div>
@@ -128,10 +127,9 @@ export const PrintReport = () => {
                                     </div>
                                     <div className="w-full h-40 flex flex-col p-2 scrollbar-hide">
                                         <div className='mr-4'>
-                                            <p className="text-[16px] pl-4">{data.mainNoteDesc}</p>
-                                            <p className="text-[16px] pl-4">{data.mainNoteAnalysis}</p>
+                                            <span className="text-[16px] pl-4">{data.mainNoteDesc}</span>
+                                            <span className="text-[16px] pl-4">{data.mainNoteAnalysis}</span>
                                         </div>
-
                                     </div>
                                 </div>
 
@@ -140,8 +138,8 @@ export const PrintReport = () => {
                                         <h3 className="font-medium mb-3 text-[22px] inline-block border-b-4 border-black ml-4">MIDDLE: {data.middleNote}</h3>
                                     </div>
                                     <div className="w-full h-40 flex flex-col p-2 scrollbar-hide">
-                                        <p className="text-[16px] pl-4"> {data.middleNoteDesc}</p>
-                                        <p className="text-[16px] pl-4">{data.middleNoteAnalysis}</p>
+                                        <span className="text-[16px] pl-4">{data.middleNoteDesc}</span>
+                                        <span className="text-[16px] pl-4">{data.middleNoteAnalysis}</span>
                                     </div>
                                 </div>
 
@@ -150,8 +148,8 @@ export const PrintReport = () => {
                                         <h3 className="font-medium mb-3 text-[22px] inline-block border-b-4 border-black ml-4">BASE: {data.baseNote}</h3>
                                     </div>
                                     <div className="w-full h-40 flex flex-col p-2 scrollbar-hide">
-                                        <p className="text-[15px] pl-4">{data.baseNoteDesc}</p>
-                                        <p className="text-[15px] pl-4">{data.baseNoteAnalysis}</p>
+                                        <span className="text-[15px] pl-4">{data.baseNoteDesc}</span>
+                                        <span className="text-[15px] pl-4">{data.baseNoteAnalysis}</span>
                                     </div>
                                 </div>
                             </div>
@@ -161,13 +159,26 @@ export const PrintReport = () => {
 
                     <div className="w-full px-4 mb-8">
                         <div className="mb-4">
-                        <h2 className="font-bold text-xl mb-2">PROFILES</h2>
+                            <h2 className="font-bold text-xl mb-2">PROFILES</h2>
                             <div className="w-full h-px bg-black"></div>
                         </div>
                         <div className="w-full h-[230px] flex items-center justify-center p-2">
                             <p className="text-[16px] overflow-auto scrollbar-hide">{data.profile}</p>
                         </div>
                     </div>
+                    <div className='flex justify-center '>
+                        <div className="w-1/2 h-[330px] flex items-center justify-center">
+                            <ResultChart
+                                inputCitrus={data.citrus}
+                                inputFloral={data.floral}
+                                inputWoody={data.woody}
+                                inputMusk={data.musk}
+                                inputFresh={data.fruity}
+                                inputSpicy={data.spicy}
+                            />
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </div>
