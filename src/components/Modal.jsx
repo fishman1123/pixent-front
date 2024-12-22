@@ -11,7 +11,6 @@ export const Modal = ({
                           title,
                           onClose,
                           children,
-                          /* NEW PROPS for optional confirmation */
                           showConfirmButtons = false,         // if true, show confirm/cancel buttons
                           onConfirm = null,                  // callback for "Confirm" button
                           confirmText = 'Confirm',           // text for the "Confirm" button
@@ -85,7 +84,7 @@ export const Modal = ({
         >
             <div
                 ref={modalRef}
-                className={`relative w-full max-w-[460px] h-[95vh] bg-white border border-black shadow-2xl overflow-hidden transition-all duration-300 ease-in-out ${
+                className={`relative w-full max-w-[460px] h-[80vh] bg-white border border-black shadow-2xl overflow-hidden transition-all duration-300 ease-in-out ${
                     isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
                 } flex flex-col`}
             >

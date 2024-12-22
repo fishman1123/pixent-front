@@ -8,6 +8,7 @@ import { Navbar } from "../Navbar.jsx";
 import {Footer} from "../Footer.jsx";
 import {ExtraFooter} from "../ExtraFooter.jsx";
 
+
 export const AppLayout = () => {
     const location = useLocation();
 

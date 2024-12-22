@@ -86,7 +86,7 @@ const Loading = () => {
                             <div className="absolute left-0 top-1/2 -translate-x-1/2 -translate-y-1/2 w-4 h-4 bg-black text-white rounded-full flex items-center justify-center text-xs">
                                 !
                             </div>
-                            <p className="text-sm whitespace-nowrap overflow-hidden text-ellipsis">
+                            <p className="text-[11px] whitespace-nowrap overflow-hidden text-ellipsis">
                                 {notice}
                             </p>
                         </div>

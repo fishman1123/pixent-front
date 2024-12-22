@@ -1,26 +1,25 @@
 // src/components/intro/InfoInput.jsx
 import React, { useEffect } from 'react';
-import { InputTextTop } from "../inputInfo/InputTextTop.jsx";
-import { Checkbox } from "../inputInfo/CheckBox.jsx";
-import { SelectForm } from "../inputInfo/SelectForm.jsx";
-import { InputTextCenter } from "../inputInfo/InputTextCenter.jsx";
-import { useRecoilState, useRecoilValue } from 'recoil';
-import { checkboxDataAtom } from '../../recoil/checkboxDataAtom.jsx';
-import { checkboxSelectionsAtom } from '../../recoil/checkboxSelectionsAtom.jsx';
-import { ProcedureButton } from "../ProcedureButton.jsx";
-import { modalTriggerAtom } from '../../recoil/modalTriggerAtom';
-import { confirmationAtom } from '../../recoil/confirmationAtom.jsx';
+import { useRecoilState } from 'recoil';
+import { checkboxDataAtom } from '../../recoil/checkboxDataAtom';
+import { checkboxSelectionsAtom } from '../../recoil/checkboxSelectionsAtom';
+import { ProcedureButton } from '../ProcedureButton';
 import { useTranslation } from 'react-i18next';
+
+// Remove isAnyModalOpenSelector if you no longer need to conditionally switch z-index
+// import { isAnyModalOpenSelector } from '../../recoil/selector/isAnyModalOpenSelector';
+
+import { InputTextTop } from '../inputInfo/InputTextTop';
+import { SelectForm } from '../inputInfo/SelectForm';
+import { Checkbox } from '../inputInfo/CheckBox';
+import { InputTextCenter } from '../inputInfo/InputTextCenter';
 
 export const InfoInput = () => {
     const { t, i18n } = useTranslation();
     const [checkboxData, setCheckboxData] = useRecoilState(checkboxDataAtom);
     const [checkboxSelections, setCheckboxSelections] = useRecoilState(checkboxSelectionsAtom);
-    const modalState = useRecoilValue(modalTriggerAtom);
-    const confirmationState = useRecoilValue(confirmationAtom);
 
     useEffect(() => {
-        // Translated data example
         const translatedData = [
             {
                 id: 1,
@@ -30,7 +29,7 @@ export const InfoInput = () => {
                     t('checkboxData.additionalInfo1_1'),
                     t('checkboxData.additionalInfo1_2'),
                     t('checkboxData.additionalInfo1_3'),
-                    t('checkboxData.additionalInfo1_4')
+                    t('checkboxData.additionalInfo1_4'),
                 ],
                 chartData: [
                     { name: t('chartData.sweetness'), value: 6 },
@@ -46,7 +45,7 @@ export const InfoInput = () => {
                 additionalInfo: [
                     t('checkboxData.additionalInfo2_1'),
                     t('checkboxData.additionalInfo2_2'),
-                    t('checkboxData.additionalInfo2_3')
+                    t('checkboxData.additionalInfo2_3'),
                 ],
                 chartData: [
                     { name: t('chartData.sweetness'), value: 8 },
@@ -62,7 +61,7 @@ export const InfoInput = () => {
                 additionalInfo: [
                     t('checkboxData.additionalInfo3_1'),
                     t('checkboxData.additionalInfo3_2'),
-                    t('checkboxData.additionalInfo3_3')
+                    t('checkboxData.additionalInfo3_3'),
                 ],
                 chartData: [
                     { name: t('chartData.sweetness'), value: 3 },
@@ -78,7 +77,7 @@ export const InfoInput = () => {
                 additionalInfo: [
                     t('checkboxData.additionalInfo4_1'),
                     t('checkboxData.additionalInfo4_2'),
-                    t('checkboxData.additionalInfo4_3')
+                    t('checkboxData.additionalInfo4_3'),
                 ],
                 chartData: [
                     { name: t('chartData.sweetness'), value: 7 },
@@ -94,7 +93,7 @@ export const InfoInput = () => {
                 additionalInfo: [
                     t('checkboxData.additionalInfo5_1'),
                     t('checkboxData.additionalInfo5_2'),
-                    t('checkboxData.additionalInfo5_3')
+                    t('checkboxData.additionalInfo5_3'),
                 ],
                 chartData: [
                     { name: t('chartData.sweetness'), value: 9 },
@@ -110,7 +109,7 @@ export const InfoInput = () => {
                 additionalInfo: [
                     t('checkboxData.additionalInfo6_1'),
                     t('checkboxData.additionalInfo6_2'),
-                    t('checkboxData.additionalInfo6_3')
+                    t('checkboxData.additionalInfo6_3'),
                 ],
                 chartData: [
                     { name: t('chartData.sweetness'), value: 4 },
@@ -120,28 +119,26 @@ export const InfoInput = () => {
                 ],
             },
         ];
+
         setCheckboxData(translatedData);
 
-        // Initialize selections
         const initialSelections = {};
-        translatedData.forEach(option => {
+        translatedData.forEach((option) => {
             initialSelections[option.id] = null;
         });
         setCheckboxSelections(initialSelections);
-    }, [t, i18n.language, setCheckboxData, setCheckboxSelections]); // Added i18n.language
+    }, [t, i18n.language, setCheckboxData, setCheckboxSelections]);
 
     return (
-        <div
-            className={`relative flex-col justify-center items-center min-h-screen w-full text-center ${
-                modalState.isOpen || confirmationState.isOpen ? 'z-0' : 'z-10'
-            }`}
-        >
+        // z-0 ensures it's behind higher layers like Navbar (z-10 or z-30) and Modal (z-50).
+        <div className="relative z-0 flex-col justify-center items-center min-h-screen w-full text-center">
             <InputTextTop />
             <SelectForm />
             <Checkbox componentId={1} />
             <InputTextCenter />
             <Checkbox componentId={2} />
-            <div className="mt-10 mb-5 ">
+
+            <div className="mt-10 mb-5">
                 <ProcedureButton
                     text={t('Next')}
                     route="/inputTwo"
