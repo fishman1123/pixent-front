@@ -1,7 +1,7 @@
 // src/components/ConfirmationModal.jsx
 
 import React from 'react';
-import { Modal } from './Modal';
+import { PortalModal } from './PortalModal';
 
 export const ConfirmationModal = ({
                                       isOpen,
@@ -14,19 +14,21 @@ export const ConfirmationModal = ({
     if (!isOpen) return null;
 
     return (
-        <Modal
-            title={title}
+        <PortalModal
+            isOpen={isOpen}
             onClose={onClose}
-            showConfirmButtons={true}
+            title={title}
+
+            showConfirmButtons
             onConfirm={onConfirm}
             confirmText="구매하러 가기"
             cancelText="보고서 확인하기"
             onCancel={onClose}
         >
-            <div className='flex ml-2 text-gray-600 text-lg'>
+            <div className="flex ml-2 text-gray-600 text-lg">
                 <p>{message}</p>
             </div>
             {children && <div className="mt-4">{children}</div>}
-        </Modal>
+        </PortalModal>
     );
 };

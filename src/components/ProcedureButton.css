@@ -9,7 +9,7 @@
     align-items: center; /* Center vertically */
     font-size: 14px;
     line-height: 1.2;
-    padding: 12px 20px; /* Adjust padding as needed */
+    padding: 12px 20px;
     text-decoration: none;
     cursor: pointer;
     background: #fff;
@@ -19,7 +19,7 @@
     width: 200px; /* Fixed width */
     height: 50px; /* Fixed height (optional) */
     box-sizing: border-box; /* Include padding and border in width and height */
-    text-align: center; /* Center text */
+    text-align: center; /* Ensure text is centered inside the button */
 }
 
 .defaultButton span:first-child {
@@ -30,17 +30,6 @@
     overflow: hidden;
     text-overflow: ellipsis; /* Add ellipsis if text is too long */
     max-width: 100%; /* Ensure it doesn't exceed the button width */
-}
-
-.defaultButton span:last-child {
-    /* No changes needed unless specific adjustments are required */
-}
-
-
-.defaultButton span:first-child {
-    position: relative;
-    transition: color 600ms cubic-bezier(0.48, 0, 0.12, 1);
-    z-index: 10;
 }
 
 .defaultButton span:last-child {
@@ -84,6 +73,7 @@
     transition: all 900ms cubic-bezier(0.48, 0, 0.12, 1);
 }
 
+/* IMAGE-BASED BUTTON */
 .imageSelectButton {
     position: relative;
     overflow: hidden;
@@ -102,7 +92,7 @@
     user-select: none;
     -webkit-user-select: none;
     touch-action: manipulation;
-    text-align: center;
+    text-align: center; /* Keep text centered horizontally */
     transition: all 300ms ease;
 }
 
@@ -110,6 +100,7 @@
     position: relative;
     z-index: 10;
     transition: opacity 600ms cubic-bezier(0.48, 0, 0.12, 1), color 300ms ease;
+    text-align: center; /* Ensure text is horizontally centered */
 }
 
 .topText {
@@ -119,14 +110,17 @@
     color: white;
     margin-bottom: 8px;
     transition: color 300ms ease;
+    text-align: center; /* Center top text */
 }
 
 .subText {
     display: block;
     font-size: 14px;
     color: grey;
+    text-align: center; /* Center sub text */
 }
 
+/* The text that appears on hover */
 .hoverText {
     color: black;
     display: block;
@@ -137,6 +131,7 @@
     transform: translate(-50%, -50%);
     transition: opacity 500ms cubic-bezier(0.48, 0, 0.12, 1);
     z-index: 100;
+    text-align: center; /* Center any lines of hover text */
 }
 
 .imageSelectButton:before {
@@ -188,18 +183,16 @@
     transform: skewY(9.3deg) scaleY(2);
 }
 
-/* responsive */
+/* RESPONSIVE */
 @media (max-width: 768px) {
     .imageSelectButton {
         width: 140px;
         height: 180px;
         padding: 40px 12px;
     }
-
     .topText {
         font-size: 16px;
     }
-
     .subText {
         font-size: 12px;
     }
@@ -211,11 +204,9 @@
         height: 160px;
         padding: 50px 10px;
     }
-
     .topText {
         font-size: 14px;
     }
-
     .subText {
         font-size: 11px;
     }
@@ -227,15 +218,10 @@
         height: 140px;
         padding: 40px 8px;
     }
-
     .topText {
         font-size: 12px;
     }
-
     .subText {
         font-size: 10px;
     }
 }
-
-
-

@@ -2,7 +2,6 @@ import { Intro } from './components/pages/Intro.jsx';
 import { Input } from './components/pages/Input.jsx';
 import SecuredRoute from "./components/SecuredRoute.jsx";
 import { InfoInput } from "./components/pages/InfoInput.jsx";
-import { Modal } from "./components/Modal.jsx";
 import { InfoInputTwo } from "./components/pages/InfoInputTwo.jsx";
 import { WrongPath } from "./components/pages/WrongPath.jsx";
 import { ResultPage } from "./components/pages/ResultPage.jsx";

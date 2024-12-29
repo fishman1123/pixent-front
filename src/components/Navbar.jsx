@@ -4,26 +4,24 @@ import { Menu } from './navbar/Menu';
 import { TranslateButton } from './navbar/TranslateButton';
 import { BackButton } from './navbar/BackButton.jsx';
 import { userAtoms } from '../recoil/userAtoms';
-import { isAnyModalOpenSelector } from '../recoil/selector/isAnyModalOpenSelector.jsx';
-import {useNavigate} from "react-router-dom";
-
+import { useNavigate } from 'react-router-dom';
 
 export const Navbar = () => {
     const [isOpen, setIsOpen] = useState(false);
     const { currentPage } = useRecoilValue(userAtoms);
     const navigate = useNavigate();
-    const isAnyModalOpen = useRecoilValue(isAnyModalOpenSelector);
+
     const toggleMenu = () => {
         setIsOpen(!isOpen);
     };
 
     return (
         <div className="max-w-[480px] mx-auto">
-            <div className={`fixed top-0 left-0 w-full text-black ${isAnyModalOpen ? 'z-10' : 'z-30'}`}>
+            <div className="fixed top-0 left-0 w-full text-black z-30">
                 <div className="max-w-[480px] mx-auto bg-white flex items-center justify-between p-5">
                     {currentPage === '/intro' ? <TranslateButton /> : <BackButton />}
                     <div className="flex-1 text-[24px] font-headerTitle text-center">
-                        <button onClick={()=>navigate("/")}>AC'SCENT</button>
+                        <button onClick={() => navigate("/")}>AC'SCENT</button>
                     </div>
                     <Menu isOpen={isOpen} toggleMenu={toggleMenu} />
                 </div>

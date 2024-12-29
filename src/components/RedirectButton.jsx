@@ -3,7 +3,6 @@
 import React, { useState } from 'react';
 import './ProcedureButton.css'; // Reuse the same styles
 import { ConfirmationModal } from "./ConfirmationModal.jsx";
-// ^ adjust path if needed
 
 export const RedirectButton = ({
                                    text,
@@ -16,16 +15,12 @@ export const RedirectButton = ({
 
     const handleOpenModal = () => {
         if (isButtonDisabled) return;
-        // Instead of redirecting, open the confirmation modal
         setIsConfirmationOpen(true);
     };
 
-    // Called after user clicks "Yes" in the confirmation modal
     const handleConfirmRedirect = () => {
-        // Close the modal
         setIsConfirmationOpen(false);
 
-        // Now proceed with your existing delay-based logic
         setButtonDisabled(true);
         setTimeout(() => {
             if (typeof target === "string") {
@@ -39,7 +34,6 @@ export const RedirectButton = ({
         }, delay);
     };
 
-    // If the user clicks "No" or closes the modal
     const handleCancelRedirect = () => {
         setIsConfirmationOpen(false);
     };
@@ -63,7 +57,6 @@ export const RedirectButton = ({
                     title="주의사항 확인"
                     message="구매 전 필독 사항입니다."
                 >
-                    {/* Children content: any additional warnings or images */}
                     <div className="w-full mb-4 flex justify-center">
                         <img
                             src="/guideline.png"

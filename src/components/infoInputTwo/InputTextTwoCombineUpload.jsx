@@ -11,9 +11,12 @@ import { useReportSubmit } from '../../hooks/useReportSubmit.jsx';
 import LoadingAnimation from '../pages/Loading.jsx';
 import imageCompression from 'browser-image-compression';
 import { PersonalAgreement } from "./PersonalAgreement.jsx";
-import { Modal } from "../Modal.jsx"; // Updated Modal
+// REMOVE or comment out old modal import:
+// import { Modal } from "../Modal.jsx";
 import NewLoading from "../pages/NewLoading.jsx";
-// REMOVED: import { ConfirmationModal } from "../ConfirmationModal.jsx";
+
+// IMPORT your new PortalModal:
+import { PortalModal } from "../PortalModal.jsx";
 
 export const InputTextTwoCombineUpload = () => {
     const { t } = useTranslation();
@@ -95,9 +98,8 @@ export const InputTextTwoCombineUpload = () => {
         return true;
     };
 
-    // Submit logic (no longer behind a confirmation modal here)
+    // Submit logic
     const handleFormSubmit = () => {
-        // Validate form first
         const isValid = validateForm();
         if (!isValid) return;
 
@@ -307,19 +309,22 @@ export const InputTextTwoCombineUpload = () => {
                             <DataButton
                                 text={t('userProfile.submitButton')}
                                 subText={isLoading ? t('userProfile.submitting') : ''}
-                                onClick={handleFormSubmit} // No confirmation modal now
+                                onClick={handleFormSubmit}
                                 disabled={isLoading}
                             />
                         </div>
 
                         {/* AGREEMENT MODAL (Close-only) */}
                         {isAgreementModalOpen && (
-                            <Modal
-                                title="개인정보처리방침"
+                            <PortalModal
+                                isOpen={isAgreementModalOpen}
                                 onClose={() => setIsAgreementModalOpen(false)}
+                                title="개인정보처리방침"
+                                /* showConfirmButtons={false} by default,
+                                   so it uses the single close button */
                             >
                                 <PersonalAgreement />
-                            </Modal>
+                            </PortalModal>
                         )}
                     </div>
                 </div>

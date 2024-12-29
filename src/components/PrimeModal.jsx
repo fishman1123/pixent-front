@@ -17,7 +17,7 @@ const PrimeModal = ({ isOpen, title, onClose, children }) => {
             setIsVisible(false);
             setTimeout(() => {
                 setIsMounted(false);
-            }, 300); // match transition duration
+            }, 300);
         }
     }, [isOpen, isMounted]);
 

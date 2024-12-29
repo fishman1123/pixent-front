@@ -114,9 +114,16 @@ export const ReportViewerResult = () => {
                         inputSpicy={responseData.spicy}
                     />
                 </div>
-                <div className="mt-8 mb-10">
+                <div className="mt-8 mb-6">
                     <div>
-                        <RedirectButton text="구매하기" subText="이동하기" delay={0} target="https://acscent.co.kr/shop_view/?idx=199"/>
+                        <RedirectButton text="구매하기" subText="이동하기" delay={0}
+                                        target="https://acscent.co.kr/shop_view/?idx=199"/>
+                    </div>
+                </div>
+                <div className="mt-4 mb-10">
+                    <div>
+                        <RedirectButton text="요약본 보기" subText="이동하기" delay={0}
+                                        target="https://acscent.co.kr/shop_view/?idx=199"/>
                     </div>
                 </div>
                 <div className='flex justify-end'>
