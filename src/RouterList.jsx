@@ -16,6 +16,9 @@ import { Admin } from "./components/pages/Admin.jsx";
 import { PrintReport } from "./components/pages/PrintReport.jsx";
 import NewLoading from "./components/pages/NewLoading.jsx";
 import Loading from "./components/pages/Loading.jsx";
+import Test from "./components/summary/Test.jsx";
+import TestTwo from "./components/summary/TestTwo.jsx";
+import {ReportSummary} from "./components/pages/ReportSummary.jsx";
 
 export const RouterList = [
     {
@@ -70,6 +73,14 @@ export const RouterList = [
                         element: <Loading />,
                     },
                     {
+                        path: 'test',
+                        element: <ReportSummary />,
+                    },
+                    {
+                        path: 'testTwo',
+                        element: <TestTwo />,
+                    },
+                    {
                         path: 'report',
                         element: <ReportViewer />,
                         children: [
@@ -78,19 +89,25 @@ export const RouterList = [
                                 element: <ReportViewerResult />
                             }
                         ]
-                    }
+                    },
+
                 ],
             },
             {
+                path: 'result',
                 element: <ResultLayout />,
                 children: [
                     {
-                        path: 'result',
+                        index: true,
                         element: (
                             <SecuredRoute>
                                 <ResultPage />
                             </SecuredRoute>
                         ),
+                    },
+                    {
+                        path: 'reportsummary',
+                        element: <ReportSummary />,
                     },
                 ],
             },

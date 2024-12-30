@@ -30,6 +30,11 @@ export const ResultPage = () => {
     // URL for purchase
     const shopUrl = "https://acscent.co.kr/shop_view/?idx=199";
 
+    const handleReportSummary = () => {
+        // Navigate to '/summary' and pass responseData via state
+        navigate('/result/reportsummary', { state: responseData });
+    };
+
     useEffect(() => {
         // Prevent the user from going back to the previous page (the result)
         history.pushState(null, "", "/");
@@ -117,8 +122,8 @@ export const ResultPage = () => {
                 <div className="mt-[80px]">
                     <div className="text-left text-[18px] font-bold">ANALYSIS</div>
                     <div className="relative flex items-center justify-center w-full mt-3 mb-5">
-                        <div className="h-[1px] w-full bg-black ml-[1px]" />
-                        <div className="h-[1px] w-full bg-black mr-[5px]" />
+                        <div className="h-[1px] w-full bg-black ml-[1px]"/>
+                        <div className="h-[1px] w-full bg-black mr-[5px]"/>
                     </div>
                     <div className="text-left">
                         <h2 className="font-bold text-[14px] pb-2">Facial Feature</h2>
@@ -144,8 +149,8 @@ export const ResultPage = () => {
                 </div>
 
                 <div className="relative flex items-center justify-center w-full mt-3 mb-5">
-                    <div className="h-[1px] w-full bg-black ml-[1px]" />
-                    <div className="h-[1px] w-full bg-black mr-[5px]" />
+                    <div className="h-[1px] w-full bg-black ml-[1px]"/>
+                    <div className="h-[1px] w-full bg-black mr-[5px]"/>
                 </div>
 
                 {/* Top Note */}
@@ -199,8 +204,8 @@ export const ResultPage = () => {
                         <div className="text-[18px] font-bold mt-14">PROFILES</div>
                     </div>
                     <div className="relative flex items-center justify-center w-full mt-3 mb-5">
-                        <div className="h-[1px] w-full bg-black ml-[1px]" />
-                        <div className="h-[1px] w-full bg-black mr-[5px]" />
+                        <div className="h-[1px] w-full bg-black ml-[1px]"/>
+                        <div className="h-[1px] w-full bg-black mr-[5px]"/>
                     </div>
                     <div>
                         <p className="text-[12px]">{responseData?.profile}</p>
@@ -247,8 +252,10 @@ export const ResultPage = () => {
                                     ><img src={CopyIcon} alt="Copy Icon" className="w-4 h-4"/></span>
                                     {/* CHECK ICON (visible when copySuccess === true) */}
                                     <span id="success-icon" className={`flex-shrink-0 ${copySuccess ? "" : "hidden"}`}>
-                                        <svg className="w-4 h-4 text-black" aria-hidden="true" fill="none" viewBox="0 0 16 12">
-                                            <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M1 5.917L5.724 10.5 15 1.5"/></svg></span>
+                                        <svg className="w-4 h-4 text-black" aria-hidden="true" fill="none"
+                                             viewBox="0 0 16 12">
+                                            <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round"
+                                                  strokeWidth="2" d="M1 5.917L5.724 10.5 15 1.5"/></svg></span>
                                     <span className="text-sm">{copySuccess ? "Copied!" : "Copy URL"}</span>
                                 </button>
                                 <button
@@ -280,7 +287,8 @@ export const ResultPage = () => {
                                     className="absolute z-10 inline-block px-3 py-2 text-sm font-medium text-white bg-gray-900 rounded-lg shadow-sm opacity-0 transition-opacity duration-300 tooltip"
                                 >
                                     <span id="default-tooltip-message" className={copySuccess ? "hidden" : ""}>Copy to clipboard</span>
-                                    <span id="success-tooltip-message" className={copySuccess ? "" : "hidden"}>Copied!</span>
+                                    <span id="success-tooltip-message"
+                                          className={copySuccess ? "" : "hidden"}>Copied!</span>
                                     <div className="tooltip-arrow" data-popper-arrow></div>
                                 </div>
                             </div>
@@ -303,6 +311,15 @@ export const ResultPage = () => {
                                 setIsConfirmationOpen(true); // Show the confirmation modal
                             }}
                         />
+                    </div>
+                </div>
+
+                <div className="mt-8 mb-10">
+                    <div>
+                        <button className='defaultButton' onClick={handleReportSummary}>
+                            <span className="text">요약본 보기</span>
+                            <span>이동하기</span>
+                        </button>
                     </div>
                 </div>
             </div>
