@@ -38,7 +38,7 @@ export const ReportSummary = () => {
     return (
         <div className="relative w-full">
             {/* Carousel wrapper */}
-            <div className="relative h-[740px] overflow-hidden rounded-lg">
+            <div className="relative h-[760px] overflow-hidden rounded-lg">
                 {/* Slide 1 */}
                 <div
                     className={`
