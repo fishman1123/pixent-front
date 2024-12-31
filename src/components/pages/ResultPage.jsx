@@ -299,7 +299,7 @@ export const ResultPage = () => {
                     </div>
                 </div>
 
-                <div className="mt-8 mb-10">
+                <div className="mt-8 mb-4">
                     <div>
                         <RedirectButton
                             text="구매하기"

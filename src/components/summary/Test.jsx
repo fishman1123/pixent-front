@@ -69,7 +69,7 @@ const Test = ({ appearance, perfumeName, userImageUrl }) => {
             </div>
 
             {/* Appearance Features (Facial Feature, Style, Vibe) */}
-            <div className="w-full space-y-3">
+            <div className="w-full space-y-6">
                 {/* Facial Feature */}
                 <div className="flex flex-col items-center px-6">
                     <h2 className="text-xs tracking-widest font-bold mb-0.5">FACIAL FEATURE</h2>

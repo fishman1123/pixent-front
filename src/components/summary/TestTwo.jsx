@@ -12,6 +12,7 @@ import { Summarychart } from '../result/SummaryChart.jsx';
  *  - citrus, floral, fruity, musk, spicy, woody
  */
 const TestTwo = ({
+                     perfumeName,
                      mainNote,
                      mainNoteDesc,
                      mainNoteAnalysis,
@@ -62,7 +63,7 @@ const TestTwo = ({
             <div className="flex flex-col items-center p-6">
                 {/* Title & Subtitle */}
                 <div className="text-center mb-3 mt-5">
-                    <h1 className="text-2xl tracking-widest font-light">AC'SCENT</h1>
+                    <h1 className="text-2xl tracking-widest font-light">{perfumeName}</h1>
                     <p className="text-xs tracking-wide text-gray-600 mt-1 font-light">
                         DISCOVER YOUR SIGNATURE PERFUMEWEAR
                     </p>
@@ -82,7 +83,7 @@ const TestTwo = ({
                 </div>
 
                 {/* Notes Section */}
-                <div className="w-full space-y-3">
+                <div className="w-full space-y-6">
                     {/* TOP NOTE */}
                     <div className="flex flex-col items-center px-6">
                         <div className="flex items-center justify-center gap-2 mb-0.5">

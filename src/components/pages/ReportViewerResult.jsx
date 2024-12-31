@@ -120,19 +120,17 @@ export const ReportViewerResult = () => {
                                         target="https://acscent.co.kr/shop_view/?idx=199"/>
                     </div>
                 </div>
-                <div className="mt-4 mb-10">
-                    <div>
-                        <RedirectButton text="요약본 보기" subText="이동하기" delay={0}
-                                        target="https://acscent.co.kr/shop_view/?idx=199"/>
-                    </div>
-                </div>
+                {/*<div className="mt-4 mb-10">*/}
+                {/*    <div>*/}
+                {/*        <RedirectButton text="요약본 보기" subText="이동하기" delay={0}*/}
+                {/*                        target="https://acscent.co.kr/shop_view/?idx=199"/>*/}
+                {/*    </div>*/}
+                {/*</div>*/}
                 <div className='flex justify-end'>
                     <button
                         onClick={handleSummaryClick}
                         className="bg-white text-white px-4 py-2 rounded mt-4"
-                    >
-                        요약본 보기
-                    </button>
+                    ></button>
                 </div>
             </div>
         </div>
