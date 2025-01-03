@@ -48,27 +48,27 @@ export const useReportSubmit = () => {
         formData.append('language', userState.userLanguage || '');
 
         // Log the FormData values for debugging
-        console.log('FormData being sent:', formData);
-        for (let [key, value] of formData.entries()) {
-            if (value instanceof File) {
-                console.log(`${key}:`, value.name);
-            } else {
-                console.log(`${key}:`, value);
-            }
-        }
-        console.log('--- FormData being prepared for submission ---');
-        const loggedData = {};
-        for (let [key, value] of formData.entries()) {
-            if (value instanceof File) {
-                console.log(`${key}: (File) ${value.name}`); // Log file name
-                loggedData[key] = `(File) ${value.name}`;
-            } else {
-                console.log(`${key}: ${value}`); // Log other values
-                loggedData[key] = value;
-            }
-        }
-        console.log('Combined FormData:', loggedData);
-        console.log('--- End of FormData log ---');
+        // console.log('FormData being sent:', formData);
+        // for (let [key, value] of formData.entries()) {
+        //     if (value instanceof File) {
+        //         console.log(`${key}:`, value.name);
+        //     } else {
+        //         console.log(`${key}:`, value);
+        //     }
+        // }
+        // console.log('--- FormData being prepared for submission ---');
+        // const loggedData = {};
+        // for (let [key, value] of formData.entries()) {
+        //     if (value instanceof File) {
+        //         console.log(`${key}: (File) ${value.name}`); // Log file name
+        //         loggedData[key] = `(File) ${value.name}`;
+        //     } else {
+        //         console.log(`${key}: ${value}`); // Log other values
+        //         loggedData[key] = value;
+        //     }
+        // }
+        // console.log('Combined FormData:', loggedData);
+        // console.log('--- End of FormData log ---');
 
 
         const response = await AxiosInstance.post('/api/image', formData);
@@ -79,7 +79,7 @@ export const useReportSubmit = () => {
     const mutation = useMutation({
         mutationFn: submitData, // Update here
         onSuccess: (responseData) => {
-            console.log('Data submitted successfully:', responseData);
+            // console.log('Data submitted successfully:', responseData);
             setResponseData(responseData); // Store response data in Recoil atom
             navigate('/result');     // Navigate to the result page
         },

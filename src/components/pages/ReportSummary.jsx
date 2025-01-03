@@ -17,9 +17,9 @@ export const ReportSummary = () => {
     const [currentSlide, setCurrentSlide] = useState(0);
 
     // For debugging
-    useEffect(() => {
-        console.log('ReportSummary received data:', passedData);
-    }, [passedData]);
+    // useEffect(() => {
+    //     // console.log('ReportSummary received data:', passedData);
+    // }, [passedData]);
 
     // 1) Extract up to two sentences from each appearance field
     const facialFeature = extractFirstTwoSentences(passedData?.appearance?.facialFeature);
