@@ -26,6 +26,10 @@ export const ReportViewerResult = () => {
         // Navigate to '/summary' and pass responseData via state
         navigate('/summary', { state: responseData });
     };
+    const handleReportSummary = () => {
+        // Navigate to '/summary' and pass responseData via state
+        navigate('/result/reportsummary', { state: responseData });
+    };
     const handleCopy = () => {
         const urlToCopy = `pixent.co.kr/report/${responseData?.uuid}`;
         navigator.clipboard
@@ -206,6 +210,15 @@ export const ReportViewerResult = () => {
                     <div>
                         <RedirectButton text="구매하기" subText="이동하기" delay={0}
                                         target="https://acscent.co.kr/shop_view/?idx=199"/>
+                    </div>
+                </div>
+
+                <div className="mt-8 mb-10">
+                    <div>
+                        <button className='defaultButton' onClick={handleReportSummary}>
+                            <span className="text">요약본 보기</span>
+                            <span>이동하기</span>
+                        </button>
                     </div>
                 </div>
 

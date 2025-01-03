@@ -32,7 +32,9 @@ export const ReportSummary = () => {
 
     const redirectToReport = () => {
         // Open the report in a new tab
-        window.open(`https://www.pixent.co.kr/report/${passedData?.uuid}`, '_blank', 'noopener,noreferrer');
+        // window.open(`https://www.pixent.co.kr/report/${passedData?.uuid}`, '_blank', 'noopener,noreferrer');
+        // no new tab, redirect only
+        window.location.href = `https://www.pixent.co.kr/report/${passedData?.uuid}`;
     };
 
     return (
