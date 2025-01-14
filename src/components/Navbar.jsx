@@ -21,7 +21,7 @@ export const Navbar = () => {
                 <div className="max-w-[480px] mx-auto bg-white flex items-center justify-between p-5">
                     {currentPage === '/intro' ? <TranslateButton /> : <BackButton />}
                     <div className="flex-1 text-[24px] font-headerTitle text-center">
-                        <button onClick={() => navigate("/")}>AC'SCENT</button>
+                        <button onClick={() => navigate("/")}>DEV MODE</button>
                     </div>
                     <Menu isOpen={isOpen} toggleMenu={toggleMenu} />
                 </div>
