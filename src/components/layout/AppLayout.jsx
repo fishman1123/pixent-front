@@ -14,7 +14,8 @@ export const AppLayout = () => {
     const isResultPage = useMatch('/result/*');
     const isFinalPage = useMatch('/inputTwo/*');
     const isLoginPage = useMatch('/login/*');
-    const shouldShowNavbar = !isResultPage && !isFinalPage && !isLoginPage;
+    const isReportPage = useMatch('/report/*');
+    const shouldShowNavbar = !isResultPage && !isFinalPage && !isLoginPage && !isReportPage;
 
     useEffect(() => {
         window.scrollTo(0, 0);
