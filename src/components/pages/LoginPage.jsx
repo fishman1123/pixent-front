@@ -30,7 +30,7 @@ const SocialLogin = () => {
                         {/* 구글 로그인 버튼 */}
                         <button
                             onClick={() => handleLogin('Google')}
-                            className="group w-full border border-black p-4 hover:bg-black transition-colors duration-300"
+                            className="group w-full border-2 border-black p-4 hover:bg-black transition-colors duration-300"
                         >
                             <div className="flex items-center justify-between">
                                 <span className="text-sm tracking-widest group-hover:text-white">GOOGLE</span>
@@ -58,7 +58,7 @@ const SocialLogin = () => {
                         {/* 카카오 로그인 버튼 */}
                         <button
                             onClick={() => handleLogin('Kakao')}
-                            className="group w-full border border-black p-4 hover:bg-black transition-colors duration-300"
+                            className="group w-full border-2 border-black p-4 hover:bg-black transition-colors duration-300"
                         >
                             <div className="flex items-center justify-between">
                                 <span className="text-sm tracking-widest group-hover:text-white">KAKAO</span>
@@ -74,7 +74,7 @@ const SocialLogin = () => {
                         {/* 네이버 로그인 버튼 */}
                         <button
                             onClick={() => handleLogin('Naver')}
-                            className="group w-full border border-black p-4 hover:bg-black transition-colors duration-300"
+                            className="group w-full border-2 border-black p-4 hover:bg-black transition-colors duration-300"
                         >
                             <div className="flex items-center justify-between">
                                 <span className="text-sm tracking-widest group-hover:text-white">NAVER</span>
