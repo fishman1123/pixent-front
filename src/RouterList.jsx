@@ -19,6 +19,7 @@ import Loading from "./components/pages/Loading.jsx";
 import Test from "./components/summary/Test.jsx";
 import TestTwo from "./components/summary/TestTwo.jsx";
 import {ReportSummary} from "./components/pages/ReportSummary.jsx";
+import LoginPage from "./components/pages/LoginPage.jsx";
 
 export const RouterList = [
     {
@@ -80,6 +81,7 @@ export const RouterList = [
                         path: 'testTwo',
                         element: <TestTwo />,
                     },
+
                     {
                         path: 'report',
                         element: <ReportViewer />,
@@ -93,6 +95,15 @@ export const RouterList = [
 
                 ],
             },
+            {
+                path: 'login',
+                element: <LoginPage />,
+            },
+            // {
+            //     path: 'oauth2/google/redirect',
+            //     element: <LoginRedirectPage />,
+            // },
+
             {
                 path: 'result',
                 element: <ResultLayout />,

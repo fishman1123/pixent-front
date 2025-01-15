@@ -5,15 +5,16 @@ import { Outlet, useLocation, useMatch } from 'react-router-dom';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import '../transition.css';
 import { Navbar } from "../Navbar.jsx";
-import {Footer} from "../Footer.jsx";
-import {ExtraFooter} from "../ExtraFooter.jsx";
-
+import { Footer } from "../Footer.jsx";
+import { ExtraFooter } from "../ExtraFooter.jsx";
 
 export const AppLayout = () => {
     const location = useLocation();
 
     const isResultPage = useMatch('/result/*');
     const isFinalPage = useMatch('/inputTwo/*');
+    const isLoginPage = useMatch('/login/*');
+    const shouldShowNavbar = !isResultPage && !isFinalPage && !isLoginPage;
 
     useEffect(() => {
         window.scrollTo(0, 0);
@@ -21,7 +22,7 @@ export const AppLayout = () => {
 
     return (
         <div className="relative min-h-screen max-w-[480px] mx-auto">
-            {!isResultPage && !isFinalPage && <Navbar />}
+            {shouldShowNavbar && <Navbar />}
             <TransitionGroup component={null}>
                 <CSSTransition
                     key={location.key}
@@ -36,7 +37,6 @@ export const AppLayout = () => {
                 <ExtraFooter />
                 <Footer />
             </div>
-
         </div>
     );
 };
