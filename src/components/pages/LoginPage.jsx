@@ -8,7 +8,7 @@ export const LoginPage = () => {
     const handleLogin = (provider) => {
         switch (provider) {
             case 'Google': {
-                const googleAuthUrl = `${baseUrl}oauth2/authorization/google`;
+                const googleAuthUrl = `${baseUrl}/oauth2/authorization/google`;
                 window.location.href = googleAuthUrl;
                 break;
             }
