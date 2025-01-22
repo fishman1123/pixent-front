@@ -61,6 +61,7 @@ export const LoginRedirectPage = () => {
 
     useEffect(() => {
         if (nicknameSuccess && nicknameData) {
+            console.log('Received nickname: ', nicknameData);
             if (nicknameData.isValid) {
                 console.log('Nickname is valid -> redirecting to "/"');
                 navigate('/');
