@@ -23,8 +23,8 @@ export const ReportViewerResult = () => {
     }
 
     const handleSummaryClick = () => {
-        // Navigate to '/summary' and pass responseData via state
-        navigate('/summary', { state: responseData });
+        // depricated
+        // navigate('/summary', { state: responseData });
     };
     const handleReportSummary = () => {
         // Navigate to '/summary' and pass responseData via state
@@ -134,7 +134,7 @@ export const ReportViewerResult = () => {
                     />
                 </div>
 
-                <div className="flex">
+                <div className="flex ">
                     <div className="w-full">
                         <div className="my-4 flex items-center border border-gray-200">
                             <label htmlFor="copy-url-input" className="sr-only">
@@ -213,8 +213,8 @@ export const ReportViewerResult = () => {
                     </div>
                 </div>
 
-                <div className="mt-8 mb-10">
-                    <div>
+                <div className="mt-8 mb-10 ">
+                    <div className='flex flex-col items-center'>
                         <button className='defaultButton' onClick={handleReportSummary}>
                             <span className="text">요약본 보기</span>
                             <span>이동하기</span>

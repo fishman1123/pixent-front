@@ -1,64 +1,36 @@
 import React from 'react';
 
+// We'll use the env var for the base URL:
+const baseUrl = import.meta.env.VITE_API_BASE_URL;
+// e.g. "https://perfume-maker-dev.pixent.co.kr/"
+
 export const LoginPage = () => {
     const handleLogin = (provider) => {
-        switch(provider) {
+        switch (provider) {
             case 'Google': {
-                // 1) Use your environment variables or hard-coded endpoints
-                //    (this is just an example)
-                const googleBaseUrl = import.meta.env.VITE_GOOGLE_REQUEST_URL; // ex: "https://accounts.google.com/o/oauth2/v2/auth"
-                const googleClientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;   // ex: "xxxx.apps.googleusercontent.com"
-                const redirectUri = window.location.origin + '/oauth2/google/redirect';
-
-                // 2) Build the Google OAuth URL
-                const googleAuthUrl = `${googleBaseUrl}?client_id=${googleClientId}&redirect_uri=${redirectUri}&scope=profile%20email&response_type=code`;
-
-                // 3) Redirect user
+                const googleAuthUrl = `${baseUrl}oauth2/authorization/google`;
                 window.location.href = googleAuthUrl;
                 break;
             }
-
             case 'Kakao': {
-                // 1) Typically, Kakao OAuth endpoint:
-                //    https://kauth.kakao.com/oauth/authorize?client_id=...&redirect_uri=...&response_type=code
-                const kakaoBaseUrl = 'https://kauth.kakao.com/oauth/authorize';
-                const kakaoClientId = 'YOUR_KAKAO_REST_API_KEY'; // put yours or use env
-                const redirectUri = window.location.origin + '/oauth2/kakao/redirect';
-
-                // 2) Construct the Kakao login URL
-                const kakaoAuthUrl = `${kakaoBaseUrl}?client_id=${kakaoClientId}&redirect_uri=${redirectUri}&response_type=code`;
-
-                // 3) Redirect user
+                // need to fix this
+                const kakaoAuthUrl = `${baseUrl}oauth2/authorization/kakao`;
                 window.location.href = kakaoAuthUrl;
                 break;
             }
-
             case 'Naver': {
-                // 1) Typically, Naver OAuth endpoint:
-                //    https://nid.naver.com/oauth2.0/authorize?client_id=...&redirect_uri=...&response_type=code&state=...
-                const naverBaseUrl = 'https://nid.naver.com/oauth2.0/authorize';
-                const naverClientId = 'YOUR_NAVER_CLIENT_ID'; // put yours or use env
-                const redirectUri = window.location.origin + '/oauth2/naver/redirect';
-
-                // State is optional but recommended for CSRF protection
-                const state = 'someRandomState';
-
-                // 2) Construct the Naver login URL
-                const naverAuthUrl = `${naverBaseUrl}?client_id=${naverClientId}&redirect_uri=${redirectUri}&response_type=code&state=${state}`;
-
-                // 3) Redirect user
+                const naverAuthUrl = `${baseUrl}oauth2/authorization/naver`;
                 window.location.href = naverAuthUrl;
                 break;
             }
-
             default:
-                console.log(`${provider} is not supported yet.`);
+                console.log(`Unsupported provider: ${provider}`);
                 break;
         }
     };
 
     return (
-        <div className="min-h-screen bg-white flex justify-center p-4">
+        <div className="min-h-screen flex justify-center p-4">
             <div className="w-full max-w-md min-w-[320px]">
                 <div className="space-y-6 p-8">
                     <div className="space-y-2 mb-8">

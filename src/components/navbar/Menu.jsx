@@ -1,8 +1,15 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
 const genericHamburgerLine = `h-[2px] w-6 my-1 rounded-full bg-black transition ease transform duration-300`;
 
 export const Menu = ({ isOpen, toggleMenu }) => {
+
+    const handleLogout = () => {
+        localStorage.removeItem("gToken");
+        window.location.href = "/";
+    };
+
     return (
         <>
             {/* Hamburger Icon */}
@@ -27,6 +34,7 @@ export const Menu = ({ isOpen, toggleMenu }) => {
                 />
             </button>
 
+            {/* Slide-down Menu */}
             <div
                 className={`fixed top-0 w-full bg-white transform transition-transform duration-300 z-20 ${
                     isOpen ? "translate-y-0" : "-translate-y-full"
@@ -39,12 +47,9 @@ export const Menu = ({ isOpen, toggleMenu }) => {
                         <li className="py-2">
                             <a href="/admin">Admin</a>
                         </li>
-                        {/*<li className="py-2">*/}
-                        {/*    <a href="#">About</a>*/}
-                        {/*</li>*/}
-                        {/*<li className="py-2">*/}
-                        {/*    <a href="#">Contact</a>*/}
-                        {/*</li>*/}
+                        <li className="py-2">
+                            <button onClick={handleLogout}>Logout</button>
+                        </li>
                     </ul>
                 </div>
             </div>

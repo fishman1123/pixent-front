@@ -2,8 +2,6 @@
 
 import React, { useEffect } from "react";
 import { Outlet, useLocation } from "react-router-dom";
-import { Footer } from "../Footer.jsx";
-import { Navbar } from "../Navbar.jsx";
 import {useRecoilValue} from "recoil";
 import {isAnyModalOpenSelector} from "../../recoil/selector/isAnyModalOpenSelector.jsx";
 

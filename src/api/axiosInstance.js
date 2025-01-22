@@ -2,28 +2,39 @@
 
 import axios from 'axios';
 import config from '../config';
+import { authAtom } from '../recoil/authAtoms';
+import { setRecoil } from 'recoil-nexus';
 
-// Create a singleton Axios instance
 const AxiosInstance = axios.create({
     baseURL: config.API_BASE_URL,
 });
 
+// Attach token if present
+AxiosInstance.interceptors.request.use(
+    (request) => {
+        const token = localStorage.getItem('gToken');
+        if (token) {
+            request.headers.Authorization = `Bearer ${token}`;
+        }
+        return request;
+    },
+    (error) => Promise.reject(error)
+);
+
+// Handle 403 => log out globally
 AxiosInstance.interceptors.response.use(
     (response) => response,
     (error) => {
-        let errorMessage = '';
+        if (error?.response?.status === 403) {
+            console.warn('403 Forbidden => removing token + updating authAtom');
+            localStorage.removeItem('gToken');
 
-        if (error.response) {
-            console.error('Server Error:', error.response.data);
-            errorMessage = error.response.data.message || 'Server Error';
-        } else if (error.request) {
-            console.error('Network Error:', error.request);
-            errorMessage = 'Network Error: Please check your connection.';
-        } else {
-            console.error('Error:', error.message);
-            errorMessage = 'An unexpected error occurred.';
+            // Set isAuthenticated: false
+            setRecoil(authAtom, (prev) => ({
+                ...prev,
+                isAuthenticated: false,
+            }));
         }
-
         return Promise.reject(error);
     }
 );

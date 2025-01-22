@@ -8,7 +8,7 @@
 .fade-enter-active {
     opacity: 1;
     transform: translateY(0);
-    transition: opacity 500ms ease-in-out, transform 500ms ease-in-out;
+    transition: opacity 5ms ease-in-out, transform 500ms ease-in-out;
 }
 
 .fade-exit {

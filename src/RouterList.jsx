@@ -8,126 +8,116 @@ import { ResultPage } from "./components/pages/ResultPage.jsx";
 import { MainLayout } from "./components/layout/MainLayout.jsx";
 import { ResultLayout } from "./components/layout/ResultLayout.jsx";
 import { AppLayout } from "./components/layout/AppLayout.jsx";
-import LoadingAnimation from "./components/pages/Loading.jsx";
 import { Preference } from "./components/pages/Preference.jsx";
 import { ReportViewer } from "./components/pages/ReportViewer.jsx";
 import { ReportViewerResult } from "./components/pages/ReportViewerResult.jsx";
 import { Admin } from "./components/pages/Admin.jsx";
-import { PrintReport } from "./components/pages/PrintReport.jsx";
-import NewLoading from "./components/pages/NewLoading.jsx";
+import { PrintReport } from "./components/pages/PrintReport";
 import Loading from "./components/pages/Loading.jsx";
-import Test from "./components/summary/Test.jsx";
-import TestTwo from "./components/summary/TestTwo.jsx";
-import {ReportSummary} from "./components/pages/ReportSummary.jsx";
-import {LoginPage} from "./components/pages/LoginPage.jsx";
-import {LoginRedirectPage} from "./components/pages/LoginRedirectPage.jsx";
+import { ReportSummary } from "./components/pages/ReportSummary";
+import { LoginPage } from "./components/pages/LoginPage";
+import { LoginRedirectPage } from "./components/pages/LoginRedirectPage";
+import { NicknamePage } from "./components/pages/NicknamePage";
+import Test from "./components/summary/Test";
+import TestTwo from "./components/summary/TestTwo";
 
 export const RouterList = [
     {
-        path: 'summary',
-        element: <PrintReport />,
-    },
-    {
         path: '/',
-        element: <AppLayout />, // top-level layout for main site
+        element: <AppLayout />,
         children: [
             {
-                element: <MainLayout />,
-                children: [
-                    {
-                        index: true,
-                        element: <Intro />,
-                    },
-                    {
-                        path: 'basic',
-                        element: <Input />,
-                    },
-                    {
-                        path: 'which',
-                        element: (
-                            <SecuredRoute>
-                                <Preference />
-                            </SecuredRoute>
-                        ),
-                    },
-                    {
-                        path: 'input',
-                        element: (
-                            <SecuredRoute>
-                                <InfoInput />
-                            </SecuredRoute>
-                        ),
-                    },
-                    {
-                        path: 'inputTwo',
-                        element: (
-                            <SecuredRoute>
-                                <InfoInputTwo />
-                            </SecuredRoute>
-                        ),
-                    },
-                    {
-                        path: '🌚',
-                        element: <Admin />
-                    },
-                    {
-                        path: 'loading',
-                        element: <Loading />,
-                    },
-                    {
-                        path: 'test',
-                        element: <ReportSummary />,
-                    },
-                    {
-                        path: 'testTwo',
-                        element: <TestTwo />,
-                    },
-
-                    {
-                        path: 'report',
-                        element: <ReportViewer />,
-                        children: [
-                            {
-                                path: ':id',
-                                element: <ReportViewerResult />
-                            }
-                        ]
-                    },
-
-                ],
+                index: true,
+                element: <Intro />,
             },
             {
                 path: 'login',
-                element: <LoginPage />,
-            },
-            {
-                path: 'oauth2/google/redirect',
-                element: <LoginRedirectPage />,
-            },
-            {
-                path: 'oauth2/kakao/redirect',
-                element: <LoginRedirectPage />,
-            },
-            {
-                path: 'oauth2/naver/redirect',
-                element: <LoginRedirectPage />,
-            },
-
-            {
-                path: 'result',
-                element: <ResultLayout />,
                 children: [
                     {
                         index: true,
-                        element: (
-                            <SecuredRoute>
-                                <ResultPage />
-                            </SecuredRoute>
-                        ),
+                        element: <LoginPage />,
                     },
                     {
-                        path: 'reportsummary',
-                        element: <ReportSummary />,
+                        path: 'nickname',
+                        element: <NicknamePage />,
+                    },
+                ],
+            },
+            {
+                path: 'oauth2/login/redirect',
+                element: <LoginRedirectPage />,
+            },
+            {
+                children: [
+                    {
+                        path: '',
+                        element: (
+                            <SecuredRoute>
+                                <MainLayout />
+                            </SecuredRoute>
+                        ),
+                        children: [
+                            {
+                                path: 'basic',
+                                element: <Input />,
+                            },
+                            {
+                                path: 'which',
+                                element: <Preference />,
+                            },
+                            {
+                                path: 'input',
+                                element: <InfoInput />,
+                            },
+                            {
+                                path: 'inputTwo',
+                                element: <InfoInputTwo />,
+                            },
+                            {
+                                path: '🌚',
+                                element: <Admin />,
+                            },
+                            {
+                                path: 'loading',
+                                element: <Loading />,
+                            },
+                            {
+                                path: 'test',
+                                element: <ReportSummary />,
+                            },
+                            {
+                                path: 'testTwo',
+                                element: <TestTwo />,
+                            },
+                            {
+                                path: 'report',
+                                element: <ReportViewer />,
+                                children: [
+                                    {
+                                        path: ':id',
+                                        element: <ReportViewerResult />,
+                                    },
+                                ],
+                            },
+                        ],
+                    },
+                    {
+                        path: 'result',
+                        element: <ResultLayout />,
+                        children: [
+                            {
+                                index: true,
+                                element: <ResultPage />,
+                            },
+                            {
+                                path: 'reportsummary',
+                                element: <ReportSummary />,
+                            },
+                        ],
+                    },
+                    {
+                        path: 'summary',
+                        element: <PrintReport />,
                     },
                 ],
             },
@@ -136,5 +126,5 @@ export const RouterList = [
                 element: <WrongPath />,
             },
         ],
-    }
+    },
 ];

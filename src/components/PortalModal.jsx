@@ -1,3 +1,5 @@
+// src/components/PortalModal.jsx
+
 import React, { useEffect, useRef, useState } from 'react';
 import ReactDOM from 'react-dom';
 import './ProcedureButton.css';
@@ -7,7 +9,7 @@ export const PortalModal = ({
                                 onClose,
                                 title,
                                 children,
-                                showConfirmButtons = false, // if true -> Confirmation Modal
+                                showConfirmButtons = false,
                                 onConfirm = null,
                                 confirmText = 'Confirm',
                                 cancelText = 'Cancel',
@@ -21,10 +23,8 @@ export const PortalModal = ({
     useEffect(() => {
         if (isOpen) {
             setIsMounted(true);
-
             setTimeout(() => setIsVisible(true), 10);
         } else {
-
             setIsVisible(false);
             setTimeout(() => {
                 setIsMounted(false);
@@ -34,7 +34,7 @@ export const PortalModal = ({
 
     useEffect(() => {
         if (isMounted) {
-            document.body.style.overflow = 'hidden';
+            document.body.style.overflow = 'hidden'; // disable scrolling behind modal
         } else {
             document.body.style.overflow = '';
         }
@@ -65,12 +65,7 @@ export const PortalModal = ({
         }
     };
 
-    // Close if user clicks outside modal content
-    const handleOutsideClick = (e) => {
-        if (modalRef.current && !modalRef.current.contains(e.target)) {
-            closeModal(true);
-        }
-    };
+    // REMOVED handleOutsideClick so clicking overlay doesn't close the modal
 
     if (!isMounted) {
         return null;
@@ -78,22 +73,26 @@ export const PortalModal = ({
 
     const modalContent = (
         <div
-            className={`fixed inset-0 bg-black transition-opacity duration-300 ease-in-out ${
-                isVisible ? 'bg-opacity-50' : 'bg-opacity-0'
-            } flex items-center justify-center p-4 z-50`}
-            onClick={handleOutsideClick}
+            className={`
+        fixed inset-0 bg-black transition-opacity duration-300 ease-in-out 
+        ${isVisible ? 'bg-opacity-50' : 'bg-opacity-0'}
+        flex items-center justify-center p-4 z-50
+      `}
+            // No click handler here -> behind the modal is not clickable
         >
             <div
                 ref={modalRef}
-                className={`relative w-full max-w-[460px] h-[80vh] bg-white border border-black shadow-2xl 
-          overflow-hidden transition-all duration-300 ease-in-out ${
-                    isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
-                } flex flex-col`}
+                className={`
+          relative w-full max-w-[460px] h-[80vh] bg-white border border-black shadow-2xl 
+          overflow-hidden transition-all duration-300 ease-in-out
+          ${isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}
+          flex flex-col
+        `}
             >
                 {/* HEADER */}
                 <div className="flex-shrink-0 flex items-center justify-between p-4 border-b border-black pl-6">
                     <h3 className="text-xl font-bold text-black">{title}</h3>
-                    {/* Top-Right "X" always shows */}
+                    {/* Top-Right "X" */}
                     <button
                         onClick={() => closeModal(true)}
                         className="text-black hover:text-gray-700 transition-colors duration-300 p-2 touch-manipulation"
@@ -116,13 +115,11 @@ export const PortalModal = ({
                     </button>
                 </div>
 
-
                 <div className="flex-grow p-4 space-y-4 overflow-y-auto touch-pan-y text-center">
                     {children}
                 </div>
 
-
-
+                {/* FOOTER */}
                 {!showConfirmButtons && (
                     <div className="flex-shrink-0 flex items-center justify-center p-4 border-t border-black bg-white">
                         <button
@@ -138,10 +135,10 @@ export const PortalModal = ({
                     </div>
                 )}
 
-
                 {showConfirmButtons && (
                     <div
-                        className="flex-shrink-0 flex flex-col items-center justify-center p-4 border-t border-black bg-white space-y-2">
+                        className="flex-shrink-0 flex flex-col items-center justify-center p-4 border-t border-black bg-white space-y-2"
+                    >
                         <button
                             onClick={handleConfirm}
                             className={`defaultButton touch-manipulation ${isClosing ? 'closing' : ''}`}
@@ -154,7 +151,6 @@ export const PortalModal = ({
               </span>
                         </button>
 
-
                         <button
                             onClick={handleCancel}
                             className={`defaultButton touch-manipulation ${isClosing ? 'closing' : ''}`}
@@ -166,8 +162,6 @@ export const PortalModal = ({
                 {cancelText}
               </span>
                         </button>
-
-
                     </div>
                 )}
             </div>

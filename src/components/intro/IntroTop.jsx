@@ -6,7 +6,6 @@ import { useTranslation } from 'react-i18next';
 export const IntroTop = () => {
     const { t } = useTranslation();
 
-
     return (
         <div className="flex-1 content-center h-full min-h-[300px] w-full bg-white text-black mt-[140px] font-introTitle">
             <div className="text-xl">{t('DISCOVER')}</div>

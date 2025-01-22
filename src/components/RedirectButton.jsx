@@ -1,7 +1,7 @@
 // src/components/RedirectButton.jsx
 
 import React, { useState } from 'react';
-import './ProcedureButton.css'; // Reuse the same styles
+import './ProcedureButton.css';
 import { ConfirmationModal } from "./ConfirmationModal.jsx";
 
 export const RedirectButton = ({
@@ -55,11 +55,11 @@ export const RedirectButton = ({
                     onClose={handleCancelRedirect}
                     onConfirm={handleConfirmRedirect}
                     title="주의사항 확인"
-                    message="구매 전 필독 사항입니다."
+                    message=""
                 >
                     <div className="w-full mb-4 flex justify-center">
                         <img
-                            src="/guideline.png"
+                            src="/newguideline.png"
                             alt="guideline"
                             className="max-w-[320px] w-auto h-auto"
                         />

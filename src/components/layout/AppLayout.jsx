@@ -7,6 +7,9 @@ import '../transition.css';
 import { Navbar } from "../Navbar.jsx";
 import { Footer } from "../Footer.jsx";
 import { ExtraFooter } from "../ExtraFooter.jsx";
+import { authAtom } from '../../recoil/authAtoms';
+import { useRecoilState } from "recoil";
+import { BottomTab } from "../BottomTab.jsx";
 
 export const AppLayout = () => {
     const location = useLocation();
@@ -17,6 +20,8 @@ export const AppLayout = () => {
     const isReportPage = useMatch('/report/*');
     const shouldShowNavbar = !isResultPage && !isFinalPage && !isLoginPage && !isReportPage;
 
+    const [authState] = useRecoilState(authAtom);
+
     useEffect(() => {
         window.scrollTo(0, 0);
     }, [location]);
@@ -24,6 +29,7 @@ export const AppLayout = () => {
     return (
         <div className="relative min-h-screen max-w-[480px] mx-auto">
             {shouldShowNavbar && <Navbar />}
+
             <TransitionGroup component={null}>
                 <CSSTransition
                     key={location.key}
@@ -34,6 +40,9 @@ export const AppLayout = () => {
                     <Outlet />
                 </CSSTransition>
             </TransitionGroup>
+
+            {authState.isAuthenticated && <BottomTab />}
+
             <div className="p-2">
                 <ExtraFooter />
                 <Footer />

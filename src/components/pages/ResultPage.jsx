@@ -307,15 +307,15 @@ export const ResultPage = () => {
                             delay={0}
                             target={shopUrl}
                             onClick={(e) => {
-                                e.preventDefault();       // Stop immediate navigation
-                                setIsConfirmationOpen(true); // Show the confirmation modal
+                                e.preventDefault();
+                                setIsConfirmationOpen(true);
                             }}
                         />
                     </div>
                 </div>
 
                 <div className="mt-8 mb-10">
-                    <div>
+                    <div className='flex flex-col items-center'>
                         <button className='defaultButton' onClick={handleReportSummary}>
                             <span className="text">요약본 보기</span>
                             <span>이동하기</span>
@@ -332,12 +332,12 @@ export const ResultPage = () => {
                     onClose={() => setIsConfirmationOpen(false)}
                     onConfirm={handleConfirmPurchase}
                     title="주의사항 확인"
-                    message="구매 전 필독 사항입니다."
+                    message=""
                 >
                     {/* Example of passing children to the modal */}
                     <div className="w-full mb-4 flex justify-center">
                         <img
-                            src="/guideline.png"
+                            src="/newguideline.png"
                             alt="guideline"
                             className="max-w-[320px] w-auto h-auto"
                         />
