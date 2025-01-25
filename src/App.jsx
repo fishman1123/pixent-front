@@ -1,5 +1,3 @@
-// src/App.jsx
-
 import React, { useEffect } from 'react';
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import { RecoilRoot } from 'recoil';
@@ -13,6 +11,9 @@ import RecoilNexus from 'recoil-nexus';
 import ErrorBoundary from './components/ErrorBoundary';
 import ErrorModal from './components/ErrorModal';
 
+// The new AuthInitializer we just created:
+import AuthInitializer from './components/AuthInitializer';
+
 const router = createBrowserRouter(RouterList);
 const queryClient = new QueryClient();
 
@@ -24,7 +25,7 @@ const initializeUserState = ({ set }) => {
 };
 
 function setScreenSize() {
-    let vh = window.innerHeight * 0.01;
+    const vh = window.innerHeight * 0.01;
     document.documentElement.style.setProperty("--vh", `${vh}px`);
 }
 
@@ -32,7 +33,6 @@ function App() {
     useEffect(() => {
         setScreenSize();
         window.addEventListener("resize", setScreenSize);
-
         return () => {
             window.removeEventListener("resize", setScreenSize);
         };
@@ -43,7 +43,10 @@ function App() {
             <RecoilNexus />
             <QueryClientProvider client={queryClient}>
                 <ErrorBoundary>
-                    <RouterProvider router={router} />
+                    {/* Wrap your router with AuthInitializer */}
+                    <AuthInitializer>
+                        <RouterProvider router={router} />
+                    </AuthInitializer>
                 </ErrorBoundary>
                 <ErrorModal />
             </QueryClientProvider>

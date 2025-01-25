@@ -1,25 +1,27 @@
+import React from 'react';
 import { Intro } from './components/pages/Intro.jsx';
 import { Input } from './components/pages/Input.jsx';
-import SecuredRoute from "./components/SecuredRoute.jsx";
-import { InfoInput } from "./components/pages/InfoInput.jsx";
-import { InfoInputTwo } from "./components/pages/InfoInputTwo.jsx";
-import { WrongPath } from "./components/pages/WrongPath.jsx";
-import { ResultPage } from "./components/pages/ResultPage.jsx";
-import { MainLayout } from "./components/layout/MainLayout.jsx";
-import { ResultLayout } from "./components/layout/ResultLayout.jsx";
-import { AppLayout } from "./components/layout/AppLayout.jsx";
-import { Preference } from "./components/pages/Preference.jsx";
-import { ReportViewer } from "./components/pages/ReportViewer.jsx";
-import { ReportViewerResult } from "./components/pages/ReportViewerResult.jsx";
-import { Admin } from "./components/pages/Admin.jsx";
-import { PrintReport } from "./components/pages/PrintReport";
-import Loading from "./components/pages/Loading.jsx";
-import { ReportSummary } from "./components/pages/ReportSummary";
-import { LoginPage } from "./components/pages/LoginPage";
-import { LoginRedirectPage } from "./components/pages/LoginRedirectPage";
-import { NicknamePage } from "./components/pages/NicknamePage";
-import Test from "./components/summary/Test";
-import TestTwo from "./components/summary/TestTwo";
+import { InfoInput } from './components/pages/InfoInput.jsx';
+import { InfoInputTwo } from './components/pages/InfoInputTwo.jsx';
+import { WrongPath } from './components/pages/WrongPath.jsx';
+import { ResultPage } from './components/pages/ResultPage.jsx';
+import { ResultLayout } from './components/layout/ResultLayout.jsx';
+import { AppLayout } from './components/layout/AppLayout.jsx';
+import { Preference } from './components/pages/Preference.jsx';
+import { ReportViewer } from './components/pages/ReportViewer.jsx';
+import { ReportViewerResult } from './components/pages/ReportViewerResult.jsx';
+import { Admin } from './components/pages/Admin.jsx';
+import { PrintReport } from './components/pages/PrintReport';
+import Loading from './components/pages/Loading.jsx';
+import { ReportSummary } from './components/pages/ReportSummary';
+import { LoginPage } from './components/pages/LoginPage';
+import { LoginRedirectPage } from './components/pages/LoginRedirectPage';
+import { NicknamePage } from './components/pages/NicknamePage';
+import Test from './components/summary/Test';
+import TestTwo from './components/summary/TestTwo';
+
+// The new protected layout
+import { ProtectedLayout } from './components/layout/ProtectedLayout';
 
 export const RouterList = [
     {
@@ -48,14 +50,14 @@ export const RouterList = [
                 element: <LoginRedirectPage />,
             },
             {
+                // Everything under here requires an authenticated user
+                // (and possibly a nickname).
                 children: [
                     {
                         path: '',
-                        element: (
-                            <SecuredRoute>
-                                <MainLayout />
-                            </SecuredRoute>
-                        ),
+                        // Our ProtectedLayout automatically checks isAuthenticated
+                        // and redirects if needed.
+                        element: <ProtectedLayout />,
                         children: [
                             {
                                 path: 'basic',
