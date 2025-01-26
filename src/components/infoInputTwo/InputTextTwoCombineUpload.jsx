@@ -1,11 +1,10 @@
 // src/components/InputTextTwoCombineUpload.jsx
 
 import React, { useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux'; // Import Redux hooks
 import imageUploadIcon from '../../assets/upload.svg';
 import { DataButton } from "../DataButton.jsx";
-import { useSetRecoilState, useRecoilValue } from "recoil";
-import { userAtoms } from "../../recoil/userAtoms.jsx";
-import { confirmationAtom } from "../../recoil/confirmationAtom.jsx";
+import { setUserState } from "../../store/userSlice"; // Import Redux action
 import { useTranslation } from "react-i18next";
 import { useReportSubmit } from '../../hooks/useReportSubmit.jsx';
 import LoadingAnimation from '../pages/Loading.jsx';
@@ -13,7 +12,6 @@ import imageCompression from 'browser-image-compression';
 import { PersonalAgreement } from "./PersonalAgreement.jsx";
 // REMOVE or comment out old modal import:
 // import { Modal } from "../Modal.jsx";
-import NewLoading from "../pages/NewLoading.jsx";
 
 // IMPORT your new PortalModal:
 import { PortalModal } from "../PortalModal.jsx";
@@ -26,8 +24,9 @@ export const InputTextTwoCombineUpload = () => {
         t('genderOptions.female'),
         t('genderOptions.other')
     ];
-    const setUserState = useSetRecoilState(userAtoms);
-    const confirmationState = useRecoilValue(confirmationAtom);
+    const userState = useSelector((state) => state.user); // Access user slice
+    const confirmationState = useSelector((state) => state.confirmation); // Access confirmation slice
+    const dispatch = useDispatch(); // Initialize dispatch
     const [keyword, setKeyword] = useState('');
     const [userName, setUserName] = useState('');
     const [userGender, setUserGender] = useState('');
@@ -60,8 +59,7 @@ export const InputTextTwoCombineUpload = () => {
                 };
                 const compressedFile = await imageCompression(file, options);
 
-                setUserState(prevState => ({
-                    ...prevState,
+                dispatch(setUserState({
                     userImage: compressedFile,
                     userImageName: compressedFile.name,
                 }));
@@ -110,8 +108,7 @@ export const InputTextTwoCombineUpload = () => {
             isAuthenticated: true,
         };
 
-        setUserState(prevState => ({
-            ...prevState,
+        dispatch(setUserState({
             ...updatedUserState,
         }));
 

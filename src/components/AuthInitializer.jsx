@@ -1,25 +1,24 @@
+// src/components/AuthInitializer.jsx
+
 import React, { useEffect, useState } from 'react';
-import { useSetRecoilState } from 'recoil';
-import { authAtom } from '../recoil/authAtoms';
+import { useDispatch } from 'react-redux';
+import { setAuthState } from '../store/authSlice';
 
 /**
  * AuthInitializer:
  * - Checks localStorage for 'gToken'
- * - Sets authAtom.isAuthenticated accordingly
+ * - Sets auth.isAuthenticated accordingly (Redux Toolkit)
  * - Shows a small loading fallback until the check is complete
  */
 function AuthInitializer({ children }) {
     const [initialized, setInitialized] = useState(false);
-    const setAuthState = useSetRecoilState(authAtom);
+    const dispatch = useDispatch();
 
     useEffect(() => {
         const token = localStorage.getItem('gToken');
-        setAuthState((prev) => ({
-            ...prev,
-            isAuthenticated: !!token,
-        }));
+        dispatch(setAuthState({ isAuthenticated: !!token }));
         setInitialized(true);
-    }, [setAuthState]);
+    }, [dispatch]);
 
     if (!initialized) {
         // Could be a spinner, skeleton, or just null

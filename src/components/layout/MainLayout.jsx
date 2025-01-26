@@ -6,7 +6,7 @@ import {useRecoilValue} from "recoil";
 import {isAnyModalOpenSelector} from "../../recoil/selector/isAnyModalOpenSelector.jsx";
 
 export const MainLayout = () => {
-    const isAnyModalOpen = useRecoilValue(isAnyModalOpenSelector);
+    // const isAnyModalOpen = useRecoilValue(isAnyModalOpenSelector);
 
     const location = useLocation();
     // Scroll to the top when the location changes

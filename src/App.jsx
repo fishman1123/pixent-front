@@ -1,28 +1,20 @@
 import React, { useEffect } from 'react';
+import { Provider } from 'react-redux';             // <-- Redux
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
-import { RecoilRoot } from 'recoil';
-import { RouterList } from './RouterList.jsx';
-import './index.css';
-import 'flowbite';
-import './i18n'; // Ensure this path is correct
-import { userAtoms, defaultUserState } from './recoil/userAtoms';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import RecoilNexus from 'recoil-nexus';
+
+import { store } from './store';                    // <-- Your Redux store
+import { RouterList } from './RouterList.jsx';
+import AuthInitializer from './components/AuthInitializer'; // If still used
 import ErrorBoundary from './components/ErrorBoundary';
 import ErrorModal from './components/ErrorModal';
 
-// The new AuthInitializer we just created:
-import AuthInitializer from './components/AuthInitializer';
+import './index.css';
+import 'flowbite';
+import './i18n'; // Ensure this path is correct
 
 const router = createBrowserRouter(RouterList);
 const queryClient = new QueryClient();
-
-const savedLanguage =
-    localStorage.getItem('language') || defaultUserState.userLanguage;
-
-const initializeUserState = ({ set }) => {
-    set(userAtoms, { ...defaultUserState, userLanguage: savedLanguage });
-};
 
 function setScreenSize() {
     const vh = window.innerHeight * 0.01;
@@ -39,18 +31,19 @@ function App() {
     }, []);
 
     return (
-        <RecoilRoot initializeState={initializeUserState}>
-            <RecoilNexus />
+        // 1) Use Redux <Provider> instead of RecoilRoot
+        <Provider store={store}>
+            {/* 2) Provide React Query */}
             <QueryClientProvider client={queryClient}>
                 <ErrorBoundary>
-                    {/* Wrap your router with AuthInitializer */}
+                    {/* 3) If using AuthInitializer, wrap your router here */}
                     <AuthInitializer>
                         <RouterProvider router={router} />
                     </AuthInitializer>
                 </ErrorBoundary>
                 <ErrorModal />
             </QueryClientProvider>
-        </RecoilRoot>
+        </Provider>
     );
 }
 

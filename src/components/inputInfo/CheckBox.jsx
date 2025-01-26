@@ -3,10 +3,8 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import "./CheckboxGrid.css";
-import { useRecoilState, useRecoilValue } from 'recoil';
-import { checkboxDataAtom } from '../../recoil/checkboxDataAtom.jsx';
-import { confirmationAtom } from '../../recoil/confirmationAtom.jsx';
-// import { Modal } from '../Modal'; // <-- Remove or comment out
+import { useSelector, useDispatch } from 'react-redux';
+import { toggleSelection } from '../../store/checkboxSelectionSlice'; // Corrected import path
 import { GraphComponent } from '../GraphComponent';
 
 // Import your new Portal-based modal:
@@ -14,8 +12,11 @@ import { PortalModal } from '../PortalModal.jsx'; // Adjust import path as neede
 
 export const Checkbox = ({ componentId }) => {
     const { t } = useTranslation();
-    const options = useRecoilValue(checkboxDataAtom);
-    const [confirmationState, setConfirmationState] = useRecoilState(confirmationAtom);
+    const dispatch = useDispatch();
+
+    // Accessing Redux state
+    const options = useSelector((state) => state.checkboxData);
+    const confirmationState = useSelector((state) => state.checkboxSelection.preferences);
 
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedOptionData, setSelectedOptionData] = useState(null);
@@ -23,35 +24,8 @@ export const Checkbox = ({ componentId }) => {
     const [visiblePopoverId, setVisiblePopoverId] = useState(null);
 
     const handleCheckboxChange = (optionId) => {
-        const selectedOption = options.find(option => option.id === optionId);
-
-        setConfirmationState((prevState) => {
-            const updatedPreferences = { ...prevState.preferences };
-            const currentCategory = componentId === 1 ? 'preferred' : 'disliked';
-            const oppositeCategory = componentId === 1 ? 'disliked' : 'preferred';
-
-            // Toggle logic
-            if (updatedPreferences[currentCategory].some(item => item.id === selectedOption.id)) {
-                // If it's already in currentCategory, remove it
-                updatedPreferences[currentCategory] = updatedPreferences[currentCategory].filter(
-                    (item) => item.id !== selectedOption.id
-                );
-            } else {
-                // Otherwise add it, and also remove it from oppositeCategory
-                updatedPreferences[currentCategory] = [
-                    ...updatedPreferences[currentCategory],
-                    selectedOption
-                ];
-                updatedPreferences[oppositeCategory] = updatedPreferences[oppositeCategory].filter(
-                    (item) => item.id !== selectedOption.id
-                );
-            }
-
-            return {
-                ...prevState,
-                preferences: updatedPreferences,
-            };
-        });
+        const category = componentId === 1 ? 'preferred' : 'disliked';
+        dispatch(toggleSelection({ category, optionId }));
     };
 
     const openModal = (option) => {
@@ -63,9 +37,8 @@ export const Checkbox = ({ componentId }) => {
         <>
             <div className="grid-container">
                 {options.map((option) => {
-                    const isChecked = confirmationState.preferences[
-                        componentId === 1 ? 'preferred' : 'disliked'
-                        ].some((item) => item.id === option.id);
+                    const category = componentId === 1 ? 'preferred' : 'disliked';
+                    const isChecked = confirmationState[category].includes(option.id);
 
                     return (
                         <div key={option.id} className="grid-item">

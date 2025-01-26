@@ -1,37 +1,51 @@
-// src/hooks/ReportSubmit.js
+// src/hooks/useReportSubmit.js
 
 import { useMutation } from '@tanstack/react-query';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
-import { setRecoil } from 'recoil-nexus';
-import { confirmationAtom } from '../recoil/confirmationAtom.jsx';
-import { userAtoms } from '../recoil/userAtoms.jsx';
-import { responseDataAtom } from '../recoil/responseDataAtom';
+import { useSelector, useDispatch } from 'react-redux';
+import { setResponseData } from '../store/responseDataSlice';
+import { closeConfirmationModal, setIsConfirm } from '../store/confirmationSlice';
+import { openErrorModal } from '../store/errorModalSlice';
+import { setUserState } from '../store/userSlice';
 import AxiosInstance from '../api/axiosInstance';
 import { useNavigate } from 'react-router-dom';
 import { useCallback } from 'react';
-import {errorModalAtom} from "../recoil/errorModalAtom.jsx";
 
 export const useReportSubmit = () => {
-    const userState = useRecoilValue(userAtoms);
-    const confirmationState = useRecoilValue(confirmationAtom);
-    const setResponseData = useSetRecoilState(responseDataAtom);
+    const dispatch = useDispatch();
     const navigate = useNavigate();
 
+    // Redux state selectors
+    const userState = useSelector((state) => state.user);
+    const confirmationState = useSelector((state) => state.checkboxSelection.preferences);
+    const checkboxData = useSelector((state) => state.checkboxData);
 
     const submitData = useCallback(async () => {
         const formData = new FormData();
 
-        const { preferred, disliked } = confirmationState.preferences;
+        const { preferred, disliked } = confirmationState;
+
+        // Map selected IDs to their corresponding data from checkboxData
+        const mappedPreferred = preferred.map(id => {
+            const option = checkboxData.find(opt => opt.id === id);
+            if (!option) {
+                console.warn(`Preferred option with id ${id} not found in checkboxData.`);
+                return null;
+            }
+            return { id: option.id, label: option.label };
+        }).filter(item => item !== null); // Remove any null entries
+
+        const mappedDisliked = disliked.map(id => {
+            const option = checkboxData.find(opt => opt.id === id);
+            if (!option) {
+                console.warn(`Disliked option with id ${id} not found in checkboxData.`);
+                return null;
+            }
+            return { id: option.id, label: option.label };
+        }).filter(item => item !== null); // Remove any null entries
 
         const preferences = {
-            preferred: preferred.map(pref => ({
-                id: pref.id,
-                label: pref.label,
-            })),
-            disliked: disliked.map(dis => ({
-                id: dis.id,
-                label: dis.label,
-            })),
+            preferred: mappedPreferred,
+            disliked: mappedDisliked,
         };
 
         formData.append('preference', JSON.stringify(preferences));
@@ -74,14 +88,19 @@ export const useReportSubmit = () => {
         const response = await AxiosInstance.post('/api/image', formData);
 
         return response.data;
-    }, [confirmationState.preferences, userState]);
+    }, [confirmationState, userState, checkboxData]);
 
     const mutation = useMutation({
-        mutationFn: submitData, // Update here
+        mutationFn: submitData,
         onSuccess: (responseData) => {
-            // console.log('Data submitted successfully:', responseData);
-            setResponseData(responseData); // Store response data in Recoil atom
-            navigate('/result');     // Navigate to the result page
+            // Store response data in Redux slice
+            dispatch(setResponseData(responseData));
+
+            // Optionally, close the confirmation modal if it's open
+            dispatch(closeConfirmationModal());
+
+            // Navigate to the result page
+            navigate('/result');
         },
         onError: (mutationError) => {
             let errorMessage = '';
@@ -96,7 +115,9 @@ export const useReportSubmit = () => {
                 console.error('Error:', mutationError.message);
                 errorMessage = 'An unexpected error occurred.';
             }
-            setRecoil(errorModalAtom, { isOpen: true, message: errorMessage });
+
+            // Dispatch an action to open the error modal with the message
+            dispatch(openErrorModal({ message: errorMessage }));
         },
     });
 

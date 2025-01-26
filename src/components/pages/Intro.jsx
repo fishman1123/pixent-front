@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import { useRecoilState } from 'recoil';
-import { authAtom } from '../../recoil/authAtoms';
-import { userAtoms } from '../../recoil/userAtoms';
+import { useSelector, useDispatch } from 'react-redux';
+import { setAuthState } from '../../store/authSlice';
+import { setUserState } from '../../store/userSlice';
 import { useGetUserInfo } from '../../hooks/useGetUserInfo';
 import PrimeModal from '../PrimeModal';  // your existing modal component
 import { IntroTop } from '../intro/IntroTop';
 
 export const Intro = () => {
-    const [authState, setAuthState] = useRecoilState(authAtom);
-    const [userState, setUserState] = useRecoilState(userAtoms);
+    const dispatch = useDispatch();
+
+    // Pulling these from Redux store instead of Recoil
+    const authState = useSelector((state) => state.auth);
 
     // Local state to handle "expired token" modal
     const [showExpiredModal, setShowExpiredModal] = useState(false);
@@ -18,40 +20,40 @@ export const Intro = () => {
      */
     useEffect(() => {
         const token = localStorage.getItem('gToken');
-        setAuthState((prev) => ({
-            ...prev,
+        dispatch(setAuthState({
             isAuthenticated: !!token,
         }));
-    }, [setAuthState]);
+    }, [dispatch]);
 
     /**
      * 2) Fetch user info (with React Query) if isAuthenticated is true.
-     *    The query won't even run if enabled = false.
+     *    The query won't run if enabled=false.
      */
     const { data: userInfo, error, isError } = useGetUserInfo(authState.isAuthenticated);
 
     /**
-     * 3) If user info is successfully retrieved, store it in Recoil.
-     *    - authAtom.nickname
-     *    - userAtoms.userName (if you still want it there)
+     * 3) If user info is successfully retrieved, store it in Redux.
+     *    - authSlice => nickname
+     *    - userSlice => userName
      */
     useEffect(() => {
         if (userInfo) {
-            setUserState((prev) => ({
-                ...prev,
-                userName: userInfo.username,
-            }));
-            setAuthState((prev) => ({
-                ...prev,
-                nickname: userInfo.username,
-            }));
+            // Update user slice
+            dispatch(setUserState({ userName: userInfo.username }));
+
+            // Update auth slice
+            dispatch(
+                setAuthState({
+                    isAuthenticated: true,
+                    nickname: userInfo.username,
+                })
+            );
         }
-    }, [userInfo, setUserState, setAuthState]);
+    }, [userInfo, dispatch]);
 
     /**
      * 4) If the query fails with 403, show the "token expired" modal.
-     *    (Your global axios interceptor also removes localStorage token
-     *     and sets authAtom.isAuthenticated = false.)
+     *    (Axios interceptor also removes the token & sets auth.isAuthenticated=false.)
      */
     useEffect(() => {
         if (isError && error?.response?.status === 403) {
@@ -72,7 +74,9 @@ export const Intro = () => {
             <IntroTop />
 
             {authState.isAuthenticated ? (
-                <div>login is done (nickname: {authState.nickname || 'N/A'})</div>
+                <div>
+                    login is done (nickname: {authState.nickname || 'N/A'})
+                </div>
             ) : (
                 <div>login is not done</div>
             )}

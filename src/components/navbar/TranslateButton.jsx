@@ -1,13 +1,14 @@
 // src/components/TranslateButton.jsx
 import React, { useState, useEffect, useRef } from 'react';
-import { useRecoilState } from 'recoil';
-import { userAtoms } from '../../recoil/userAtoms';
+import { useSelector, useDispatch } from 'react-redux';
+import { setUserLanguage } from '../../store/userSlice';
 import { useTranslation } from 'react-i18next';
 import translatorIcon from '../../assets/translate.svg';
 
 export const TranslateButton = () => {
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-    const [userState, setUserState] = useRecoilState(userAtoms);
+    const userLanguage = useSelector((state) => state.user.userLanguage);
+    const dispatch = useDispatch();
     const dropdownRef = useRef(null);
     const { i18n } = useTranslation();
 
@@ -36,10 +37,7 @@ export const TranslateButton = () => {
     }, [dropdownRef]);
 
     const handleLanguageChange = (languageCode) => {
-        setUserState(prevState => ({
-            ...prevState,
-            userLanguage: languageCode,
-        }));
+        dispatch(setUserLanguage(languageCode));
         i18n.changeLanguage(languageCode);
         localStorage.setItem('language', languageCode);
 
@@ -74,7 +72,7 @@ export const TranslateButton = () => {
                                         type="radio"
                                         name="language-radio"
                                         value={code}
-                                        checked={userState.userLanguage === code}
+                                        checked={userLanguage === code}
                                         onChange={() => handleLanguageChange(code)}
                                         className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500"
                                     />

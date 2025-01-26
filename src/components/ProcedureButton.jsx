@@ -1,26 +1,37 @@
+// src/components/ProcedureButton.jsx
+
 import React, { useState } from 'react';
-import { useRecoilState } from 'recoil';
-import { userAtoms } from '../recoil/userAtoms';
-import { confirmationAtom } from '../recoil/confirmationAtom';
+import { useSelector, useDispatch } from 'react-redux';
+import { setUserState } from '../store/userSlice';
+import {
+    openConfirmationModal,
+    closeConfirmationModal,
+    setIsConfirm,
+} from '../store/confirmationSlice';
+import {
+    openModalTrigger,
+    closeModalTrigger,
+} from '../store/modalTriggerSlice';
 import { useNavigate } from 'react-router-dom';
 import './ProcedureButton.css';
-import { modalTriggerAtom } from "../recoil/modalTriggerAtom.jsx";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from 'react-i18next';
 import { PortalModal } from "./PortalModal.jsx";
 import PrimeModal from './PrimeModal';
 
 export const ProcedureButton = ({ text, route, subText, confirm }) => {
     const { t } = useTranslation();
     const navigate = useNavigate();
+    const dispatch = useDispatch();
 
-    // Recoil
-    const [userState, setUserState] = useRecoilState(userAtoms);
-    const [confirmationState, setConfirmationState] = useRecoilState(confirmationAtom);
-    const [modalState, setModalState] = useRecoilState(modalTriggerAtom);
+    // Redux state selectors
+    const confirmationState = useSelector((state) => state.confirmation);
 
-    // Local
+    // Access checkbox selections and data from Redux store
+    const checkboxSelections = useSelector((state) => state.checkboxSelection.preferences);
+    const checkboxData = useSelector((state) => state.checkboxData);
+
+    // Local state
     const [isButtonDisabled, setButtonDisabled] = useState(false);
-
     const [loginNeededModalOpen, setLoginNeededModalOpen] = useState(false);
 
     const handleButtonClick = () => {
@@ -29,8 +40,8 @@ export const ProcedureButton = ({ text, route, subText, confirm }) => {
         const token = localStorage.getItem('gToken');
         const isAuth = !!token; // true if token exists, false otherwise
 
-        setUserState(prev => ({
-            ...prev,
+        // Update user authentication state
+        dispatch(setUserState({
             isAuthenticated: isAuth,
         }));
 
@@ -42,14 +53,27 @@ export const ProcedureButton = ({ text, route, subText, confirm }) => {
         setButtonDisabled(true);
 
         if (confirm) {
-            setConfirmationState((prevState) => ({
-                ...prevState,
-                isOpen: true,
+            // Map selected IDs to their corresponding data
+            const mappedPreferred = checkboxSelections.preferred.map(id => {
+                const option = checkboxData.find(opt => opt.id === id);
+                return option ? { id: option.id, label: option.label, description: option.description } : null;
+            }).filter(item => item !== null);
+
+            const mappedDisliked = checkboxSelections.disliked.map(id => {
+                const option = checkboxData.find(opt => opt.id === id);
+                return option ? { id: option.id, label: option.label, description: option.description } : null;
+            }).filter(item => item !== null);
+
+            // Dispatch the action with mapped data
+            dispatch(openConfirmationModal({
+                preferences: {
+                    preferred: mappedPreferred,
+                    disliked: mappedDisliked,
+                },
             }));
         } else {
             setTimeout(() => {
-                setUserState((prevState) => ({
-                    ...prevState,
+                dispatch(setUserState({
                     currentPage: route,
                 }));
                 navigate(route);
@@ -59,16 +83,12 @@ export const ProcedureButton = ({ text, route, subText, confirm }) => {
     };
 
     const handleConfirm = () => {
-        setConfirmationState((prevState) => ({
-            ...prevState,
-            isOpen: false,
-            isConfirm: true,
-        }));
-        setModalState({ isOpen: false });
+        dispatch(setIsConfirm(true));
+        dispatch(closeConfirmationModal());
+        dispatch(closeModalTrigger());
 
         setTimeout(() => {
-            setUserState((prevState) => ({
-                ...prevState,
+            dispatch(setUserState({
                 currentPage: route,
             }));
             navigate(route);
@@ -77,12 +97,9 @@ export const ProcedureButton = ({ text, route, subText, confirm }) => {
     };
 
     const handleCancel = () => {
-        setConfirmationState((prevState) => ({
-            ...prevState,
-            isOpen: false,
-            isConfirm: false,
-        }));
-        setModalState({ isOpen: false });
+        dispatch(setIsConfirm(false));
+        dispatch(closeConfirmationModal());
+        dispatch(closeModalTrigger());
         setButtonDisabled(false);
     };
 
@@ -106,7 +123,7 @@ export const ProcedureButton = ({ text, route, subText, confirm }) => {
                 </button>
             )}
 
-            {/* Confirmation Modal (existing) */}
+            {/* Confirmation Modal */}
             <PortalModal
                 isOpen={confirmationState.isOpen}
                 onClose={handleCancel}
@@ -165,7 +182,7 @@ export const ProcedureButton = ({ text, route, subText, confirm }) => {
                 </div>
             </PortalModal>
 
-            {/* "Login needed" Modal using PrimeModal (same as SecuredRoute) */}
+            {/* "Login needed" Modal using PrimeModal */}
             {loginNeededModalOpen && (
                 <PrimeModal
                     isOpen={loginNeededModalOpen}
@@ -178,3 +195,4 @@ export const ProcedureButton = ({ text, route, subText, confirm }) => {
         </div>
     );
 };
+

@@ -1,8 +1,8 @@
 // src/components/ErrorBoundary.jsx
 
 import React from 'react';
-import { setRecoil } from 'recoil-nexus';
-import { errorModalAtom } from '../recoil/errorModalAtom';
+import { connect } from 'react-redux';
+import { openErrorModal } from '../store/errorModalSlice';
 
 class ErrorBoundary extends React.Component {
     constructor(props) {
@@ -11,20 +11,34 @@ class ErrorBoundary extends React.Component {
     }
 
     static getDerivedStateFromError(error) {
+        // Update state to display fallback UI on the next render
         return { hasError: true };
     }
 
     componentDidCatch(error, errorInfo) {
+        // Log the error details for debugging
         console.error('Uncaught error:', error, errorInfo);
-        setRecoil(errorModalAtom, {
-            isOpen: true,
+
+        // Dispatch the action to open the error modal with the error message
+        this.props.openErrorModal({
             message: error.message || 'An unexpected error occurred.',
         });
     }
 
     render() {
+        if (this.state.hasError) {
+            // You can render any fallback UI here if desired
+            return null; // Alternatively, return a fallback UI component
+        }
+
         return this.props.children;
     }
 }
 
-export default ErrorBoundary;
+// Map dispatch to props to provide the openErrorModal action
+const mapDispatchToProps = {
+    openErrorModal,
+};
+
+// Connect the ErrorBoundary component to the Redux store
+export default connect(null, mapDispatchToProps)(ErrorBoundary);

@@ -1,15 +1,21 @@
 // src/components/ErrorModal.jsx
-
 import React, { useState, useEffect } from 'react';
 import ReactDOM from 'react-dom';
-import { useRecoilState } from 'recoil';
-import { errorModalAtom } from '../recoil/errorModalAtom';
+import { useSelector, useDispatch } from 'react-redux';
+import { closeErrorModal } from '../store/errorModalSlice';
 
 const ErrorModal = () => {
-    const [errorModalState, setErrorModalState] = useRecoilState(errorModalAtom);
+    const dispatch = useDispatch();
+
+    // 1) Read the current modal state from Redux
+    const errorModalState = useSelector((state) => state.errorModal);
+
+    // 2) Local states for controlling mount/unmount animations
     const [isMounted, setIsMounted] = useState(false);
     const [isVisible, setIsVisible] = useState(false);
 
+    // When isOpen becomes true, mount the modal + fade in
+    // When isOpen becomes false, fade out + unmount
     useEffect(() => {
         if (errorModalState.isOpen) {
             setIsMounted(true);
@@ -24,6 +30,7 @@ const ErrorModal = () => {
         }
     }, [errorModalState.isOpen, isMounted]);
 
+    // Lock scrolling if mounted
     useEffect(() => {
         if (isMounted) {
             document.body.style.overflow = 'hidden';
@@ -32,14 +39,17 @@ const ErrorModal = () => {
         }
     }, [isMounted]);
 
+    // Close button or backdrop click => dispatch closeErrorModal
     const handleClose = () => {
-        setErrorModalState({ isOpen: false, message: '' });
+        dispatch(closeErrorModal());
     };
 
+    // If not mounted, no modal in DOM
     if (!isMounted) {
         return null;
     }
 
+    // The actual modal content
     const modalContent = (
         <div
             className={`fixed inset-0 bg-black transition-opacity duration-300 ease-in-out ${
@@ -54,13 +64,12 @@ const ErrorModal = () => {
                 onClick={(e) => e.stopPropagation()}
             >
                 <h2 className="text-xl font-bold mb-4">Error</h2>
-                {/*<p>{errorModalState.message}</p>*/}
+                {/* If you want to show the actual message from Redux:
+           <p>{errorModalState.message}</p>
+           or your custom error text below */}
                 <p>이미지에 문제가 있는것 같습니다, 문의 부탁 드립니다.</p>
                 <div className="mt-4 flex justify-end">
-                    <button
-                        onClick={handleClose}
-                        className="bg-black text-white py-2 px-4"
-                    >
+                    <button onClick={handleClose} className="bg-black text-white py-2 px-4">
                         Close
                     </button>
                 </div>
@@ -68,10 +77,8 @@ const ErrorModal = () => {
         </div>
     );
 
-    return ReactDOM.createPortal(
-        modalContent,
-        document.getElementById('modal-root')
-    );
+    // Render into a portal (assuming <div id="modal-root"/> in index.html)
+    return ReactDOM.createPortal(modalContent, document.getElementById('modal-root'));
 };
 
 export default ErrorModal;

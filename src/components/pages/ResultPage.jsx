@@ -1,22 +1,24 @@
 // src/pages/ResultPage.jsx
 
-import { ResultChart } from "../result/ResultChart";
-import { useRecoilState, useSetRecoilState } from "recoil";
-import { useNavigate } from "react-router-dom";
-import { responseDataAtom } from "../../recoil/responseDataAtom.jsx";
-import imageUploadIcon from "../../assets/upload.svg";
 import React, { useEffect, useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { setUserState } from "../../store/userSlice";
+import { setResponseData, clearResponseData } from "../../store/responseDataSlice";
+import { ResultChart } from "../result/ResultChart";
+import imageUploadIcon from "../../assets/upload.svg";
 import Loading from "./Loading.jsx";
 import { RedirectButton } from "../RedirectButton.jsx";
-import { userAtoms } from "../../recoil/userAtoms.jsx";
 import { ConfirmationModal } from "../ConfirmationModal.jsx";
-import CopyIcon from '../../assets/copy.svg'
-// ^ Adjust this import path if necessary.
+import CopyIcon from '../../assets/copy.svg';
+import { openErrorModal } from "../../store/errorModalSlice"; // If needed
 
 export const ResultPage = () => {
-    // Recoil states
-    const [responseData, setResponseData] = useRecoilState(responseDataAtom);
-    const setUserState = useSetRecoilState(userAtoms);
+    // Redux state selectors
+    const responseData = useSelector((state) => state.responseData.data);
+    const userState = useSelector((state) => state.user);
+
+    const dispatch = useDispatch();
 
     // React Router
     const navigate = useNavigate();
@@ -37,28 +39,27 @@ export const ResultPage = () => {
 
     useEffect(() => {
         // Prevent the user from going back to the previous page (the result)
-        history.pushState(null, "", "/");
+        window.history.pushState(null, "", "/");
 
         const handlePopState = () => {
             // If user hits back button, reset state & go home
-            setUserState((prevState) => ({
-                ...prevState,
+            dispatch(setUserState({
                 isAuthenticated: false,
             }));
-            setResponseData(null);
+            dispatch(clearResponseData());
             navigate("/", { replace: true });
         };
 
-        window.onpopstate = handlePopState;
+        window.addEventListener('popstate', handlePopState);
 
         return () => {
-            window.onpopstate = null;
+            window.removeEventListener('popstate', handlePopState);
         };
-    }, [setUserState, setResponseData, navigate]);
+    }, [dispatch, navigate]);
 
     // Handle copy link
     const handleCopy = () => {
-        const urlToCopy = `pixent.co.kr/report/${responseData?.uuid}`;
+        const urlToCopy = `https://www.pixent.co.kr/report/${responseData?.uuid}`;
         navigator.clipboard
             .writeText(urlToCopy)
             .then(() => {
@@ -67,6 +68,7 @@ export const ResultPage = () => {
             })
             .catch((err) => {
                 console.error("Failed to copy: ", err);
+                dispatch(openErrorModal({ message: "Failed to copy the URL. Please try again." }));
             });
     };
 
@@ -79,20 +81,18 @@ export const ResultPage = () => {
     };
 
     // Optional fallback if responseData is missing
-    /*
     if (!responseData) {
-      return (
-        <div className="flex justify-center items-center min-h-screen">
-          <Loading />
-        </div>
-      );
+        return (
+            <div className="flex justify-center items-center min-h-screen">
+                <Loading />
+            </div>
+        );
     }
-    */
 
     return (
         <div className="flex flex-col justify-center items-center min-h-screen w-full text-center">
             <div className="w-full h-auto flex flex-col justify-center items-center">
-                {responseData?.userImageUrl ? (
+                {responseData.userImageUrl ? (
                     <img
                         src={responseData.userImageUrl}
                         alt="User"
@@ -112,7 +112,7 @@ export const ResultPage = () => {
                 )}
                 <div className="mt-12">
                     <p className="font-headerTitle text-[40px]">
-                        {responseData?.perfumeName}
+                        {responseData.perfumeName}
                     </p>
                 </div>
             </div>
@@ -128,15 +128,15 @@ export const ResultPage = () => {
                     <div className="text-left">
                         <h2 className="font-bold text-[14px] pb-2">Facial Feature</h2>
                         <p className="text-[12px]">
-                            {responseData?.appearance?.facialFeature}
+                            {responseData.appearance.facialFeature}
                         </p>
                         <h2 className="font-bold text-[14px] pb-2 mt-4">Style</h2>
                         <p className="text-[12px]">
-                            {responseData?.appearance?.style}
+                            {responseData.appearance.style}
                         </p>
                         <h2 className="font-bold text-[14px] pb-2 mt-4">Vibe</h2>
                         <p className="text-[12px]">
-                            {responseData?.appearance?.vibe}
+                            {responseData.appearance.vibe}
                         </p>
                     </div>
                 </div>
@@ -144,7 +144,7 @@ export const ResultPage = () => {
                 {/* Perfume Notes */}
                 <div>
                     <div className="text-left text-[18px] font-bold mt-8">
-                        {responseData?.perfumeName} NOTES
+                        {responseData.perfumeName} NOTES
                     </div>
                 </div>
 
@@ -157,45 +157,45 @@ export const ResultPage = () => {
                 <div className="text-left">
                     <div className="flex items-center">
                         <img
-                            src={responseData?.mainNoteImageUrl}
+                            src={responseData.mainNoteImageUrl}
                             alt="Main Note"
                             className="w-14 h-14 mr-2"
                         />
                         <span className="font-bold">TOP:</span>{" "}
-                        {responseData?.mainNote}
+                        {responseData.mainNote}
                     </div>
-                    <p className="text-[12px]">{responseData?.mainNoteDesc}</p>
-                    <p className="text-[12px]">{responseData?.mainNoteAnalysis}</p>
+                    <p className="text-[12px]">{responseData.mainNoteDesc}</p>
+                    <p className="text-[12px]">{responseData.mainNoteAnalysis}</p>
                 </div>
 
                 {/* Middle Note */}
                 <div className="text-left mt-4">
                     <div className="flex items-center">
                         <img
-                            src={responseData?.middleNoteImageUrl}
+                            src={responseData.middleNoteImageUrl}
                             alt="Middle Note"
                             className="w-14 h-14 mr-2"
                         />
                         <span className="font-bold">MIDDLE:</span>{" "}
-                        {responseData?.middleNote}
+                        {responseData.middleNote}
                     </div>
-                    <p className="text-[12px]">{responseData?.middleNoteDesc}</p>
-                    <p className="text-[12px]">{responseData?.middleNoteAnalysis}</p>
+                    <p className="text-[12px]">{responseData.middleNoteDesc}</p>
+                    <p className="text-[12px]">{responseData.middleNoteAnalysis}</p>
                 </div>
 
                 {/* Base Note */}
                 <div className="text-left mt-4">
                     <div className="flex items-center">
                         <img
-                            src={responseData?.baseNoteImageUrl}
+                            src={responseData.baseNoteImageUrl}
                             alt="Base Note"
                             className="w-14 h-14 mr-2"
                         />
                         <span className="font-bold">BASE:</span>{" "}
-                        {responseData?.baseNote}
+                        {responseData.baseNote}
                     </div>
-                    <p className="text-[12px]">{responseData?.baseNoteDesc}</p>
-                    <p className="text-[12px]">{responseData?.baseNoteAnalysis}</p>
+                    <p className="text-[12px]">{responseData.baseNoteDesc}</p>
+                    <p className="text-[12px]">{responseData.baseNoteAnalysis}</p>
                 </div>
 
                 {/* Profile */}
@@ -208,19 +208,19 @@ export const ResultPage = () => {
                         <div className="h-[1px] w-full bg-black mr-[5px]"/>
                     </div>
                     <div>
-                        <p className="text-[12px]">{responseData?.profile}</p>
+                        <p className="text-[12px]">{responseData.profile}</p>
                     </div>
                 </div>
 
                 {/* Result Chart */}
                 <div className="mt-8">
                     <ResultChart
-                        inputCitrus={responseData?.citrus}
-                        inputFloral={responseData?.floral}
-                        inputWoody={responseData?.woody}
-                        inputMusk={responseData?.musk}
-                        inputFresh={responseData?.fruity}
-                        inputSpicy={responseData?.spicy}
+                        inputCitrus={responseData.citrus}
+                        inputFloral={responseData.floral}
+                        inputWoody={responseData.woody}
+                        inputMusk={responseData.musk}
+                        inputFresh={responseData.fruity}
+                        inputSpicy={responseData.spicy}
                     />
                 </div>
                 <div className='border-1 border-t-0 px-6 shadow-md'>
@@ -236,31 +236,35 @@ export const ResultPage = () => {
                                     id="copy-url-input"
                                     type="text"
                                     className="flex-1 min-w-0 text-gray-500 text-sm focus:ring-blue-500 outline-none border-none"
-                                    value={`https://www.pixent.co.kr/report/${responseData?.uuid}`}
+                                    value={`https://www.pixent.co.kr/report/${responseData.uuid}`}
                                     disabled
                                     readOnly
                                 />
                                 <button
                                     onClick={handleCopy}
                                     data-tooltip-target="tooltip-copy-url-button"
-                                    className="relativetext-gray-500 border-l border-r p-2 px-4 h-full flex items-center justify-center space-x-2 w-[120px] whitespace-nowrap"
+                                    className="relative text-gray-500 border-l border-r p-2 px-4 h-full flex items-center justify-center space-x-2 w-[120px] whitespace-nowrap"
                                 >
                                     {/* COPY ICON (hidden when copySuccess === true) */}
                                     <span
                                         id="default-icon"
                                         className={`flex-shrink-0 ${copySuccess ? "hidden" : ""}`}
-                                    ><img src={CopyIcon} alt="Copy Icon" className="w-4 h-4"/></span>
+                                    >
+                                        <img src={CopyIcon} alt="Copy Icon" className="w-4 h-4"/>
+                                    </span>
                                     {/* CHECK ICON (visible when copySuccess === true) */}
                                     <span id="success-icon" className={`flex-shrink-0 ${copySuccess ? "" : "hidden"}`}>
                                         <svg className="w-4 h-4 text-black" aria-hidden="true" fill="none"
                                              viewBox="0 0 16 12">
                                             <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round"
-                                                  strokeWidth="2" d="M1 5.917L5.724 10.5 15 1.5"/></svg></span>
+                                                  strokeWidth="2" d="M1 5.917L5.724 10.5 15 1.5"/>
+                                        </svg>
+                                    </span>
                                     <span className="text-sm">{copySuccess ? "Copied!" : "Copy URL"}</span>
                                 </button>
                                 <button
                                     onClick={() => {
-                                        const url = `https://www.pixent.co.kr/report/${responseData?.uuid}`;
+                                        const url = `https://www.pixent.co.kr/report/${responseData.uuid}`;
                                         const text = `Share analysis report created by Pixent!`;
                                         const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(
                                             text

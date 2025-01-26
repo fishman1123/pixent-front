@@ -1,13 +1,11 @@
 // src/components/intro/InfoInput.jsx
+
 import React, { useEffect } from 'react';
-import { useRecoilState } from 'recoil';
-import { checkboxDataAtom } from '../../recoil/checkboxDataAtom';
-import { checkboxSelectionsAtom } from '../../recoil/checkboxSelectionsAtom';
+import { useSelector, useDispatch } from 'react-redux'; // Import Redux hooks
+import { setCheckboxData } from '../../store/checkboxDataSlice'; // Import Redux actions
+import { setCheckboxSelections } from '../../store/checkboxSelectionSlice'; // Corrected import path
 import { ProcedureButton } from '../ProcedureButton';
 import { useTranslation } from 'react-i18next';
-
-// Remove isAnyModalOpenSelector if you no longer need to conditionally switch z-index
-// import { isAnyModalOpenSelector } from '../../recoil/selector/isAnyModalOpenSelector';
 
 import { InputTextTop } from '../inputInfo/InputTextTop';
 import { SelectForm } from '../inputInfo/SelectForm';
@@ -16,8 +14,11 @@ import { InputTextCenter } from '../inputInfo/InputTextCenter';
 
 export const InfoInput = () => {
     const { t, i18n } = useTranslation();
-    const [checkboxData, setCheckboxData] = useRecoilState(checkboxDataAtom);
-    const [checkboxSelections, setCheckboxSelections] = useRecoilState(checkboxSelectionsAtom);
+    const dispatch = useDispatch();
+
+    // Accessing Redux state if needed
+    const checkboxData = useSelector((state) => state.checkboxData);
+    const checkboxSelections = useSelector((state) => state.checkboxSelection.preferences);
 
     useEffect(() => {
         const translatedData = [
@@ -120,14 +121,17 @@ export const InfoInput = () => {
             },
         ];
 
-        setCheckboxData(translatedData);
+        // Dispatch actions to set checkbox data and initial selections
+        dispatch(setCheckboxData(translatedData));
 
-        const initialSelections = {};
-        translatedData.forEach((option) => {
-            initialSelections[option.id] = null;
-        });
-        setCheckboxSelections(initialSelections);
-    }, [t, i18n.language, setCheckboxData, setCheckboxSelections]);
+        const initialSelections = {
+            preferences: {
+                preferred: [],
+                disliked: [],
+            },
+        };
+        dispatch(setCheckboxSelections(initialSelections));
+    }, [t, i18n.language, dispatch]);
 
     return (
         // z-0 ensures it's behind higher layers like Navbar (z-10 or z-30) and Modal (z-50).

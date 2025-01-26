@@ -1,24 +1,28 @@
+// src/components/SerialNumberBox.jsx
+
 import React, { useState, useEffect } from 'react';
 import { FaArrowRight } from 'react-icons/fa';
 import { useNavigate, useLocation } from "react-router-dom";
-import { useRecoilState, useSetRecoilState } from "recoil";
-import { userAtoms } from "../../recoil/userAtoms";
-import { authAtom } from "../../recoil/authAtoms";
+import { useSelector, useDispatch } from "react-redux"; // Import Redux hooks
+import { setUserState } from "../../store/userSlice"; // Import Redux actions
+import { setAuthState } from "../../store/authSlice";
 import { useTranslation } from "react-i18next";
-import AxiosInstance from "../../api/axiosInstance"; // <-- import your axios instance
+import AxiosInstance from "../../api/axiosInstance"; // Import your axios instance
+import { openErrorModal } from '../../store/errorModalSlice'; // Import error modal action if needed
 
 /**
  * SerialNumberBox
  *  - Uses AxiosInstance to POST { username: serialNumber }
- *  - If success => set authAtom.isAuthenticated = true, navigate to "/"
- *  - If error => set errorMessage
+ *  - If success => set authSlice.isAuthenticated = true, navigate to "/"
+ *  - If error => dispatch openErrorModal with error message
  */
 export const SerialNumberBox = ({ path, isViewer }) => {
     const { t } = useTranslation();
 
-    // Recoil
-    const setUserState = useSetRecoilState(userAtoms);
-    const [authState, setAuthState] = useRecoilState(authAtom);
+    // Redux
+    const dispatch = useDispatch();
+    const authState = useSelector((state) => state.auth);
+    const userState = useSelector((state) => state.user);
 
     // Local state
     const [serialNumber, setSerialNumber] = useState("");
@@ -41,11 +45,10 @@ export const SerialNumberBox = ({ path, isViewer }) => {
 
     // Update user state on mount
     useEffect(() => {
-        setUserState((prevState) => ({
-            ...prevState,
+        dispatch(setUserState({
             currentPage: 'input',
         }));
-    }, [setUserState]);
+    }, [dispatch]);
 
     // Handle input change
     const handleSerialNumberChange = (e) => {
@@ -80,7 +83,7 @@ export const SerialNumberBox = ({ path, isViewer }) => {
 
             // If successful
             console.log("Response data:", response.data);
-            setAuthState((prev) => ({ ...prev, isAuthenticated: true }));
+            dispatch(setAuthState({ isAuthenticated: true }));
 
             // Optional: store token in localStorage if returned, or handle as needed
             // localStorage.setItem('gToken', response.data.someToken);
@@ -94,9 +97,11 @@ export const SerialNumberBox = ({ path, isViewer }) => {
                 // Errors with response (4xx / 5xx)
                 const msg = err.response.data?.message || "Failed to register username";
                 setErrorMessage(msg);
+                dispatch(openErrorModal({ message: msg }));
             } else {
                 // Network or CORS errors, etc.
                 setErrorMessage(err.message);
+                dispatch(openErrorModal({ message: err.message }));
             }
         }
     };
@@ -117,18 +122,20 @@ export const SerialNumberBox = ({ path, isViewer }) => {
             });
 
             console.log("Response data:", response.data);
-            setAuthState((prev) => ({ ...prev, isAuthenticated: true }));
+            dispatch(setAuthState({ isAuthenticated: true }));
 
             console.log("Viewer success, redirecting...");
-            navigate(targetPath + '/' + serialNumber);
+            navigate(`${targetPath}/${serialNumber}`);
             // or navigate("/") if you'd rather go home
         } catch (err) {
             console.error("Error in POST (viewer):", err);
             if (err.response) {
                 const msg = err.response.data?.message || "Failed to register username";
                 setErrorMessage(msg);
+                dispatch(openErrorModal({ message: msg }));
             } else {
                 setErrorMessage(err.message);
+                dispatch(openErrorModal({ message: err.message }));
             }
         }
     };

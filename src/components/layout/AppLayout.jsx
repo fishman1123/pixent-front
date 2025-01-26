@@ -1,5 +1,3 @@
-// src/components/layout/AppLayout.jsx
-
 import React, { useEffect } from 'react';
 import { Outlet, useLocation, useMatch } from 'react-router-dom';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
@@ -7,8 +5,7 @@ import '../transition.css';
 import { Navbar } from "../Navbar.jsx";
 import { Footer } from "../Footer.jsx";
 import { ExtraFooter } from "../ExtraFooter.jsx";
-import { authAtom } from '../../recoil/authAtoms';
-import { useRecoilState } from "recoil";
+import { useSelector } from 'react-redux'; // <-- Import useSelector from react-redux
 import { BottomTab } from "../BottomTab.jsx";
 
 export const AppLayout = () => {
@@ -20,7 +17,7 @@ export const AppLayout = () => {
     const isReportPage = useMatch('/report/*');
     const shouldShowNavbar = !isResultPage && !isFinalPage && !isLoginPage && !isReportPage;
 
-    const [authState] = useRecoilState(authAtom);
+    const authState = useSelector((state) => state.auth);
 
     useEffect(() => {
         window.scrollTo(0, 0);
@@ -37,7 +34,9 @@ export const AppLayout = () => {
                     classNames="fade"
                     unmountOnExit
                 >
-                    <Outlet />
+                    <div>
+                        <Outlet />
+                    </div>
                 </CSSTransition>
             </TransitionGroup>
 

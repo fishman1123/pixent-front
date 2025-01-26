@@ -1,9 +1,9 @@
-// src/api/axiosInstance.js
-
 import axios from 'axios';
 import config from '../config';
-import { authAtom } from '../recoil/authAtoms';
-import { setRecoil } from 'recoil-nexus';
+
+// Import your store and the logout action
+import { store } from '../store';
+import { logout } from '../store/authSlice';
 
 const AxiosInstance = axios.create({
     baseURL: config.API_BASE_URL,
@@ -28,14 +28,11 @@ AxiosInstance.interceptors.response.use(
         const status = error?.response?.status;
 
         if (status === 401 || status === 403) {
-            console.warn(`${status} => removing token + updating authAtom`);
+            console.warn(`${status} => removing token + dispatching logout()`);
             localStorage.removeItem('gToken');
 
-            // Set isAuthenticated: false
-            setRecoil(authAtom, (prev) => ({
-                ...prev,
-                isAuthenticated: false,
-            }));
+            // Dispatch the logout action to update Redux
+            store.dispatch(logout());
         }
 
         return Promise.reject(error);
