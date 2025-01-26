@@ -21,12 +21,14 @@ AxiosInstance.interceptors.request.use(
     (error) => Promise.reject(error)
 );
 
-// Handle 403 => log out globally
+// Handle 401 or 403 => log out globally
 AxiosInstance.interceptors.response.use(
     (response) => response,
     (error) => {
-        if (error?.response?.status === 403) {
-            console.warn('403 Forbidden => removing token + updating authAtom');
+        const status = error?.response?.status;
+
+        if (status === 401 || status === 403) {
+            console.warn(`${status} => removing token + updating authAtom`);
             localStorage.removeItem('gToken');
 
             // Set isAuthenticated: false
@@ -35,6 +37,7 @@ AxiosInstance.interceptors.response.use(
                 isAuthenticated: false,
             }));
         }
+
         return Promise.reject(error);
     }
 );
