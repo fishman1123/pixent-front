@@ -5,9 +5,15 @@ import { setUserState } from '../../store/userSlice';
 import { useGetUserInfo } from '../../hooks/useGetUserInfo';
 import PrimeModal from '../PrimeModal';  // your existing modal component
 import { IntroTop } from '../intro/IntroTop';
+import {IntroCenter} from "../intro/IntroCenter.jsx";
+import {IntroBottom} from "../intro/IntroBotttom.jsx";
+import {ProcedureButton} from "../ProcedureButton.jsx";
+import {useTranslation} from "react-i18next";
 
 export const Intro = () => {
     const dispatch = useDispatch();
+    const { t } = useTranslation();
+
 
     // Pulling these from Redux store instead of Recoil
     const authState = useSelector((state) => state.auth);
@@ -71,23 +77,70 @@ export const Intro = () => {
 
     return (
         <div className="flex-col justify-center items-center min-h-screen w-full text-center">
-            <IntroTop />
+            <IntroTop>
+                <div className="mt-[120px] mb-[40px]">
+                    <div className="text-[40px] font-extralight">{t('DISCOVER')}</div>
+                    <div className="text-[40px] font-extralight">{t('YOUR_SCENT')}</div>
+                    <div className="text-[14px] mt-[40px] text-black">
+                        {t('Uncover your unique fragrance profile')}
+                    </div>
+                </div>
+
+            </IntroTop>
+            <div className="mb-[48px]">
+                <div className="mx-10">
+                    <ProcedureButton
+                        text={t('Start Analysis')} // Pass translated text
+                        route="/which"
+                        // subText={t('Test in progress')} // Pass translated subtext
+                        confirm={false}
+                    />
+                </div>
+
+            </div>
 
             {authState.isAuthenticated ? (
-                <div>
-                    login is done (nickname: {authState.nickname || 'N/A'})
+                <div className="flex flex-col ">
+                    <div>
+                        login is done (nickname: {authState.nickname || 'N/A'})
+                    </div>
+                    <div>
+                        view amount left: {authState.viewChance || 'N/A'} left to use analysis
+                    </div>
                 </div>
+
             ) : (
                 <div>login is not done</div>
             )}
 
-            <PrimeModal
-                isOpen={showExpiredModal}
-                onClose={handleCloseExpiredModal}
-                title="Session Expired"
-            >
-                <p>the login time is expired, login again</p>
-            </PrimeModal>
-        </div>
-    );
-};
+            <IntroCenter/>
+            <IntroTop>
+                <div className="mt-[20px] mb-[40px]">
+                    <div className="text-[40px] font-extralight">{t('REFINE')}</div>
+                    <div className="text-[40px] font-extralight">{t('YOUR_SCENT')}</div>
+                    <div className="text-[14px] mt-[40px] text-black">
+                        {t('COMPLETE WITH OUR EXPERTS')}
+                    </div>
+                </div>
+
+            </IntroTop>
+            <div className="mb-[48px]">
+                <div className="mx-10">
+                    <ProcedureButton
+                        text={t('Get A/S')} // Pass translated text
+                        route="/which"
+                        subText={t('Test in progress')} // Pass translated subtext
+                        confirm={false}
+                    />
+                </div>
+            </div>
+                <PrimeModal
+                    isOpen={showExpiredModal}
+                    onClose={handleCloseExpiredModal}
+                    title="Session Expired"
+                >
+                    <p>the login time is expired, login again</p>
+                </PrimeModal>
+            </div>
+            );
+            };

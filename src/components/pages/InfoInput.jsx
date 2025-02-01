@@ -146,7 +146,7 @@ export const InfoInput = () => {
                 <ProcedureButton
                     text={t('Next')}
                     route="/inputTwo"
-                    subText={t('Test in progress')}
+                    // subText={t('Test in progress')}
                     confirm={true}
                 />
             </div>

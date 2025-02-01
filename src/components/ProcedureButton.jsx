@@ -1,5 +1,4 @@
-// src/components/ProcedureButton.jsx
-
+// ProcedureButton.jsx
 import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { setUserState } from '../store/userSlice';
@@ -13,26 +12,28 @@ import {
     closeModalTrigger,
 } from '../store/modalTriggerSlice';
 import { useNavigate } from 'react-router-dom';
-import './ProcedureButton.css';
+import '../components/intro/IntroButton.css';
 import { useTranslation } from 'react-i18next';
 import { PortalModal } from "./PortalModal.jsx";
 import PrimeModal from './PrimeModal';
+import ToastModal from './ToastModal';
+import { ViewCountInfo } from "./ViewCountInfo.jsx";
 
 export const ProcedureButton = ({ text, route, subText, confirm }) => {
     const { t } = useTranslation();
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
-    // Redux state selectors
     const confirmationState = useSelector((state) => state.confirmation);
-
-    // Access checkbox selections and data from Redux store
     const checkboxSelections = useSelector((state) => state.checkboxSelection.preferences);
     const checkboxData = useSelector((state) => state.checkboxData);
 
-    // Local state
+
+
+    // --- Local state ---
     const [isButtonDisabled, setButtonDisabled] = useState(false);
     const [loginNeededModalOpen, setLoginNeededModalOpen] = useState(false);
+    const [showToast, setShowToast] = useState(false); // controls ToastModal
 
     const handleButtonClick = () => {
         if (isButtonDisabled) return;
@@ -40,10 +41,8 @@ export const ProcedureButton = ({ text, route, subText, confirm }) => {
         const token = localStorage.getItem('gToken');
         const isAuth = !!token; // true if token exists, false otherwise
 
-        // Update user authentication state
-        dispatch(setUserState({
-            isAuthenticated: isAuth,
-        }));
+        // Update Redux user state
+        dispatch(setUserState({ isAuthenticated: isAuth }));
 
         if (!isAuth) {
             setLoginNeededModalOpen(true);
@@ -53,7 +52,6 @@ export const ProcedureButton = ({ text, route, subText, confirm }) => {
         setButtonDisabled(true);
 
         if (confirm) {
-            // Map selected IDs to their corresponding data
             const mappedPreferred = checkboxSelections.preferred.map(id => {
                 const option = checkboxData.find(opt => opt.id === id);
                 return option ? { id: option.id, label: option.label, description: option.description } : null;
@@ -64,7 +62,6 @@ export const ProcedureButton = ({ text, route, subText, confirm }) => {
                 return option ? { id: option.id, label: option.label, description: option.description } : null;
             }).filter(item => item !== null);
 
-            // Dispatch the action with mapped data
             dispatch(openConfirmationModal({
                 preferences: {
                     preferred: mappedPreferred,
@@ -72,13 +69,17 @@ export const ProcedureButton = ({ text, route, subText, confirm }) => {
                 },
             }));
         } else {
-            setTimeout(() => {
-                dispatch(setUserState({
-                    currentPage: route,
-                }));
-                navigate(route);
+            // If confirm=false AND route="/which", show Toast instead of navigating
+            if (route === '/which') {
+                setShowToast(true);
                 setButtonDisabled(false);
-            }, 700);
+            } else {
+                setTimeout(() => {
+                    dispatch(setUserState({ currentPage: route }));
+                    navigate(route);
+                    setButtonDisabled(false);
+                }, 700);
+            }
         }
     };
 
@@ -88,9 +89,7 @@ export const ProcedureButton = ({ text, route, subText, confirm }) => {
         dispatch(closeModalTrigger());
 
         setTimeout(() => {
-            dispatch(setUserState({
-                currentPage: route,
-            }));
+            dispatch(setUserState({ currentPage: route }));
             navigate(route);
             setButtonDisabled(false);
         }, 200);
@@ -108,12 +107,28 @@ export const ProcedureButton = ({ text, route, subText, confirm }) => {
         navigate('/login');
     };
 
+    // Close ToastModal
+    const handleCloseToast = () => {
+        setShowToast(false);
+    };
+
+
+    const handleCharge = () => {
+        navigate('/');      // redirect to home for now
+        handleCloseToast();
+    };
+
+    const handleAnalysis = () => {
+        navigate('/which');
+        handleCloseToast();
+    };
+
     return (
         <div className="flex justify-center">
-            {/* The main button, only shown if confirmation modal isn't open */}
+            {/* Main button (only shown if confirmation modal isn't open) */}
             {!confirmationState.isOpen && (
                 <button
-                    className="defaultButton"
+                    className="noanimationbutton"
                     role="button"
                     onClick={handleButtonClick}
                     disabled={isButtonDisabled}
@@ -135,51 +150,7 @@ export const ProcedureButton = ({ text, route, subText, confirm }) => {
                 cancelText={t('confirmationModal.cancel')}
             >
                 <p>{t('confirmationModal.proceedQuestion')}</p>
-                <div className="mt-4">
-                    <h3 className="text-lg font-bold">
-                        {t('confirmationModal.preferredScents')}
-                    </h3>
-                    {confirmationState.preferences.preferred.length > 0 ? (
-                        confirmationState.preferences.preferred.map((scent, index) => (
-                            <div key={index} className="mb-4">
-                                <p className="font-semibold">{t(scent.label)}</p>
-                                <p className="text-gray-600">{t(scent.description)}</p>
-                            </div>
-                        ))
-                    ) : (
-                        <p className="text-gray-600">
-                            {t('confirmationModal.noPreferredScents')}
-                        </p>
-                    )}
-                </div>
-
-                <div className="mt-4">
-                    <h3 className="text-lg font-bold">
-                        {t('confirmationModal.dislikedScents')}
-                    </h3>
-                    {confirmationState.preferences.disliked.length > 0 ? (
-                        confirmationState.preferences.disliked.map((scent, index) => (
-                            <div key={index} className="mb-4">
-                                <p className="font-semibold">{t(scent.label)}</p>
-                                <p className="text-gray-600">{t(scent.description)}</p>
-                            </div>
-                        ))
-                    ) : (
-                        <p className="text-gray-600">
-                            {t('confirmationModal.noDislikedScents')}
-                        </p>
-                    )}
-                </div>
-
-                <div className="mt-4">
-                    <h3 className="text-lg font-bold">
-                        {t('confirmationModal.howWeUsePreferences')}
-                    </h3>
-                    <ul className="list-disc pl-5 text-[14px]">
-                        <li>{t('confirmationModal.usePreference1')}</li>
-                        <li>{t('confirmationModal.usePreference2')}</li>
-                    </ul>
-                </div>
+                {/* ... confirmation content ... */}
             </PortalModal>
 
             {/* "Login needed" Modal using PrimeModal */}
@@ -192,7 +163,16 @@ export const ProcedureButton = ({ text, route, subText, confirm }) => {
                     <p className="my-2">로그인이 필요합니다. 로그인 후 이용해주세요.</p>
                 </PrimeModal>
             )}
+
+            {/* ToastModal */}
+            {showToast && (
+                <ToastModal onClose={handleCloseToast}>
+                    <ViewCountInfo
+                        onCharge={handleCharge}
+                        startAnalysis={handleAnalysis}
+                    />
+                </ToastModal>
+            )}
         </div>
     );
 };
-

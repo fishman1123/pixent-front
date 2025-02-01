@@ -24,7 +24,7 @@ export const AppLayout = () => {
     }, [location]);
 
     return (
-        <div className="relative min-h-screen max-w-[480px] mx-auto">
+        <div className="relative min-h-screen max-w-[480px] mx-auto scrollbar-hide ">
             {shouldShowNavbar && <Navbar />}
 
             <TransitionGroup component={null}>
@@ -44,7 +44,10 @@ export const AppLayout = () => {
 
             <div className="p-2">
                 <ExtraFooter />
-                <Footer />
+                <div className={`p-2 ${authState.isAuthenticated ? 'mb-9' : ''}`}>
+                    <Footer />
+                </div>
+
             </div>
         </div>
     );
