@@ -22,6 +22,7 @@ import TestTwo from './components/summary/TestTwo';
 
 // The new protected layout
 import { ProtectedLayout } from './components/layout/ProtectedLayout';
+import {UserPage} from "./components/pages/UserPage.jsx";
 
 export const RouterList = [
     {
@@ -90,6 +91,10 @@ export const RouterList = [
                             {
                                 path: 'testTwo',
                                 element: <TestTwo />,
+                            },
+                            {
+                                path: 'user',
+                                element: <UserPage />,
                             },
                             {
                                 path: 'report',

@@ -1,12 +1,15 @@
+/* ============================= */
+/*       DEFAULT BUTTON          */
+/* ============================= */
 .defaultButton {
     position: relative;
     overflow: hidden;
     border: 2px solid #18181a;
     color: #18181a;
     font-weight: bold;
-    display: flex; /* Use Flexbox */
-    justify-content: center; /* Center horizontally */
-    align-items: center; /* Center vertically */
+    display: flex;
+    justify-content: center;
+    align-items: center;
     font-size: 14px;
     line-height: 1.2;
     padding: 12px 20px;
@@ -16,20 +19,20 @@
     user-select: none;
     -webkit-user-select: none;
     touch-action: manipulation;
-    width: 200px; /* Fixed width */
-    height: 50px; /* Fixed height (optional) */
-    box-sizing: border-box; /* Include padding and border in width and height */
-    text-align: center; /* Ensure text is centered inside the button */
+    width: 200px;
+    height: 50px;
+    box-sizing: border-box;
+    text-align: center;
 }
 
 .defaultButton span:first-child {
     position: relative;
     transition: color 600ms cubic-bezier(0.48, 0, 0.12, 1);
     z-index: 10;
-    white-space: nowrap; /* Prevent text from wrapping */
+    white-space: nowrap;
     overflow: hidden;
-    text-overflow: ellipsis; /* Add ellipsis if text is too long */
-    max-width: 100%; /* Ensure it doesn't exceed the button width */
+    text-overflow: ellipsis;
+    max-width: 100%;
 }
 
 .defaultButton span:last-child {
@@ -73,7 +76,9 @@
     transition: all 900ms cubic-bezier(0.48, 0, 0.12, 1);
 }
 
-/* IMAGE-BASED BUTTON */
+/* ============================= */
+/*      IMAGE SELECT BUTTON      */
+/* ============================= */
 .imageSelectButton {
     position: relative;
     overflow: hidden;
@@ -85,22 +90,41 @@
     padding: 60px 16px;
     text-decoration: none;
     cursor: pointer;
-    background: url('/img.png') no-repeat center center;
+    background: url("/img.png") no-repeat center center;
     background-size: cover;
     width: 160px;
     height: 200px;
     user-select: none;
     -webkit-user-select: none;
     touch-action: manipulation;
-    text-align: center; /* Keep text centered horizontally */
+    text-align: center;
     transition: all 300ms ease;
 }
 
+/* Dark overlay from the start */
+.imageSelectButton::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.55);
+    transition: opacity 300ms ease;
+    z-index: 5;
+}
+
+/* Remove any white transform overlay, if present */
+.imageSelectButton:after,
+.imageSelectButton:hover:after {
+    content: none;
+}
+
+/* Text styling */
 .mainText {
     position: relative;
     z-index: 10;
-    transition: opacity 600ms cubic-bezier(0.48, 0, 0.12, 1), color 300ms ease;
-    text-align: center; /* Ensure text is horizontally centered */
+    text-align: center;
 }
 
 .topText {
@@ -109,18 +133,16 @@
     font-weight: bold;
     color: white;
     margin-bottom: 8px;
-    transition: color 300ms ease;
-    text-align: center; /* Center top text */
 }
 
 .subText {
     display: block;
     font-size: 14px;
-    color: grey;
-    text-align: center; /* Center sub text */
+    color: white;
+    text-align: center;
 }
 
-/* The text that appears on hover */
+/* Hover text (optional) */
 .hoverText {
     color: black;
     display: block;
@@ -129,61 +151,31 @@
     left: 50%;
     opacity: 0;
     transform: translate(-50%, -50%);
-    transition: opacity 500ms cubic-bezier(0.48, 0, 0.12, 1);
+    transition: opacity 300ms ease;
     z-index: 100;
-    text-align: center; /* Center any lines of hover text */
+    text-align: center;
 }
-
-.imageSelectButton:before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(255, 255, 255, 0.3);
-    transition: background-color 300ms ease;
-    z-index: 5;
-}
-
-.imageSelectButton:hover:before {
-    background-color: rgba(255, 255, 255, 0.5);
-}
-
-.imageSelectButton:hover .topText {
-    color: black;
-}
-
-.imageSelectButton:hover .mainText {
-    opacity: 1;
-    transition: opacity 500ms ease-in-out;
-}
-
 .imageSelectButton:hover .hoverText {
     opacity: 1;
-    transition: opacity 500ms ease-in-out;
 }
 
-.imageSelectButton:after {
-    content: "";
-    position: absolute;
-    bottom: -50%;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: white;
-    transform-origin: bottom center;
-    transition: transform 600ms cubic-bezier(0.48, 0, 0.12, 1);
-    transform: skewY(9.3deg) scaleY(0);
-    z-index: 50;
+/* When .clicked is applied, remove overlay & hide text */
+.imageSelectButton.clicked::before {
+    opacity: 0;
+}
+.imageSelectButton.clicked .topText,
+.imageSelectButton.clicked .subText {
+    display: none;
 }
 
-.imageSelectButton:hover:after {
-    transform-origin: bottom center;
-    transform: skewY(9.3deg) scaleY(2);
+/* (Optional) also hide hover text */
+.imageSelectButton.clicked .hoverText {
+    display: none;
 }
 
-/* RESPONSIVE */
+/* ============================= */
+/*         RESPONSIVE           */
+/* ============================= */
 @media (max-width: 768px) {
     .imageSelectButton {
         width: 140px;
@@ -225,3 +217,4 @@
         font-size: 10px;
     }
 }
+

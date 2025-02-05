@@ -16,7 +16,7 @@ export const MainLayout = () => {
 
     return (
         <div className="relative min-h-screen bg-intro max-w-[480px] mx-auto">
-            <div className="relative z-10 mt-[80px] mx-[20px]">
+            <div className="relative z-10 mt-[80px]">
                 <Outlet />
             </div>
         </div>

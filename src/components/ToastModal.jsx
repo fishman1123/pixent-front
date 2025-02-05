@@ -3,15 +3,13 @@ import ReactDOM from "react-dom";
 // Import the SVG icon
 import axIcon from "../assets/ax.svg";
 
-const THRESHOLD = 80; // how far (in px) user must drag down to close
+const THRESHOLD = 80;
 
 const ToastModal = ({ children, onClose }) => {
     const [opened, setOpened] = useState(false);
     const [closing, setClosing] = useState(false);
 
-    // Track current drag offset in px
     const [dragOffset, setDragOffset] = useState(0);
-    // Store the initial touch Y position
     const startYRef = useRef(0);
 
     useEffect(() => {
@@ -19,10 +17,8 @@ const ToastModal = ({ children, onClose }) => {
         const originalOverflow = document.body.style.overflow;
         document.body.style.overflow = "hidden";
 
-        // Animate "slide up" on mount
         setOpened(true);
 
-        // Cleanup: restore body overflow
         return () => {
             document.body.style.overflow = originalOverflow;
         };
@@ -30,13 +26,11 @@ const ToastModal = ({ children, onClose }) => {
 
     const handleClose = () => {
         setClosing(true);
-        // After transition ends, call onClose to unmount
         setTimeout(() => {
             onClose();
         }, 300);
     };
 
-    // --- Touch Events for Drag Down to Close ---
     const handleTouchStart = (e) => {
         if (e.touches.length === 1) {
             startYRef.current = e.touches[0].clientY;
@@ -44,11 +38,10 @@ const ToastModal = ({ children, onClose }) => {
     };
 
     const handleTouchMove = (e) => {
-        if (!opened || closing) return; // ignore if not fully opened or already closing
+        if (!opened || closing) return;
         if (e.touches.length === 1) {
             const currentY = e.touches[0].clientY;
             const diff = currentY - startYRef.current;
-            // Only track downward drag
             if (diff > 0) {
                 setDragOffset(diff);
             }
@@ -57,10 +50,8 @@ const ToastModal = ({ children, onClose }) => {
 
     const handleTouchEnd = () => {
         if (dragOffset > THRESHOLD) {
-            // If dragged down enough, close modal
             handleClose();
         } else {
-            // Snap back
             setDragOffset(0);
         }
     };
@@ -79,7 +70,7 @@ const ToastModal = ({ children, onClose }) => {
             }
       `}
         >
-            <div className={`w-full max-h-[80%] overflow-y-auto transform transition-transform duration-300
+            <div className={`w-full max-h-[90%] overflow-y-auto transform transition-transform duration-300
           ${ opened && !closing ? "" : "translate-y-full" }`}
                  style={ opened && !closing ? { transform: `translateY(${dragOffset}px)` } : undefined }
                 onTouchStart={handleTouchStart}

@@ -4,18 +4,36 @@ import reserveIcon from '../assets/reservation.svg';
 import likeIcon from '../assets/like.svg';
 import reportIcon from '../assets/report.svg';
 import ToastModal from './ToastModal';
-import {ViewCountInfo} from "./ViewCountInfo.jsx";
+import { ViewCountInfo } from './ViewCountInfo.jsx';
+import { useNavigate } from 'react-router-dom';
 
 export const BottomTab = () => {
     const [showToast, setShowToast] = useState(false);
+    const navigate = useNavigate();
 
     const handleAnalysisClick = () => {
         setShowToast(true);
     };
 
-    // Called after toast fades out
     const handleCloseToast = () => {
         setShowToast(false);
+    };
+
+    // Callback for "분석권 충전하기"
+    const handleCharge = () => {
+        navigate('/');
+        handleCloseToast();
+    };
+
+    // Callback for "분석 시작하기"
+    const handleAnalysis = () => {
+        navigate('/which');
+        handleCloseToast();
+    };
+
+    const handleUserPage = () => {
+        navigate('/user');
+        handleCloseToast();
     };
 
     return (
@@ -45,24 +63,20 @@ export const BottomTab = () => {
                     </button>
 
                     {/* User */}
-                    <button className="flex flex-col items-center space-y-1">
+                    <button className="flex flex-col items-center space-y-1" onClick={handleUserPage}>
                         <img src={userIcon} alt="User" className="w-6 h-6" />
                         <span className="text-xs text-[#8E8E8E]">마이페이지</span>
                     </button>
                 </div>
             </div>
 
-            {/* When showToast is true, render our ToastModal with custom children */}
+            {/* Show ToastModal when user clicks "분석하기" */}
             {showToast && (
                 <ToastModal onClose={handleCloseToast}>
-                    {/* Example child content in the ToastModal */}
-                    {/*<div className="flex flex-col items-center space-y-2">*/}
-                    {/*    <h2 className="text-lg font-semibold">분석을 시작합니다...</h2>*/}
-                    {/*    <p className="text-sm text-gray-600">*/}
-                    {/*        조금만 기다려 주시면 결과가 나옵니다!*/}
-                    {/*    </p>*/}
-                    {/*</div>*/}
-                    <ViewCountInfo/>
+                    <ViewCountInfo
+                        onCharge={handleCharge}
+                        startAnalysis={handleAnalysis}
+                    />
                 </ToastModal>
             )}
         </div>

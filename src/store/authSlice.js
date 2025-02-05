@@ -4,23 +4,44 @@ const initialState = {
     isAuthenticated: false,
     nickname: null,
     viewChance: null,
+    viewAttempts: null,
+    userEmail: null,
+    userProvider: null,
+};
+
+// Map the payload keys to the auth slice keys
+const fieldMapping = {
+    isAuthenticated: 'isAuthenticated',
+    nickname: 'nickname',
+    email: 'userEmail',
+    provider: 'userProvider',
 };
 
 const authSlice = createSlice({
     name: 'auth',
     initialState,
     reducers: {
-        // Set entire auth state or just specific fields
         setAuthState: (state, action) => {
-            const { isAuthenticated, nickname } = action.payload;
-            state.isAuthenticated = isAuthenticated;
-            state.nickname = nickname ?? null;
-            state.viewChance = 3 ?? null;
+            const payload = action.payload || {};
+
+            // Loop over the fieldMapping to do partial updates
+            Object.entries(fieldMapping).forEach(([payloadKey, sliceKey]) => {
+                if (typeof payload[payloadKey] !== 'undefined') {
+                    state[sliceKey] = payload[payloadKey];
+                }
+            });
+
+            // Always keep these fields at fixed values
+            state.viewChance = 3;
+            state.viewAttempts = 10;
         },
         logout: (state) => {
             state.isAuthenticated = false;
             state.nickname = null;
             state.viewChance = null;
+            state.viewAttempts = null;
+            state.userEmail = null;
+            state.userProvider = null;
         },
     },
 });

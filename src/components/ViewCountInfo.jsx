@@ -5,6 +5,7 @@ import { useSelector } from "react-redux";
 export const ViewCountInfo = ({ onCharge, startAnalysis }) => {
     const viewChance = useSelector((state) => state.auth.viewChance);
 
+
     return (
         <div className="mx-[24px] w-full h-full">
             <div className="mb-[26px] mt-4 ml-[12px]">
@@ -35,7 +36,6 @@ export const ViewCountInfo = ({ onCharge, startAnalysis }) => {
                 </h2>
             </div>
             <div>
-                {/* Another button that also calls onAction */}
                 <button
                     className="noanimationbutton flex items-center justify-center w-full"
                     role="button"

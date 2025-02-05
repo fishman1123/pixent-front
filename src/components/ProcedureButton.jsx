@@ -150,6 +150,52 @@ export const ProcedureButton = ({ text, route, subText, confirm }) => {
                 cancelText={t('confirmationModal.cancel')}
             >
                 <p>{t('confirmationModal.proceedQuestion')}</p>
+                <div className="mt-4">
+                    <h3 className="text-lg font-bold">
+                        {t('confirmationModal.preferredScents')}
+                    </h3>
+                    {confirmationState.preferences.preferred.length > 0 ? (
+                        confirmationState.preferences.preferred.map((scent, index) => (
+                            <div key={index} className="mb-4">
+                                <p className="font-semibold">{t(scent.label)}</p>
+                                <p className="text-gray-600">{t(scent.description)}</p>
+                            </div>
+                        ))
+                    ) : (
+                        <p className="text-gray-600">
+                            {t('confirmationModal.noPreferredScents')}
+                        </p>
+                    )}
+                </div>
+
+                <div className="mt-4">
+                    <h3 className="text-lg font-bold">
+                        {t('confirmationModal.dislikedScents')}
+                    </h3>
+                    {confirmationState.preferences.disliked.length > 0 ? (
+                        confirmationState.preferences.disliked.map((scent, index) => (
+                            <div key={index} className="mb-4">
+                                <p className="font-semibold">{t(scent.label)}</p>
+                                <p className="text-gray-600">{t(scent.description)}</p>
+                            </div>
+                        ))
+                    ) : (
+                        <p className="text-gray-600">
+                            {t('confirmationModal.noDislikedScents')}
+                        </p>
+                    )}
+                </div>
+
+                <div className="mt-4">
+                    <h3 className="text-lg font-bold">
+                        {t('confirmationModal.howWeUsePreferences')}
+                    </h3>
+                    <ul className="list-disc pl-5 text-[14px]">
+                        <li>{t('confirmationModal.usePreference1')}</li>
+                        <li>{t('confirmationModal.usePreference2')}</li>
+                    </ul>
+                </div>
+
                 {/* ... confirmation content ... */}
             </PortalModal>
 

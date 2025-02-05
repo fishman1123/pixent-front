@@ -3,73 +3,74 @@ import { useSelector, useDispatch } from 'react-redux';
 import { setAuthState } from '../../store/authSlice';
 import { setUserState } from '../../store/userSlice';
 import { useGetUserInfo } from '../../hooks/useGetUserInfo';
-import PrimeModal from '../PrimeModal';  // your existing modal component
+import PrimeModal from '../PrimeModal';
 import { IntroTop } from '../intro/IntroTop';
-import {IntroCenter} from "../intro/IntroCenter.jsx";
-import {IntroBottom} from "../intro/IntroBotttom.jsx";
-import {ProcedureButton} from "../ProcedureButton.jsx";
-import {useTranslation} from "react-i18next";
+import { IntroCenter } from "../intro/IntroCenter";
+import { IntroBottom } from "../intro/IntroBottom.jsx";
+import { ProcedureButton } from "../ProcedureButton";
+import { useTranslation } from "react-i18next";
+import { useLocation } from 'react-router-dom';
 
 export const Intro = () => {
     const dispatch = useDispatch();
     const { t } = useTranslation();
+    const location = useLocation();
 
-
-    // Pulling these from Redux store instead of Recoil
     const authState = useSelector((state) => state.auth);
 
-    // Local state to handle "expired token" modal
+    // Check if user arrived from "/login/nickname"
+    const nicknameUpdated = location.state?.from === "/login/nickname";
+
+    // Local modal for "expired token"
     const [showExpiredModal, setShowExpiredModal] = useState(false);
 
-    /**
-     * 1) On mount, decide if user is "authenticated" by checking localStorage.
-     */
+    // 1) On mount, set isAuthenticated if localStorage has a token
     useEffect(() => {
         const token = localStorage.getItem('gToken');
-        dispatch(setAuthState({
-            isAuthenticated: !!token,
-        }));
+        dispatch(setAuthState({ isAuthenticated: !!token }));
     }, [dispatch]);
 
-    /**
-     * 2) Fetch user info (with React Query) if isAuthenticated is true.
-     *    The query won't run if enabled=false.
-     */
-    const { data: userInfo, error, isError } = useGetUserInfo(authState.isAuthenticated);
+    // 2) Use React Query for user info, if we’re authenticated
+    //    This uses the cached data if it already exists
+    const {
+        data: userInfo,
+        error,
+        isError,
+        refetch
+    } = useGetUserInfo(authState.isAuthenticated);
 
-    /**
-     * 3) If user info is successfully retrieved, store it in Redux.
-     *    - authSlice => nickname
-     *    - userSlice => userName
-     */
+    // 3) If the user came from "/login/nickname", force a fresh fetch
+    //    so we ensure we get the updated nickname from the server
+    useEffect(() => {
+        if (nicknameUpdated) {
+            refetch();
+        }
+    }, [nicknameUpdated, refetch]);
+
+    // 4) If user info arrives, store it in Redux
+    //    (only if we actually have data)
     useEffect(() => {
         if (userInfo) {
             // Update user slice
             dispatch(setUserState({ userName: userInfo.username }));
 
             // Update auth slice
-            dispatch(
-                setAuthState({
-                    isAuthenticated: true,
-                    nickname: userInfo.username,
-                })
-            );
+            dispatch(setAuthState({
+                isAuthenticated: true,
+                nickname: userInfo.username,
+                email: userInfo.email,
+                provider: userInfo.provider,
+            }));
         }
     }, [userInfo, dispatch]);
 
-    /**
-     * 4) If the query fails with 403, show the "token expired" modal.
-     *    (Axios interceptor also removes the token & sets auth.isAuthenticated=false.)
-     */
+    // 5) If the query fails with 403 => show "expired" modal
     useEffect(() => {
         if (isError && error?.response?.status === 403) {
             setShowExpiredModal(true);
         }
     }, [isError, error]);
 
-    /**
-     * 5) Handle closing the "expired" modal (and optionally navigate to /login).
-     */
     const handleCloseExpiredModal = () => {
         setShowExpiredModal(false);
         // e.g. navigate('/login');
@@ -77,6 +78,7 @@ export const Intro = () => {
 
     return (
         <div className="flex-col justify-center items-center min-h-screen w-full text-center">
+            {/* Example UI */}
             <IntroTop>
                 <div className="mt-[120px] mb-[40px]">
                     <div className="text-[40px] font-extralight">{t('DISCOVER')}</div>
@@ -85,35 +87,40 @@ export const Intro = () => {
                         {t('Uncover your unique fragrance profile')}
                     </div>
                 </div>
-
             </IntroTop>
+
             <div className="mb-[48px]">
-                <div className="mx-10">
+                <div className="mx-20">
                     <ProcedureButton
-                        text={t('Start Analysis')} // Pass translated text
+                        text={t('Start Analysis')}
                         route="/which"
-                        // subText={t('Test in progress')} // Pass translated subtext
                         confirm={false}
                     />
                 </div>
-
             </div>
 
+            {/* Show user info if authenticated */}
             {authState.isAuthenticated ? (
-                <div className="flex flex-col ">
+                <div className="flex flex-col">
                     <div>
                         login is done (nickname: {authState.nickname || 'N/A'})
                     </div>
                     <div>
-                        view amount left: {authState.viewChance || 'N/A'} left to use analysis
+                        view amount left: {authState.viewChance || 'N/A'}
+                    </div>
+                    <div>
+                        user email: {authState.userEmail || 'N/A'}
+                    </div>
+                    <div>
+                        user provider: {authState.userProvider || 'N/A'}
                     </div>
                 </div>
-
             ) : (
                 <div>login is not done</div>
             )}
 
-            <IntroCenter/>
+            <IntroCenter />
+
             <IntroTop>
                 <div className="mt-[20px] mb-[40px]">
                     <div className="text-[40px] font-extralight">{t('REFINE')}</div>
@@ -122,25 +129,26 @@ export const Intro = () => {
                         {t('COMPLETE WITH OUR EXPERTS')}
                     </div>
                 </div>
-
             </IntroTop>
+
             <div className="mb-[48px]">
-                <div className="mx-10">
+                <div className="mx-20">
                     <ProcedureButton
-                        text={t('Get A/S')} // Pass translated text
+                        text={t('Get A/S')}
                         route="/which"
-                        subText={t('Test in progress')} // Pass translated subtext
+
                         confirm={false}
                     />
                 </div>
             </div>
-                <PrimeModal
-                    isOpen={showExpiredModal}
-                    onClose={handleCloseExpiredModal}
-                    title="Session Expired"
-                >
-                    <p>the login time is expired, login again</p>
-                </PrimeModal>
-            </div>
-            );
-            };
+
+            <PrimeModal
+                isOpen={showExpiredModal}
+                onClose={handleCloseExpiredModal}
+                title="Session Expired"
+            >
+                <p>the login time is expired, login again</p>
+            </PrimeModal>
+        </div>
+    );
+};

@@ -12,9 +12,10 @@
     background: #fff;
     user-select: none;
     width: 100%; /* Fixed width */
-    height: 50px; /* Fixed height (optional) */
+    height: auto; /* Allow height to expand */
     -webkit-user-select: none;
     touch-action: manipulation;
+    padding: 12px; /* Added padding for better spacing */
 }
 
 .noanimationbutton span:first-child {
@@ -23,18 +24,14 @@
 }
 
 .noanimationbutton span:last-child {
-    color: white;
     display: block;
-    position: absolute;
-    bottom: 0;
-    z-index: 100;
-    opacity: 0;
-    top: 50%;
-    left: 50%;
-    transform: translateY(225%) translateX(-50%);
-    height: 14px;
-    line-height: 13px;
-    padding-top: 6px;
+    position: relative; /* Changed from absolute */
+    color: #18181a; /* Make text visible */
+    opacity: 1; /* Ensure it's visible */
+    top: auto; /* Reset previous positioning */
+    left: auto;
+    transform: none; /* Remove unnecessary translation */
+    height: auto; /* Allow height to adjust */
+    line-height: normal;
+    padding-top: 4px; /* Add spacing between texts */
 }
-
-/* Removed :after styles and hover effects */

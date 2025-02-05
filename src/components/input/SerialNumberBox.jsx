@@ -8,7 +8,8 @@ import { setUserState } from "../../store/userSlice"; // Import Redux actions
 import { setAuthState } from "../../store/authSlice";
 import { useTranslation } from "react-i18next";
 import AxiosInstance from "../../api/axiosInstance"; // Import your axios instance
-import { openErrorModal } from '../../store/errorModalSlice'; // Import error modal action if needed
+import { openErrorModal } from '../../store/errorModalSlice';
+import {data} from "autoprefixer"; // Import error modal action if needed
 
 /**
  * SerialNumberBox
@@ -84,12 +85,14 @@ export const SerialNumberBox = ({ path, isViewer }) => {
             // If successful
             console.log("Response data:", response.data);
             dispatch(setAuthState({ isAuthenticated: true }));
+            dispatch(setAuthState({ nickname: response.data }));
+
 
             // Optional: store token in localStorage if returned, or handle as needed
             // localStorage.setItem('gToken', response.data.someToken);
 
             console.log("Nickname registration success, redirecting to /");
-            navigate("/");
+            navigate("/", { state: { from: "/login/nickname" } });
         } catch (err) {
             // If request fails or returns a non-2xx
             console.error("Error in POST:", err);

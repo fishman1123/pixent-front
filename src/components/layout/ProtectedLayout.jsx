@@ -1,25 +1,52 @@
-// src/components/layout/ProtectedLayout.jsx
-
-import React from 'react';
-import { useSelector } from 'react-redux'; // Import useSelector from react-redux
+import React, { useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import { Navigate } from 'react-router-dom';
 import { MainLayout } from './MainLayout';
+import { useGetUserInfo } from '../../hooks/useGetUserInfo';
 
 export function ProtectedLayout() {
-    // Use useSelector to access auth state from Redux store
-    const { isAuthenticated, nickname } = useSelector((state) => state.auth);
+    const { isAuthenticated } = useSelector((state) => state.auth);
 
-    // If user is NOT logged in => go to /login
+    // 1) If not authenticated, go to /login
     if (!isAuthenticated) {
         return <Navigate to="/login" replace />;
     }
-    console.log("nickname status: ", nickname);
 
-    // If user IS logged in but no nickname => go to /login/nickname
-    if (!nickname) {
+    // 2) Always call the hook once, unconditionally
+    const {
+        data,
+        isLoading,
+        isFetching,
+        isError,
+        error,
+        refetch
+    } = useGetUserInfo(true); // we enable the query
+
+    // 3) If data is undefined (not cached), do a manual refetch
+    useEffect(() => {
+        if (!data) {
+            refetch();
+        }
+    }, [data, refetch]);
+
+    // 4) Show loading if still fetching
+    if (isLoading || isFetching) {
+        return <div style={{ margin: '40px auto', fontSize: '18px' }}>
+            Loading your profile...
+        </div>;
+    }
+
+    // 5) If an error (403, etc.) => go to /login
+    if (isError) {
+        console.error('ProtectedLayout fetch error:', error);
+        return <Navigate to="/login" replace />;
+    }
+
+    // 6) If user data has no username => they haven’t set nickname => /login/nickname
+    if (!data?.username) {
         return <Navigate to="/login/nickname" replace />;
     }
 
-    // Otherwise, render the main layout and the rest of the protected pages
+    // 7) Otherwise => proceed
     return <MainLayout />;
 }
