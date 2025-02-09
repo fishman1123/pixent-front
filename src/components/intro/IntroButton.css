@@ -2,8 +2,7 @@
     position: relative;
     overflow: hidden;
     border: 2px solid #18181a;
-    color: #18181a;
-    font-weight: bold;
+    /*font-weight: bold;*/
     display: inline-block;
     font-size: 14px;
     line-height: 15px;
@@ -26,7 +25,6 @@
 .noanimationbutton span:last-child {
     display: block;
     position: relative; /* Changed from absolute */
-    color: #18181a; /* Make text visible */
     opacity: 1; /* Ensure it's visible */
     top: auto; /* Reset previous positioning */
     left: auto;

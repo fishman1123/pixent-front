@@ -1,8 +1,9 @@
 import React from "react";
+import { useNavigate } from "react-router-dom"; // <-- Import useNavigate
 import barChart from "../../assets/barchart.svg";
 import CopyIcon from "../../assets/copy.svg";
 import cartIcon from "../../assets/cart.svg";
-import rightIcon from "../../assets/rightarrow.svg"; // <--- we'll use this
+import rightIcon from "../../assets/rightarrow.svg";
 import cancelIcon from "../../assets/ax.svg";
 
 export const MyPageToastContent = ({
@@ -12,13 +13,19 @@ export const MyPageToastContent = ({
   getCollectionButtonProps,
   handleCollectionClick,
 }) => {
+  // We use useNavigate hook from react-router-dom for navigation
+  const navigate = useNavigate();
+
   if (!selectedReport) return null;
 
+  // Get the icon, text, disabled status from props
   const { icon, text, disabled } = getCollectionButtonProps(selectedReport.id);
 
+  // Default state: user must add to collection
   let bottomButtonText = "향수 컬렉션에 추가 하셔야 합니다!";
-  let bottomButtonDisabled = true; // default is unclickable
+  let bottomButtonDisabled = true;
 
+  // If they've already added to collection, let them navigate
   if (text === "컬렉션 추가 취소") {
     bottomButtonText = "향수 컬렉션 바로가기";
     bottomButtonDisabled = false;
@@ -27,6 +34,8 @@ export const MyPageToastContent = ({
   const handleBottomButtonClick = () => {
     if (!bottomButtonDisabled) {
       console.log("Navigating to 향수 컬렉션…");
+      // Here is the actual navigation to /user/collection
+      navigate("/user/collection");
     }
   };
 
@@ -92,6 +101,7 @@ export const MyPageToastContent = ({
         </div>
       </div>
 
+      {/* Bottom Navigation Button */}
       <div className="mt-4">
         <button
           className="noanimationbutton flex items-center justify-center w-full h-[60px] px-5 py-4"
@@ -100,7 +110,11 @@ export const MyPageToastContent = ({
           disabled={bottomButtonDisabled}
         >
           <span
-            className={`${!bottomButtonDisabled ? "text-black" : "text-[#666666]"} text-[16px] pt-1`}
+            className={
+              !bottomButtonDisabled
+                ? "text-black text-[16px] pt-1"
+                : "text-[#666666] text-[16px] pt-1"
+            }
           >
             {bottomButtonText}
           </span>
@@ -114,6 +128,7 @@ export const MyPageToastContent = ({
         </button>
       </div>
 
+      {/* Copy URL, purchase, etc. */}
       <div className="flex">
         <div className="w-full">
           <div className="my-4 flex items-center border border-gray-200">
