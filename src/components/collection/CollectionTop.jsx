@@ -5,21 +5,16 @@ import React, { useState } from "react";
 import { Summarychart } from "../result/SummaryChart.jsx";
 import barChart from "../../assets/newchart.svg";
 import icon from "../../assets/newplus.svg";
+import upIcon from "../../assets/up.svg";
 
 export const CollectionTop = ({ dataOne, dataTwo }) => {
   // We'll have exactly 2 slides => one for ID=451, one for ID=452.
   const slides = dataOne.user_report.map((report) => {
-    // 1) Find matches in dataTwo
     const matched = dataTwo.user_report.filter((item) => item.id === report.id);
 
-    // 2) Build the "items" array (gray boxes)
+    // Build "items"
     const items = [
-      {
-        name: report.perfumeName,
-        subName: "",
-        date: "2024.01.10",
-      },
-      // For each match in dataTwo, create an item row
+      { name: report.perfumeName, subName: "", date: "2024.01.10" },
       ...matched.map((mItem, mIndex) => ({
         name: mItem.perfumeName,
         subName: `from ${report.perfumeName}`,
@@ -27,10 +22,8 @@ export const CollectionTop = ({ dataOne, dataTwo }) => {
       })),
     ];
 
-    // 3) Build chartSet: one from dataOne, multiple from dataTwo
+    // Build chartSet
     const chartSet = [];
-
-    // A) dataOne chart (store mainNote/middleNote/baseNote too)
     chartSet.push({
       id: "chartOne",
       data: {
@@ -46,8 +39,6 @@ export const CollectionTop = ({ dataOne, dataTwo }) => {
         spicy: report.spicy ?? 0,
       },
     });
-
-    // B) dataTwo charts (also store mainNote, etc.)
     matched.forEach((mItem, idx) => {
       chartSet.push({
         id: `chartTwo-${idx}`,
@@ -66,7 +57,6 @@ export const CollectionTop = ({ dataOne, dataTwo }) => {
       });
     });
 
-    // Return one slide object
     return {
       title: report.perfumeName,
       subtitle: `${report.mainNote} 블렌드`,
@@ -76,21 +66,36 @@ export const CollectionTop = ({ dataOne, dataTwo }) => {
   });
 
   const [currentSlide, setCurrentSlide] = useState(0);
+  // Keep track of expand/collapse per slide
+  const [expandStates, setExpandStates] = useState(slides.map(() => false));
 
+  // The currently active slide
+  const activeSlide = slides[currentSlide];
+
+  // Arrow nav
   const prevSlide = () => {
     if (currentSlide > 0) {
+      // Reset expansions
+      setExpandStates(slides.map(() => false));
       setCurrentSlide((prev) => prev - 1);
     }
   };
 
   const nextSlide = () => {
     if (currentSlide < slides.length - 1) {
+      // Reset expansions
+      setExpandStates(slides.map(() => false));
       setCurrentSlide((prev) => prev + 1);
     }
   };
 
-  // The currently active slide
-  const activeSlide = slides[currentSlide];
+  const toggleExpand = (slideIndex) => {
+    setExpandStates((prev) => {
+      const copy = [...prev];
+      copy[slideIndex] = !copy[slideIndex];
+      return copy;
+    });
+  };
 
   return (
     <div className="w-full max-w-md text-white pb-4 overflow-hidden relative">
@@ -131,64 +136,107 @@ export const CollectionTop = ({ dataOne, dataTwo }) => {
             className="flex transition-transform duration-300"
             style={{ transform: `translateX(-${currentSlide * 100}%)` }}
           >
-            {slides.map((slide, index) => (
-              <div key={index} className="w-full shrink-0 flex flex-col px-2">
-                {/* Example 'ADD' Button */}
-                <div className="w-[80px] ml-[40px] flex justify-center">
-                  <button
-                    className="noanimationbutton flex items-center justify-center min-w-[80px]
-                      min-h-[30px] px-2 py-1 bg-black border border-white text-white"
-                  >
-                    <span className="text-sm font-medium tracking-wide">
-                      ADD
-                    </span>
-                    <svg
-                      className="w-5 h-5 ml-2 text-white"
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="24"
-                      height="24"
-                      viewBox="0 0 24 24"
-                      fill="currentColor"
+            {slides.map((slide, index) => {
+              const isExpanded = expandStates[index];
+
+              return (
+                <div key={index} className="w-full shrink-0 flex flex-col px-2">
+                  {/* Example 'ADD' Button */}
+                  <div className="w-[80px] ml-[40px] flex justify-center">
+                    <button
+                      className="noanimationbutton flex items-center justify-center min-w-[80px]
+                        min-h-[30px] px-2 py-1 bg-black border border-white text-white"
                     >
-                      <path d="M13 7H11V11H7V13H11V17H13V13H17V11H13V7Z" />
-                      <path
-                        d="M12 2C6.486 2 2 6.486 2 12C2 17.514 6.486 22 12 22
-                             C17.514 22 22 17.514 22 12C22 6.486 17.514 2 12 2ZM12 20
-                             C7.589 20 4 16.411 4 12C4 7.589 7.589 4 12 4
-                             C16.411 4 20 7.589 20 12C20 16.411 16.411 20 12 20Z"
-                      />
-                    </svg>
-                  </button>
-                </div>
-
-                {/* Slide Title, subtitle */}
-                <div className="mb-2">
-                  <h1 className="text-[40px] text-center font-headerTitle">
-                    {slide.title}
-                  </h1>
-                  <p className=" pl-12 text-sm">{slide.subtitle}</p>
-                </div>
-
-                <hr className="border-white mb-4" />
-
-                {/* Gray item rows */}
-                {slide.items.map((item, idx) => (
-                  <div
-                    key={idx}
-                    className="flex items-center justify-between bg-[#333] p-3 mb-6"
-                  >
-                    <div>
-                      <span className="mr-2">•</span>
-                      <span className="font-[inter]">{item.name}</span>
-                      {item.subName && (
-                        <p className="text-gray-400 text-sm">{item.subName}</p>
-                      )}
-                    </div>
-                    <div className="text-sm">{item.date}</div>
+                      <span className="text-sm font-medium tracking-wide">
+                        ADD
+                      </span>
+                      <svg
+                        className="w-5 h-5 ml-2 text-white"
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="currentColor"
+                      >
+                        <path d="M13 7H11V11H7V13H11V17H13V13H17V11H13V7Z" />
+                        <path
+                          d="M12 2C6.486 2 2 6.486 2 12
+                             C2 17.514 6.486 22 12 22
+                             C17.514 22 22 17.514 22 12
+                             C22 6.486 17.514 2 12 2ZM12 20
+                             C7.589 20 4 16.411 4 12
+                             C4 7.589 7.589 4 12 4
+                             C16.411 4 20 7.589 20 12
+                             C20 16.411 16.411 20 12 20Z"
+                        />
+                      </svg>
+                    </button>
                   </div>
-                ))}
-              </div>
-            ))}
+
+                  {/* Slide Title, subtitle */}
+                  <div className="mb-2">
+                    <h1 className="text-[40px] text-center font-headerTitle">
+                      {slide.title}
+                    </h1>
+                    <p className="pl-12 text-sm">{slide.subtitle}</p>
+                  </div>
+
+                  <hr className="border-white mb-4" />
+
+                  {/* Collapsible Container for ALL items */}
+                  <div
+                    className={`overflow-hidden transition-all duration-500 
+                      ${
+                        isExpanded
+                          ? // fully expanded
+                            "max-h-[1000px]"
+                          : // collapsed height for 3 items
+                            "max-h-[150px]"
+                      }
+                    `}
+                  >
+                    {slide.items.map((item, idx2) => (
+                      <div
+                        key={idx2}
+                        className="flex items-center justify-between bg-[#333] p-3 mb-6"
+                      >
+                        <div>
+                          <span className="mr-2">•</span>
+                          <span className="font-[inter]">{item.name}</span>
+                          {item.subName && (
+                            <p className="text-gray-400 text-sm">
+                              {item.subName}
+                            </p>
+                          )}
+                        </div>
+                        <div className="text-sm">{item.date}</div>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Expand/Collapse Button (only if more than 3 items) */}
+                  {slide.items.length > 3 && (
+                    <div className="flex justify-center mt-2">
+                      <button
+                        className="noanimationbutton border bg-black border-white px-3 py-1 flex items-center justify-center w-full"
+                        onClick={() => toggleExpand(index)}
+                      >
+                        <span className="text-white">
+                          {isExpanded ? "COLLAPSE" : "EXPAND"}
+                        </span>
+                        <img
+                          src={upIcon}
+                          alt="arrow"
+                          className={`w-4 h-4 ml-2 transition-transform duration-300 ${
+                            isExpanded ? "rotate-180" : "rotate-0"
+                          }`}
+                        />
+                      </button>
+                    </div>
+                  )}
+                </div>
+              );
+            })}
           </div>
         </div>
 
@@ -197,7 +245,11 @@ export const CollectionTop = ({ dataOne, dataTwo }) => {
           {slides.map((_, dotIndex) => (
             <div
               key={dotIndex}
-              onClick={() => setCurrentSlide(dotIndex)}
+              onClick={() => {
+                // Reset expansions if user clicks a dot
+                setExpandStates(slides.map(() => false));
+                setCurrentSlide(dotIndex);
+              }}
               className={
                 dotIndex === currentSlide
                   ? "w-2 h-2 rounded-full bg-white cursor-pointer"
@@ -238,31 +290,32 @@ export const CollectionTop = ({ dataOne, dataTwo }) => {
                   </div>
 
                   {/* Example ADD button */}
-                  <div>
-                    <div className="w-[80px] ml-[40px] flex justify-center">
-                      <button
-                        className="noanimationbutton flex items-center justify-center min-w-[80px]
-                          min-h-[30px] px-2 py-1 border border-gray-600 text-black font-light"
+                  <div className="w-[80px] ml-[40px] flex justify-center">
+                    <button
+                      className="noanimationbutton flex items-center justify-center min-w-[80px]
+                        min-h-[30px] px-2 py-1 border border-gray-600 text-black font-light"
+                    >
+                      <span className="text-sm tracking-wide">ADD</span>
+                      <svg
+                        className="w-5 h-5 ml-2 text-black font-light"
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="currentColor"
                       >
-                        <span className="text-sm tracking-wide">ADD</span>
-                        <svg
-                          className="w-5 h-5 ml-2 text-black font-light"
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="24"
-                          height="24"
-                          viewBox="0 0 24 24"
-                          fill="currentColor"
-                        >
-                          <path d="M13 7H11V11H7V13H11V17H13V13H17V11H13V7Z" />
-                          <path
-                            d="M12 2C6.486 2 2 6.486 2 12C2 17.514 6.486 22 12 22
-                                 C17.514 22 22 17.514 22 12C22 6.486 17.514 2 12 2ZM12 20
-                                 C7.589 20 4 16.411 4 12C4 7.589 7.589 4 12 4
-                                 C16.411 4 20 7.589 20 12C20 16.411 16.411 20 12 20Z"
-                          />
-                        </svg>
-                      </button>
-                    </div>
+                        <path d="M13 7H11V11H7V13H11V17H13V13H17V11H13V7Z" />
+                        <path
+                          d="M12 2C6.486 2 2 6.486 2 12C2 17.514 6.486 22 12 22
+                               C17.514 22 22 17.514 22 12
+                               C22 6.486 17.514 2 12 2ZM12 20
+                               C7.589 20 4 16.411 4 12
+                               C4 7.589 7.589 4 12 4
+                               C16.411 4 20 7.589 20 12
+                               C20 16.411 16.411 20 12 20Z"
+                        />
+                      </svg>
+                    </button>
                   </div>
                 </div>
               </div>
@@ -274,6 +327,7 @@ export const CollectionTop = ({ dataOne, dataTwo }) => {
               <div>Middle: {chart.data.middleNote}</div>
               <div>Base: {chart.data.baseNote}</div>
             </div>
+
             <div className="mx-[20px]">
               <div className="flex gap-4 mt-6">
                 <div className="w-full">

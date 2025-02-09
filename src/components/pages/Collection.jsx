@@ -182,6 +182,28 @@ export const Collection = () => {
         fruity: 90,
         spicy: 90,
       },
+      {
+        id: 452,
+        userName: "아리아",
+        perfumeName: "AC'SCENT12.2",
+        mainNote: "로즈마리",
+        mainNoteImageUrl:
+          "https://pixent-image.s3.ap-northeast-2.amazonaws.com/product/12-1.png",
+        middleNote: "화이트 머스크",
+        middleNoteImageUrl:
+          "https://pixent-image.s3.ap-northeast-2.amazonaws.com/product/12-2.png",
+        baseNote: "샌달우드",
+        baseNoteImageUrl:
+          "https://pixent-image.s3.ap-northeast-2.amazonaws.com/product/12-3.png",
+        userImageUrl:
+          "https://pixent-image.s3.ap-northeast-2.amazonaws.com/user/2025-02-05-16-15-28-asdasd.jpg",
+        citrus: 10,
+        floral: 90,
+        woody: 90,
+        musk: 90,
+        fruity: 90,
+        spicy: 90,
+      },
     ],
   };
 
