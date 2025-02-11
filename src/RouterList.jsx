@@ -24,6 +24,7 @@ import TestTwo from "./components/summary/TestTwo";
 import { ProtectedLayout } from "./components/layout/ProtectedLayout";
 import { UserPage } from "./components/pages/UserPage.jsx";
 import { Collection } from "./components/pages/Collection.jsx";
+import { FeedBackPage } from "./components/pages/FeedBackPage.jsx";
 
 export const RouterList = [
   {
@@ -52,8 +53,6 @@ export const RouterList = [
         element: <LoginRedirectPage />,
       },
       {
-        // Everything under here requires an authenticated user
-        // (and possibly a nickname).
         children: [
           {
             path: "",
@@ -100,11 +99,15 @@ export const RouterList = [
                     index: true,
                     element: <UserPage />,
                   },
-                  {
-                    path: "collection",
-                    element: <Collection />,
-                  },
                 ],
+              },
+              {
+                path: "collection",
+                element: <Collection />,
+              },
+              {
+                path: "feedback",
+                element: <FeedBackPage />,
               },
               {
                 path: "report",

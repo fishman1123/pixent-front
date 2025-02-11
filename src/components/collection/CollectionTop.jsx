@@ -1,17 +1,24 @@
 import plusIcon from "../../assets/plus.svg";
 import leftIcon from "../../assets/newleft.svg";
 import rightIcon from "../../assets/newright.svg";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Summarychart } from "../result/SummaryChart.jsx";
 import barChart from "../../assets/newchart.svg";
 import icon from "../../assets/newplus.svg";
+import fixIcon from "../../assets/fix.svg";
 import upIcon from "../../assets/up.svg";
+import { useNavigate } from "react-router-dom";
 
 export const CollectionTop = ({ dataOne, dataTwo }) => {
-  // We'll have exactly 2 slides => one for ID=451, one for ID=452.
+  const navigate = useNavigate();
+  const onClickFeedBack = (subId, perfumeName) => {
+    console.log("this is subid : ", subId);
+    console.log("this is perfumeName : ", perfumeName);
+    navigate("/feedback", { state: { subId, perfumeName } });
+  };
+
   const slides = dataOne.user_report.map((report) => {
     const matched = dataTwo.user_report.filter((item) => item.id === report.id);
-
     // Build "items"
     const items = [
       { name: report.perfumeName, subName: "", date: "2024.01.10" },
@@ -22,7 +29,6 @@ export const CollectionTop = ({ dataOne, dataTwo }) => {
       })),
     ];
 
-    // Build chartSet
     const chartSet = [];
     chartSet.push({
       id: "chartOne",
@@ -37,6 +43,8 @@ export const CollectionTop = ({ dataOne, dataTwo }) => {
         musk: report.musk ?? 0,
         fruity: report.fruity ?? 0,
         spicy: report.spicy ?? 0,
+        subId: null,
+        hasfeedback: report.hasfeedback ?? false,
       },
     });
     matched.forEach((mItem, idx) => {
@@ -44,15 +52,17 @@ export const CollectionTop = ({ dataOne, dataTwo }) => {
         id: `chartTwo-${idx}`,
         data: {
           perfumeName: mItem.perfumeName,
-          mainNote: mItem.mainNote,
-          middleNote: mItem.middleNote,
-          baseNote: mItem.baseNote,
+          mainNote: `(${mItem.feedbackelement[0].elementName}) ${mItem.feedbackelement[0].elementRatio}%`,
+          middleNote: `${mItem.feedbackelement[1].elementName} ${mItem.feedbackelement[1].elementRatio}%`,
+          baseNote: `${mItem.feedbackelement[2].elementName} ${mItem.feedbackelement[2].elementRatio}%`,
           citrus: mItem.citrus ?? 0,
           floral: mItem.floral ?? 0,
           woody: mItem.woody ?? 0,
           musk: mItem.musk ?? 0,
           fruity: mItem.fruity ?? 0,
           spicy: mItem.spicy ?? 0,
+          subId: mItem.subId ?? null,
+          hasfeedback: mItem.hasfeedback ?? false,
         },
       });
     });
@@ -66,16 +76,12 @@ export const CollectionTop = ({ dataOne, dataTwo }) => {
   });
 
   const [currentSlide, setCurrentSlide] = useState(0);
-  // Keep track of expand/collapse per slide
   const [expandStates, setExpandStates] = useState(slides.map(() => false));
 
-  // The currently active slide
   const activeSlide = slides[currentSlide];
 
-  // Arrow nav
   const prevSlide = () => {
     if (currentSlide > 0) {
-      // Reset expansions
       setExpandStates(slides.map(() => false));
       setCurrentSlide((prev) => prev - 1);
     }
@@ -83,7 +89,6 @@ export const CollectionTop = ({ dataOne, dataTwo }) => {
 
   const nextSlide = () => {
     if (currentSlide < slides.length - 1) {
-      // Reset expansions
       setExpandStates(slides.map(() => false));
       setCurrentSlide((prev) => prev + 1);
     }
@@ -246,7 +251,6 @@ export const CollectionTop = ({ dataOne, dataTwo }) => {
             <div
               key={dotIndex}
               onClick={() => {
-                // Reset expansions if user clicks a dot
                 setExpandStates(slides.map(() => false));
                 setCurrentSlide(dotIndex);
               }}
@@ -260,13 +264,11 @@ export const CollectionTop = ({ dataOne, dataTwo }) => {
         </div>
       </div>
 
-      {/* Perfume Name + Radar Charts + main/middle/base notes */}
       <div className="mt-8 flex flex-col gap-8">
-        {activeSlide.chartSet.map((chart) => (
+        {activeSlide.chartSet.map((chart, index) => (
           <div key={`wrapper-${chart.id}`} className="rounded-md bg-white">
             <div className="text-black ml-3 m-4">SCENT PROFILE</div>
 
-            {/* Radar Chart */}
             <Summarychart
               key={`slide-${currentSlide}-${chart.id}`}
               inputCitrus={chart.data.citrus}
@@ -293,7 +295,7 @@ export const CollectionTop = ({ dataOne, dataTwo }) => {
                   <div className="w-[80px] ml-[40px] flex justify-center">
                     <button
                       className="noanimationbutton flex items-center justify-center min-w-[80px]
-                        min-h-[30px] px-2 py-1 border border-gray-600 text-black font-light"
+                  min-h-[30px] px-2 py-1 border border-gray-600 text-black font-light"
                     >
                       <span className="text-sm tracking-wide">ADD</span>
                       <svg
@@ -307,12 +309,12 @@ export const CollectionTop = ({ dataOne, dataTwo }) => {
                         <path d="M13 7H11V11H7V13H11V17H13V13H17V11H13V7Z" />
                         <path
                           d="M12 2C6.486 2 2 6.486 2 12C2 17.514 6.486 22 12 22
-                               C17.514 22 22 17.514 22 12
-                               C22 6.486 17.514 2 12 2ZM12 20
-                               C7.589 20 4 16.411 4 12
-                               C4 7.589 7.589 4 12 4
-                               C16.411 4 20 7.589 20 12
-                               C20 16.411 16.411 20 12 20Z"
+                         C17.514 22 22 17.514 22 12
+                         C22 6.486 17.514 2 12 2ZM12 20
+                         C7.589 20 4 16.411 4 12
+                         C4 7.589 7.589 4 12 4
+                         C16.411 4 20 7.589 20 12
+                         C20 16.411 16.411 20 12 20Z"
                         />
                       </svg>
                     </button>
@@ -323,9 +325,19 @@ export const CollectionTop = ({ dataOne, dataTwo }) => {
 
             {/* Show Main/Middle/Base Notes */}
             <div className="text-gray-400 m-4">
-              <div>Top: {chart.data.mainNote}</div>
-              <div>Middle: {chart.data.middleNote}</div>
-              <div>Base: {chart.data.baseNote}</div>
+              {chart.data.subId ? (
+                <>
+                  <div>원향 {chart.data.mainNote}</div>
+                  <div>+ {chart.data.middleNote}</div>
+                  <div>+ {chart.data.baseNote}</div>
+                </>
+              ) : (
+                <>
+                  <div>Top: {chart.data.mainNote}</div>
+                  <div>Middle: {chart.data.middleNote}</div>
+                  <div>Base: {chart.data.baseNote}</div>
+                </>
+              )}
             </div>
 
             <div className="mx-[20px]">
@@ -347,18 +359,21 @@ export const CollectionTop = ({ dataOne, dataTwo }) => {
                 <div className="w-full">
                   <button
                     className="noanimationbutton border flex flex-col items-center p-4 min-w-32 w-full h-auto"
-                    disabled=""
-                    onClick={() => {}}
+                    onClick={() =>
+                      onClickFeedBack(chart.data.subId, chart.data.perfumeName)
+                    }
                   >
                     <span className="text-sm text-black">
                       <img
-                        src={icon}
-                        alt="collection-icon"
+                        src={chart.data.hasfeedback ? fixIcon : icon}
+                        alt="feedback-icon"
                         className="w-[30px] h-[30px] font-light text-black"
                       />
                     </span>
                     <span className="text-[12px] text-black">
-                      피드백 기록하기
+                      {chart.data.hasfeedback
+                        ? "피드백 수정하기"
+                        : "피드백 기록하기"}
                     </span>
                   </button>
                 </div>
@@ -369,10 +384,12 @@ export const CollectionTop = ({ dataOne, dataTwo }) => {
                 <button
                   className="noanimationbutton flex items-center justify-center w-full h-[60px] px-5 py-4"
                   role="button"
-                  onClick=""
+                  onClick={() => {}}
                   disabled=""
                 >
-                  <span className="text-black text-[16px] pt-1">구매하기</span>
+                  <span className="text-black text-[16px] pt-1">
+                    {index === 0 ? "구매하기" : "매장 예약하기"}
+                  </span>
                 </button>
               </div>
             </div>

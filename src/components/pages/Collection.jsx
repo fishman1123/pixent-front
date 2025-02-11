@@ -40,6 +40,7 @@ export const Collection = () => {
         fruity: 10,
         spicy: 70,
         uuid: "xxxxxxxxx",
+        hasfeedback: true,
       },
       {
         id: 452,
@@ -75,6 +76,7 @@ export const Collection = () => {
         fruity: 20,
         spicy: 20,
         uuid: "yyyyyyyyy",
+        hasfeedback: true,
       },
       {
         id: 453,
@@ -110,6 +112,7 @@ export const Collection = () => {
         fruity: 10,
         spicy: 10,
         uuid: "yyyyyyyyy",
+        hasfeedback: false,
       },
     ],
   };
@@ -118,19 +121,24 @@ export const Collection = () => {
     user_report: [
       {
         id: 451,
+        subId: 45101,
         userName: "카리나",
         perfumeName: "AC'SCENT17.1",
-        mainNote: "레몬페퍼",
-        mainNoteImageUrl:
-          "https://pixent-image.s3.ap-northeast-2.amazonaws.com/product/17-1.png",
-        middleNote: "인센스",
-        middleNoteImageUrl:
-          "https://pixent-image.s3.ap-northeast-2.amazonaws.com/product/17-2.png",
-        baseNote: "오리스",
-        baseNoteImageUrl:
-          "https://pixent-image.s3.ap-northeast-2.amazonaws.com/product/17-3.png",
-        userImageUrl:
-          "https://pixent-image.s3.ap-northeast-2.amazonaws.com/user/2025-02-05-16-15-28-asdasd.jpg",
+        hasfeedback: false,
+        feedbackelement: [
+          {
+            elementName: "AC'SCENT17",
+            elementRatio: 75,
+          },
+          {
+            elementName: "시더우드",
+            elementRatio: 15,
+          },
+          {
+            elementName: "시티은행",
+            elementRatio: 10,
+          },
+        ],
         citrus: 60,
         floral: 10,
         woody: 80,
@@ -140,19 +148,24 @@ export const Collection = () => {
       },
       {
         id: 452,
+        subId: 45201,
         userName: "아리아",
         perfumeName: "AC'SCENT12.1",
-        mainNote: "로즈마리",
-        mainNoteImageUrl:
-          "https://pixent-image.s3.ap-northeast-2.amazonaws.com/product/12-1.png",
-        middleNote: "화이트 머스크",
-        middleNoteImageUrl:
-          "https://pixent-image.s3.ap-northeast-2.amazonaws.com/product/12-2.png",
-        baseNote: "샌달우드",
-        baseNoteImageUrl:
-          "https://pixent-image.s3.ap-northeast-2.amazonaws.com/product/12-3.png",
-        userImageUrl:
-          "https://pixent-image.s3.ap-northeast-2.amazonaws.com/user/2025-02-05-16-15-28-asdasd.jpg",
+        hasfeedback: true,
+        feedbackelement: [
+          {
+            elementName: "AC'SCENT12",
+            elementRatio: 75,
+          },
+          {
+            elementName: "시더우드",
+            elementRatio: 15,
+          },
+          {
+            elementName: "시티은행",
+            elementRatio: 10,
+          },
+        ],
         citrus: 30,
         floral: 50,
         woody: 40,
@@ -162,19 +175,24 @@ export const Collection = () => {
       },
       {
         id: 452,
+        subId: 45202,
         userName: "아리아",
         perfumeName: "AC'SCENT12.2",
-        mainNote: "로즈마리",
-        mainNoteImageUrl:
-          "https://pixent-image.s3.ap-northeast-2.amazonaws.com/product/12-1.png",
-        middleNote: "화이트 머스크",
-        middleNoteImageUrl:
-          "https://pixent-image.s3.ap-northeast-2.amazonaws.com/product/12-2.png",
-        baseNote: "샌달우드",
-        baseNoteImageUrl:
-          "https://pixent-image.s3.ap-northeast-2.amazonaws.com/product/12-3.png",
-        userImageUrl:
-          "https://pixent-image.s3.ap-northeast-2.amazonaws.com/user/2025-02-05-16-15-28-asdasd.jpg",
+        hasfeedback: true,
+        feedbackelement: [
+          {
+            elementName: "AC'SCENT12",
+            elementRatio: 75,
+          },
+          {
+            elementName: "시더우드",
+            elementRatio: 15,
+          },
+          {
+            elementName: "시티은행",
+            elementRatio: 10,
+          },
+        ],
         citrus: 10,
         floral: 10,
         woody: 10,
@@ -184,19 +202,24 @@ export const Collection = () => {
       },
       {
         id: 452,
+        subId: 45203,
         userName: "아리아",
-        perfumeName: "AC'SCENT12.2",
-        mainNote: "로즈마리",
-        mainNoteImageUrl:
-          "https://pixent-image.s3.ap-northeast-2.amazonaws.com/product/12-1.png",
-        middleNote: "화이트 머스크",
-        middleNoteImageUrl:
-          "https://pixent-image.s3.ap-northeast-2.amazonaws.com/product/12-2.png",
-        baseNote: "샌달우드",
-        baseNoteImageUrl:
-          "https://pixent-image.s3.ap-northeast-2.amazonaws.com/product/12-3.png",
-        userImageUrl:
-          "https://pixent-image.s3.ap-northeast-2.amazonaws.com/user/2025-02-05-16-15-28-asdasd.jpg",
+        perfumeName: "AC'SCENT12.3",
+        hasfeedback: false,
+        feedbackelement: [
+          {
+            elementName: "AC'SCENT12",
+            elementRatio: 75,
+          },
+          {
+            elementName: "시더우드",
+            elementRatio: 15,
+          },
+          {
+            elementName: "시티은행",
+            elementRatio: 10,
+          },
+        ],
         citrus: 10,
         floral: 90,
         woody: 90,
