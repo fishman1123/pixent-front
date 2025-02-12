@@ -15,7 +15,7 @@ export const FeedbackOptions = ({ onSelect }) => {
       {options.map((option, index) => (
         <button
           key={index}
-          className="bg-white text-black text-center p-4 rounded-lg shadow-md border border-gray-300"
+          className="bg-white text-black text-center p-4 shadow-md border border-gray-300"
           onClick={() => onSelect(option.value)}
         >
           <p className="text-md font-semibold">{option.label}</p>

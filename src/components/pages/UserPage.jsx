@@ -63,7 +63,7 @@ export const UserPage = () => {
             <button className="noanimationbutton flex flex-col items-start p-4 min-w-32 max-w-48 h-auto">
               <span className="text-sm text-gray-700">보유 분석권</span>
               <span className="text-2xl font-bold text-black">
-                {authState.viewChance}00개
+                {authState.viewChance}개
               </span>
             </button>
           </div>
@@ -93,59 +93,59 @@ export const UserPage = () => {
         </div>
       </PortalModal>
 
-      <div className="w-full border-t border-black mt-6">
-        <button
-          onClick={() => setIsAccordionOpen(!isAccordionOpen)}
-          className="w-full flex justify-between items-center px-4 py-3 border-b border-black relative"
-        >
-          <span className="text-lg font-medium">결제 내역</span>
+      {/*<div className="w-full border-t border-black mt-6">*/}
+      {/*  <button*/}
+      {/*    onClick={() => setIsAccordionOpen(!isAccordionOpen)}*/}
+      {/*    className="w-full flex justify-between items-center px-4 py-3 border-b border-black relative"*/}
+      {/*  >*/}
+      {/*    <span className="text-lg font-medium">결제 내역</span>*/}
 
-          <img
-            src={downIcon}
-            alt="Chevron"
-            className={`w-8 h-8 transition-transform duration-300 ${
-              isAccordionOpen ? "rotate-0" : "rotate-180"
-            }`}
-          />
-        </button>
+      {/*    <img*/}
+      {/*      src={downIcon}*/}
+      {/*      alt="Chevron"*/}
+      {/*      className={`w-8 h-8 transition-transform duration-300 ${*/}
+      {/*        isAccordionOpen ? "rotate-0" : "rotate-180"*/}
+      {/*      }`}*/}
+      {/*    />*/}
+      {/*  </button>*/}
 
-        <div
-          className={`overflow-hidden transition-all duration-500 ${
-            isAccordionOpen ? "max-h-[1000px] opacity-100" : "max-h-0 opacity-0"
-          }`}
-        >
-          <div className="px-[20px] py-3 bg-white">
-            {paymentHistory.map((section, idx) => (
-              <div
-                key={idx}
-                className={`mb-4 ${idx !== 0 ? "border-t border-black pt-4" : ""}`}
-              >
-                {/* Year Header with Conditional Border */}
-                <p className="text-gray-400 text-sm mb-2">{section.year}</p>
+      {/*  <div*/}
+      {/*    className={`overflow-hidden transition-all duration-500 ${*/}
+      {/*      isAccordionOpen ? "max-h-[1000px] opacity-100" : "max-h-0 opacity-0"*/}
+      {/*    }`}*/}
+      {/*  >*/}
+      {/*    <div className="px-[20px] py-3 bg-white">*/}
+      {/*      {paymentHistory.map((section, idx) => (*/}
+      {/*        <div*/}
+      {/*          key={idx}*/}
+      {/*          className={`mb-4 ${idx !== 0 ? "border-t border-black pt-4" : ""}`}*/}
+      {/*        >*/}
+      {/*          /!* Year Header with Conditional Border *!/*/}
+      {/*          <p className="text-gray-400 text-sm mb-2">{section.year}</p>*/}
 
-                {/* Transactions List */}
-                {section.transactions.map((tx, index) => (
-                  <div
-                    key={index}
-                    className="flex justify-between items-center py-3 border-b last:border-none"
-                  >
-                    <div>
-                      <p className="text-black font-bold">{tx.amount}</p>
-                      <p className="text-gray-600 text-sm">분석권 {tx.count}</p>
-                    </div>
-                    <div className="flex flex-col items-center gap-[2px]">
-                      <p className="text-gray-900 text-sm">{tx.date}</p>
-                      <p className="bg-gray-200 text-gray-700 text-xs px-3 py-1 rounded-full">
-                        {tx.method}
-                      </p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
+      {/*          /!* Transactions List *!/*/}
+      {/*          {section.transactions.map((tx, index) => (*/}
+      {/*            <div*/}
+      {/*              key={index}*/}
+      {/*              className="flex justify-between items-center py-3 border-b last:border-none"*/}
+      {/*            >*/}
+      {/*              <div>*/}
+      {/*                <p className="text-black font-bold">{tx.amount}</p>*/}
+      {/*                <p className="text-gray-600 text-sm">분석권 {tx.count}</p>*/}
+      {/*              </div>*/}
+      {/*              <div className="flex flex-col items-center gap-[2px]">*/}
+      {/*                <p className="text-gray-900 text-sm">{tx.date}</p>*/}
+      {/*                <p className="bg-gray-200 text-gray-700 text-xs px-3 py-1 rounded-full">*/}
+      {/*                  {tx.method}*/}
+      {/*                </p>*/}
+      {/*              </div>*/}
+      {/*            </div>*/}
+      {/*          ))}*/}
+      {/*        </div>*/}
+      {/*      ))}*/}
+      {/*    </div>*/}
+      {/*  </div>*/}
+      {/*</div>*/}
 
       <div>
         <IntroBottom />

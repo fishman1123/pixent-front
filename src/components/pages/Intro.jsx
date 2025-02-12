@@ -61,6 +61,7 @@ export const Intro = () => {
           nickname: userInfo.username,
           email: userInfo.email,
           provider: userInfo.provider,
+          viewChance: userInfo.usageLimit,
         }),
       );
     }
@@ -77,6 +78,7 @@ export const Intro = () => {
     setShowExpiredModal(false);
     // e.g. navigate('/login');
   };
+  console.log(userInfo);
 
   return (
     <div className="flex-col justify-center items-center min-h-screen w-full text-center">
