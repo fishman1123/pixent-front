@@ -1,85 +1,78 @@
-import React, { useState } from "react";
-import downIcon from "../../assets/down.svg"; // Replace with your actual icon path
-import PrimeModal from "../PrimeModal"; // Import your modal component
-import cancelIcon from "../../assets/ax.svg"; // The new cancel icon path
+import React, { useState, useEffect } from "react";
+import downIcon from "../../assets/down.svg";
+import PrimeModal from "../PrimeModal";
+import cancelIcon from "../../assets/ax.svg";
 import optionData from "../../feedbackoptions.json";
+import ScentProfile from "./ScentProfile";
+import { useSelector, useDispatch } from "react-redux";
+import {
+  resetStepTwoSelections,
+  setStepTwoSelections,
+} from "../../store/feedbackSlice.js";
 
 export const StepTwo = ({ onNext, onBack }) => {
-  const [selectedNote, setSelectedNote] = useState(null);
+  const dispatch = useDispatch();
+
+  const stepOneRatio = useSelector((state) => state.feedback.stepOneRatio);
   const [openAccordion, setOpenAccordion] = useState(null);
-
-  // selectedOptions[noteName] = array of selected option names for that note
   const [selectedOptions, setSelectedOptions] = useState({});
-
-  // percentages[optionName] = numeric percentage for that option
   const [percentages, setPercentages] = useState({});
-
-  // Controls the "exceeded 2 selections" modal
+  const [modalMessage, setModalMessage] = useState("");
   const [showModal, setShowModal] = useState(false);
-
-  /**
-   * We map the categoryId in optionData to the 6 main categories.
-   */
   const fragranceNotes = [
     {
       name: "시트러스",
       content: "상큼한 과일 향이 가득한 시트러스 향.",
-      options: optionData.filter((item) => item.categoryId === 1),
+      categoryId: 1,
     },
     {
       name: "플로럴",
       content: "우아한 꽃향기가 조화를 이루는 플로럴 계열.",
-      options: optionData.filter((item) => item.categoryId === 2),
+      categoryId: 2,
     },
     {
       name: "우디",
       content: "고급스러운 나무 향이 특징인 우디 계열.",
-      options: optionData.filter((item) => item.categoryId === 3),
+      categoryId: 3,
     },
-    {
-      name: "머스크",
-      content: "부드럽고 포근한 머스크 향.",
-      options: optionData.filter((item) => item.categoryId === 4),
-    },
+    { name: "머스크", content: "부드럽고 포근한 머스크 향.", categoryId: 4 },
     {
       name: "프루티",
       content: "달콤하고 신선한 과일 향이 나는 프루티 계열.",
-      options: optionData.filter((item) => item.categoryId === 5),
+      categoryId: 5,
     },
     {
       name: "스파이시",
       content: "강렬하고 매콤한 스파이시 향.",
-      options: optionData.filter((item) => item.categoryId === 6),
+      categoryId: 6,
     },
-  ];
+  ].map((note) => ({
+    ...note,
+    options: optionData.filter(
+      (option) => option.categoryId === note.categoryId,
+    ),
+  }));
 
-  /**
-   * Toggle open/close for the accordion of a given note.
-   */
+  const resetSelections = () => {
+    dispatch(resetStepTwoSelections()); // Reset Redux state
+    setSelectedOptions({});
+    setPercentages({});
+    setOpenAccordion(null);
+  };
+
   const handleAccordionToggle = (noteName) => {
-    if (openAccordion === noteName) {
-      setOpenAccordion(null);
-      setSelectedNote(null);
-    } else {
-      setOpenAccordion(noteName);
-      setSelectedNote(noteName);
-    }
+    setOpenAccordion(openAccordion === noteName ? null : noteName);
   };
 
-  /**
-   * Count how many total options are selected across ALL notes.
-   */
-  const getTotalSelectedCount = (optionsObj) => {
-    return Object.values(optionsObj).reduce((sum, arr) => sum + arr.length, 0);
-  };
+  const getTotalSelectedCount = (optionsObj) =>
+    Object.values(optionsObj).reduce((sum, arr) => sum + arr.length, 0);
 
-  /**
-   * Remove a single option from both selectedOptions and percentages.
-   */
+  const getTotalPercentages = (pcts) =>
+    Object.values(pcts).reduce((sum, val) => sum + (val || 0), 0);
+
   const removeSelection = (noteName, option) => {
     setSelectedOptions((prev) => {
       const copy = { ...prev };
-      if (!copy[noteName]) return copy;
       copy[noteName] = copy[noteName].filter((o) => o !== option);
       return copy;
     });
@@ -90,69 +83,103 @@ export const StepTwo = ({ onNext, onBack }) => {
     });
   };
 
-  /**
-   * Handle selection/deselection within a note.
-   * Multiple options per note allowed, but total across all notes <= 2.
-   */
   const handleOptionSelect = (noteName, option) => {
     setSelectedOptions((prev) => {
-      const newSelections = { ...prev };
-      if (!newSelections[noteName]) {
-        newSelections[noteName] = [];
-      }
+      let newSelections = { ...prev };
+      if (!newSelections[noteName]) newSelections[noteName] = [];
 
       const alreadySelected = newSelections[noteName].includes(option);
 
       if (alreadySelected) {
-        // Deselect (undo)
+        // Deselect
         newSelections[noteName] = newSelections[noteName].filter(
           (o) => o !== option,
         );
-        // Remove from percentages
+        // Also remove from percentages
         setPercentages((prevP) => {
           const copy = { ...prevP };
           delete copy[option];
           return copy;
         });
       } else {
-        // Select new
-        newSelections[noteName] = [...newSelections[noteName], option];
-
-        const newTotal = getTotalSelectedCount(newSelections);
-        if (newTotal > 2) {
-          // Over limit
+        // Before we finalize, check if total picks would exceed 2
+        const totalIfWeAdd = getTotalSelectedCount({
+          ...prev,
+          [noteName]: [...newSelections[noteName], option],
+        });
+        if (totalIfWeAdd > 2) {
+          setModalMessage(
+            "두 개 이상의 노트를 선택하실 수 없습니다. (최대 2개)",
+          );
           setShowModal(true);
           return prev; // revert
-        } else {
-          // Within limit, default percentage
-          setPercentages((prevP) => ({
-            ...prevP,
-            [option]: 10,
-          }));
         }
+
+        newSelections[noteName] = [...newSelections[noteName], option];
+
+        const oldPcts = { ...percentages };
+        const newPcts = { ...oldPcts, [option]: 10 };
+
+        const newTotal = getTotalPercentages(newPcts);
+        if (stepOneRatio && newTotal > stepOneRatio) {
+          setModalMessage(
+            `사용자 지정 비율(${stepOneRatio}%)을 초과할 수 없습니다.`,
+          );
+          setShowModal(true);
+          return prev;
+        }
+
+        setPercentages(newPcts);
       }
       return newSelections;
     });
   };
 
-  /**
-   * Adjust percentage by +/-5 for a selected option.
-   */
   const adjustPercentage = (option, amount, e) => {
     e.stopPropagation();
     e.preventDefault();
 
     setPercentages((prev) => {
       const copy = { ...prev };
-      const currentVal = copy[option] ?? 10;
-      copy[option] = Math.max(0, Math.min(100, currentVal + amount));
+      const oldVal = copy[option] ?? 10;
+      let newVal = Math.max(10, Math.min(100, oldVal + amount));
+      copy[option] = newVal;
+
+      const totalPct = getTotalPercentages(copy);
+      if (stepOneRatio && totalPct > stepOneRatio) {
+        // Revert
+        copy[option] = oldVal;
+        setModalMessage(
+          `사용자 지정 비율(${stepOneRatio}%)을 초과할 수 없습니다.`,
+        );
+        setShowModal(true);
+      }
       return copy;
     });
   };
 
-  // For enabling the "Next" button only when there's at least 1 selection.
-  const totalSelectedNow = getTotalSelectedCount(selectedOptions);
-  const hasAnySelection = totalSelectedNow > 0;
+  useEffect(() => {
+    dispatch(setStepTwoSelections({ selectedOptions, percentages }));
+  }, [selectedOptions, percentages, dispatch]);
+
+  useEffect(() => {
+    return () => {
+      resetSelections();
+    };
+  }, [dispatch]);
+
+  const handleNext = () => {
+    dispatch(setStepTwoSelections({ selectedOptions, percentages }));
+    onNext(selectedOptions, percentages);
+  };
+
+  const handleBack = () => {
+    resetSelections();
+    onBack(); // Proceed to previous step
+  };
+
+  const totalSelected = getTotalSelectedCount(selectedOptions);
+  const canProceed = totalSelected > 0;
 
   return (
     <>
@@ -161,7 +188,7 @@ export const StepTwo = ({ onNext, onBack }) => {
           2단계: 어떤 향을 더 강조하고 싶으신가요?
         </h2>
 
-        {/* Accordions for each note */}
+        {/* Accordion List */}
         <div className="w-full border-t border-black mt-6">
           {fragranceNotes.map((note) => {
             const isOpen = openAccordion === note.name;
@@ -186,10 +213,9 @@ export const StepTwo = ({ onNext, onBack }) => {
                               className="bg-white text-black border border-black pl-2 text-sm flex items-center space-x-1"
                             >
                               <span>{opt}</span>
-                              {/* Cancel Icon for removing selection */}
                               <button
                                 onClick={(e) => {
-                                  e.stopPropagation(); // Don’t close accordion
+                                  e.stopPropagation();
                                   removeSelection(note.name, opt);
                                 }}
                                 className="p-1"
@@ -215,76 +241,64 @@ export const StepTwo = ({ onNext, onBack }) => {
                   </button>
                 </div>
 
-                {/* Accordion Content */}
                 <div
                   className={`overflow-hidden transition-all duration-500 ${
                     isOpen
-                      ? "max-h-[1000px] opacity-100 p-4 bg-gray-100"
+                      ? "max-h-[1000px] opacity-100 p-4 bg-white"
                       : "max-h-0 opacity-0"
                   }`}
                 >
-                  {/* Category description */}
-                  <p className="text-black mb-3">{note.content}</p>
-
                   <div className="flex flex-col space-y-2">
-                    {/* Now note.options is an array of objects from optionData */}
                     {note.options.map((optionObj) => {
                       const isSelected = currentSelections.includes(
                         optionObj.name,
                       );
 
                       return (
-                        <button
-                          key={optionObj.id}
-                          type="button"
-                          className="flex flex-col border border-black bg-white text-black w-full px-4 py-2"
-                          onClick={() =>
-                            handleOptionSelect(note.name, optionObj.name)
-                          }
-                        >
-                          {/* Top row: dot + name + percentage controls */}
-                          <div className="flex items-center justify-between">
-                            {/* Dot + option name */}
-                            <div className="flex items-center space-x-2">
-                              <span className="inline-block w-4 text-center">
-                                {isSelected ? "●" : ""}
-                              </span>
-                              <span>{optionObj.name}</span>
-                            </div>
-
-                            {/* If selected, show +/- controls */}
-                            {isSelected && (
+                        <div key={optionObj.id}>
+                          <div className="flex flex-col bg-white justify-center text-black w-full px-4 py-2 border border-black h-[52px]">
+                            {/* The button to select/deselect */}
+                            <button
+                              type="button"
+                              className="flex justify-between items-center w-full"
+                              onClick={() =>
+                                handleOptionSelect(note.name, optionObj.name)
+                              }
+                            >
                               <div className="flex items-center space-x-2">
-                                <span
-                                  onClick={(e) =>
-                                    adjustPercentage(optionObj.name, -5, e)
-                                  }
-                                  className="border border-black px-3 py-1 text-black cursor-pointer select-none"
-                                >
-                                  -
+                                <span className="inline-block w-4 text-center">
+                                  {isSelected ? "●" : ""}
                                 </span>
-                                <span className="font-bold">
-                                  {percentages[optionObj.name] ?? 10}%
-                                </span>
-                                <span
-                                  onClick={(e) =>
-                                    adjustPercentage(optionObj.name, 5, e)
-                                  }
-                                  className="border border-black px-3 py-1 text-black cursor-pointer select-none"
-                                >
-                                  +
-                                </span>
+                                <span>{optionObj.name}</span>
                               </div>
-                            )}
+                              {isSelected && (
+                                <div className="flex items-center space-x-2">
+                                  <span
+                                    onClick={(e) =>
+                                      adjustPercentage(optionObj.name, -10, e)
+                                    }
+                                    className="border border-black px-3 py-1 text-black cursor-pointer"
+                                  >
+                                    -
+                                  </span>
+                                  <span className="font-bold">
+                                    {percentages[optionObj.name] ?? 10}%
+                                  </span>
+                                  <span
+                                    onClick={(e) =>
+                                      adjustPercentage(optionObj.name, 10, e)
+                                    }
+                                    className="border border-black px-3 py-1 text-black cursor-pointer"
+                                  >
+                                    +
+                                  </span>
+                                </div>
+                              )}
+                            </button>
                           </div>
-
-                          {/* Show the description if selected */}
-                          {isSelected && (
-                            <div className="mt-2 text-sm text-gray-600">
-                              {optionObj.desc}
-                            </div>
-                          )}
-                        </button>
+                          {/* Show ScentProfile if selected */}
+                          {isSelected && <ScentProfile data={optionObj} />}
+                        </div>
                       );
                     })}
                   </div>
@@ -294,37 +308,34 @@ export const StepTwo = ({ onNext, onBack }) => {
           })}
         </div>
 
-        {/* Navigation Buttons */}
         <div className="flex justify-between mt-4">
           <button
             className="bg-gray-600 text-white py-2 px-4 rounded-md"
-            onClick={onBack}
+            onClick={handleBack}
           >
             이전 단계로 돌아가기
           </button>
           <button
             className={`py-2 px-4 rounded-md ${
-              hasAnySelection
+              canProceed
                 ? "bg-black text-white"
                 : "bg-gray-300 text-gray-600 cursor-not-allowed"
             }`}
-            onClick={() => onNext(selectedOptions, percentages)}
-            disabled={!hasAnySelection}
+            onClick={handleNext}
+            disabled={!canProceed}
           >
             다음 단계로 이동하기
           </button>
         </div>
       </div>
 
-      {/* Modal if user tries to select more than two total options */}
+      {/* Modal for errors */}
       <PrimeModal
         isOpen={showModal}
         title="알림"
         onClose={() => setShowModal(false)}
       >
-        <p className="text-black">
-          두 개 이상의 노트를 선택하실 수 없습니다. (최대 2개까지 가능)
-        </p>
+        <p className="text-black">{modalMessage}</p>
       </PrimeModal>
     </>
   );
