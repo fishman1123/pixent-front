@@ -25,6 +25,7 @@ import { ProtectedLayout } from "./components/layout/ProtectedLayout";
 import { UserPage } from "./components/pages/UserPage.jsx";
 import { Collection } from "./components/pages/Collection.jsx";
 import { FeedBackPage } from "./components/pages/FeedBackPage.jsx";
+import NewChart from "./components/pages/NewChart.jsx";
 
 export const RouterList = [
   {
@@ -35,6 +36,7 @@ export const RouterList = [
         index: true,
         element: <Intro />,
       },
+
       {
         path: "login",
         children: [
@@ -87,6 +89,10 @@ export const RouterList = [
               {
                 path: "test",
                 element: <ReportSummary />,
+              },
+              {
+                path: "dummy",
+                element: <NewChart />,
               },
               {
                 path: "testTwo",
