@@ -18,20 +18,15 @@ export const Intro = () => {
 
   const authState = useSelector((state) => state.auth);
 
-  // Check if user arrived from "/login/nickname"
   const nicknameUpdated = location.state?.from === "/login/nickname";
 
-  // Local modal for "expired token"
   const [showExpiredModal, setShowExpiredModal] = useState(false);
 
-  // 1) On mount, set isAuthenticated if localStorage has a token
   useEffect(() => {
     const token = localStorage.getItem("gToken");
     dispatch(setAuthState({ isAuthenticated: !!token }));
   }, [dispatch]);
 
-  // 2) Use React Query for user info, if we’re authenticated
-  //    This uses the cached data if it already exists
   const {
     data: userInfo,
     error,
@@ -39,16 +34,12 @@ export const Intro = () => {
     refetch,
   } = useGetUserInfo(authState.isAuthenticated);
 
-  // 3) If the user came from "/login/nickname", force a fresh fetch
-  //    so we ensure we get the updated nickname from the server
   useEffect(() => {
     if (nicknameUpdated) {
       refetch();
     }
   }, [nicknameUpdated, refetch]);
 
-  // 4) If user info arrives, store it in Redux
-  //    (only if we actually have data)
   useEffect(() => {
     if (userInfo) {
       // Update user slice
@@ -67,7 +58,6 @@ export const Intro = () => {
     }
   }, [userInfo, dispatch]);
 
-  // 5) If the query fails with 403 => show "expired" modal
   useEffect(() => {
     if (isError && error?.response?.status === 403) {
       setShowExpiredModal(true);
@@ -76,7 +66,6 @@ export const Intro = () => {
 
   const handleCloseExpiredModal = () => {
     setShowExpiredModal(false);
-    // e.g. navigate('/login');
   };
   console.log(userInfo);
 

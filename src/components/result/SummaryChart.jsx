@@ -1,3 +1,4 @@
+// SummaryChart.jsx
 import React, { useState, useEffect } from "react";
 import {
   RadarChart,
@@ -7,6 +8,9 @@ import {
   Radar,
   ResponsiveContainer,
 } from "recharts";
+
+import { useSelector } from "react-redux";
+import { selectBlendedChartData } from "../../store/selectors/feedbackSelectors";
 
 export const Summarychart = ({
   inputCitrus,
@@ -55,12 +59,6 @@ export const Summarychart = ({
     return () => clearInterval(interval);
   }, [profile]);
 
-  // Use the scentOrder array to ensure "Watery" is first
-  const data = scentOrder.map((key) => ({
-    subject: key,
-    A: animatedProfile[key],
-  }));
-
   const handleSliderChange = (event) => {
     const { name, value } = event.target;
     setProfile((prevProfile) => ({
@@ -68,6 +66,30 @@ export const Summarychart = ({
       [name]: parseInt(value, 10),
     }));
   };
+
+  const originalData = scentOrder.map((key) => ({
+    subject: key,
+    A: animatedProfile[key],
+  }));
+
+  const blended = useSelector(selectBlendedChartData);
+  console.log("SummaryChart >> blended from Redux:", blended);
+
+  let finalData;
+  if (blended) {
+    finalData = scentOrder.map((key) => {
+      const lowerKey = key.toLowerCase();
+      return {
+        subject: key,
+        A: animatedProfile[key],
+        B: blended[lowerKey] || 0,
+      };
+    });
+  } else {
+    finalData = originalData;
+  }
+
+  console.log("SummaryChart >> final data used for chart:", finalData);
 
   return (
     <div className="w-full max-w-md mx-auto">
@@ -77,7 +99,7 @@ export const Summarychart = ({
             cx="50%"
             cy="50%"
             outerRadius="70%"
-            data={data}
+            data={finalData}
             startAngle={90}
             endAngle={-270}
           >
@@ -87,12 +109,12 @@ export const Summarychart = ({
               tick={(props) => {
                 const { payload, x, y, textAnchor, ...rest } = props;
                 let dy = 0;
-                // Check if the label is the fourth item in scentOrder
+                // Move the 4th label downward
                 if (
                   payload &&
-                  payload.value === scentOrder[3] // Index 3 is the fourth item
+                  payload.value === scentOrder[3] // the 4th item
                 ) {
-                  dy = "1rem"; // Add 1rem to dy
+                  dy = "1rem";
                 }
                 return (
                   <text
@@ -114,6 +136,7 @@ export const Summarychart = ({
               domain={[0, 100]}
               tick={{ fontSize: 10 }}
             />
+
             <Radar
               name="Scent"
               dataKey="A"
@@ -121,29 +144,43 @@ export const Summarychart = ({
               fill="#000000"
               fillOpacity={0.3}
             />
+
+            {blended && (
+              <Radar
+                name="Modified"
+                dataKey="B"
+                stroke="#82ca9d"
+                fill="#82ca9d"
+                fillOpacity={0.3}
+              />
+            )}
           </RadarChart>
         </ResponsiveContainer>
       </div>
-      {/*<div className="space-y-4">*/}
-      {/*    {scentOrder.map((key) => (*/}
-      {/*        <div key={key} className="flex items-center">*/}
-      {/*            <label htmlFor={key} className="w-20">*/}
-      {/*                {key}*/}
-      {/*            </label>*/}
-      {/*            <input*/}
-      {/*                type="range"*/}
-      {/*                id={key}*/}
-      {/*                name={key}*/}
-      {/*                min="0"*/}
-      {/*                max="100"*/}
-      {/*                value={profile[key]}*/}
-      {/*                onChange={handleSliderChange}*/}
-      {/*                className="w-full mx-2"*/}
-      {/*            />*/}
-      {/*            <span className="w-10 text-right">{profile[key]}</span>*/}
-      {/*        </div>*/}
-      {/*    ))}*/}
-      {/*</div>*/}
+
+      {/* Optional debug sliders, commented out */}
+      {/*
+      <div className="space-y-4">
+        {scentOrder.map((key) => (
+          <div key={key} className="flex items-center">
+            <label htmlFor={key} className="w-20">
+              {key}
+            </label>
+            <input
+              type="range"
+              id={key}
+              name={key}
+              min="0"
+              max="100"
+              value={profile[key]}
+              onChange={handleSliderChange}
+              className="w-full mx-2"
+            />
+            <span className="w-10 text-right">{profile[key]}</span>
+          </div>
+        ))}
+      </div>
+      */}
     </div>
   );
 };
