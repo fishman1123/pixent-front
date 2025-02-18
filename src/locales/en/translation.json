@@ -103,5 +103,24 @@
     "mainText": "Reflect preferences in image analysis",
     "subText1": "AI analyzes the image and",
     "subText2": "incorporates your preferred fragrance characteristics"
+  },
+  "fragranceNotes": {
+    "citrusName": "Citrus",
+    "citrusContent": "A bright, tangy fragrance brimming with refreshing citrus notes.",
+
+    "floralName": "Floral",
+    "floralContent": "An elegant bouquet of blooming flowers that exude a refined aroma.",
+
+    "woodyName": "Woody",
+    "woodyContent": "A luxurious woody profile featuring the rich depth of forest notes.",
+
+    "muskName": "Musk",
+    "muskContent": "A soft, comforting musk that envelops you in a warm, powdery scent.",
+
+    "fruityName": "Fruity",
+    "fruityContent": "A sweet, fresh aroma bursting with the lively essence of ripe fruits.",
+
+    "spicyName": "Spicy",
+    "spicyContent": "A bold, piquant fragrance offering warm, peppery spice accents."
   }
 }

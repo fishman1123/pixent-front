@@ -103,5 +103,24 @@
     "mainText": "在图片分析中反映偏好",
     "subText1": "AI的图片分析结果",
     "subText2": "结合您偏好的香水特性"
+  },
+  "fragranceNotes": {
+    "citrusName": "柑橘",
+    "citrusContent": "充满清爽果香的柑橘调香味。",
+
+    "floralName": "花香",
+    "floralContent": "优雅的花卉香气，营造出柔美与浪漫的氛围。",
+
+    "woodyName": "木质香",
+    "woodyContent": "以深邃的木质调为特色，散发高雅与稳重之感。",
+
+    "muskName": "麝香",
+    "muskContent": "柔和温暖的麝香香气，带来温馨舒适的感受。",
+
+    "fruityName": "果香",
+    "fruityContent": "甜美且清新的果实香气，充满活力与甜润。",
+
+    "spicyName": "辛香",
+    "spicyContent": "热烈又辛辣的香调，带来独特而浓郁的魅力。"
   }
 }

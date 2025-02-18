@@ -103,5 +103,24 @@
     "mainText": "画像分析に好みを反映",
     "subText1": "AIの画像分析結果に",
     "subText2": "好みの香りの特性を反映します"
+  },
+  "fragranceNotes": {
+    "citrusName": "シトラス",
+    "citrusContent": "爽やかな果実の香りが溢れるシトラス系の香り。",
+
+    "floralName": "フローラル",
+    "floralContent": "優雅な花の香りが調和するフローラル系。",
+
+    "woodyName": "ウッディ",
+    "woodyContent": "高級感のある木の香りが特徴のウッディ系。",
+
+    "muskName": "ムスク",
+    "muskContent": "柔らかくて心地よいムスクの香り。",
+
+    "fruityName": "フルーティ",
+    "fruityContent": "甘くて新鮮な果物の香りが漂うフルーティ系。",
+
+    "spicyName": "スパイシー",
+    "spicyContent": "刺激的でピリッとしたスパイシーな香り。"
   }
 }

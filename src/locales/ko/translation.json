@@ -103,5 +103,24 @@
     "mainText": "이미지 분석에 취향 반영하기",
     "subText1": "AI의 이미지 분석 결과에",
     "subText2": "선호하는 향의 특성을 반영합니다"
+  },
+  "fragranceNotes": {
+    "citrusName": "시트러스",
+    "citrusContent": "상큼한 과일 향이 가득한 시트러스 향.",
+
+    "floralName": "플로럴",
+    "floralContent": "우아한 꽃향기가 조화를 이루는 플로럴 계열.",
+
+    "woodyName": "우디",
+    "woodyContent": "고급스러운 나무 향이 특징인 우디 계열.",
+
+    "muskName": "머스크",
+    "muskContent": "부드럽고 포근한 머스크 향.",
+
+    "fruityName": "프루티",
+    "fruityContent": "달콤하고 신선한 과일 향이 나는 프루티 계열.",
+
+    "spicyName": "스파이시",
+    "spicyContent": "강렬하고 매콤한 스파이시 향."
   }
 }
