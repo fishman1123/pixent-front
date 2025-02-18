@@ -1,3 +1,5 @@
+// src/components/stepTwo/StepTwo.jsx
+
 import React, { useState, useEffect } from "react";
 import downIcon from "../../assets/down.svg";
 import PrimeModal from "../PrimeModal";
@@ -10,7 +12,17 @@ import {
   setStepTwoSelections,
 } from "../../store/feedbackSlice.js";
 
+// 1) Import the raw JSON data
+import rawCheckboxData from "../../checkboxData.json";
+
+// 2) Import your InfoButton
+import { InfoButton } from "../InfoButton";
+
+// 3) Import i18n
+import { useTranslation } from "react-i18next";
+
 export const StepTwo = ({ onNext, onBack }) => {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
 
   const stepOneRatio = useSelector((state) => state.feedback.stepOneRatio);
@@ -19,6 +31,11 @@ export const StepTwo = ({ onNext, onBack }) => {
   const [percentages, setPercentages] = useState({});
   const [modalMessage, setModalMessage] = useState("");
   const [showModal, setShowModal] = useState(false);
+
+  // 4) Translated JSON data state
+  const [translatedData, setTranslatedData] = useState([]);
+
+  // Prepare fragrance notes
   const fragranceNotes = [
     {
       name: "시트러스",
@@ -53,8 +70,24 @@ export const StepTwo = ({ onNext, onBack }) => {
     ),
   }));
 
+  // 5) Translate `rawCheckboxData` on mount or language change
+  useEffect(() => {
+    const data = rawCheckboxData.map((item) => ({
+      ...item,
+      label: t(item.label),
+      description: t(item.description),
+      additionalInfo: item.additionalInfo.map((info) => t(info)),
+      chartData: item.chartData.map((d) => ({
+        ...d,
+        name: t(d.name),
+      })),
+    }));
+    setTranslatedData(data);
+  }, [t]);
+
+  // Helpers
   const resetSelections = () => {
-    dispatch(resetStepTwoSelections()); // Reset Redux state
+    dispatch(resetStepTwoSelections());
     setSelectedOptions({});
     setPercentages({});
     setOpenAccordion(null);
@@ -64,12 +97,15 @@ export const StepTwo = ({ onNext, onBack }) => {
     setOpenAccordion(openAccordion === noteName ? null : noteName);
   };
 
+  // Count how many note picks are selected
   const getTotalSelectedCount = (optionsObj) =>
     Object.values(optionsObj).reduce((sum, arr) => sum + arr.length, 0);
 
+  // Sum of all assigned percentages
   const getTotalPercentages = (pcts) =>
     Object.values(pcts).reduce((sum, val) => sum + (val || 0), 0);
 
+  // Remove a note selection and its percentage
   const removeSelection = (noteName, option) => {
     setSelectedOptions((prev) => {
       const copy = { ...prev };
@@ -83,15 +119,16 @@ export const StepTwo = ({ onNext, onBack }) => {
     });
   };
 
+  // Select / Deselect a note
   const handleOptionSelect = (noteName, option) => {
     setSelectedOptions((prev) => {
-      let newSelections = { ...prev };
+      const newSelections = { ...prev };
       if (!newSelections[noteName]) newSelections[noteName] = [];
 
       const alreadySelected = newSelections[noteName].includes(option);
 
       if (alreadySelected) {
-        // Deselect
+        // Remove the note
         newSelections[noteName] = newSelections[noteName].filter(
           (o) => o !== option,
         );
@@ -102,7 +139,7 @@ export const StepTwo = ({ onNext, onBack }) => {
           return copy;
         });
       } else {
-        // Before we finalize, check if total picks would exceed 2
+        // Ensure total note picks won't exceed 2
         const totalIfWeAdd = getTotalSelectedCount({
           ...prev,
           [noteName]: [...newSelections[noteName], option],
@@ -115,8 +152,10 @@ export const StepTwo = ({ onNext, onBack }) => {
           return prev; // revert
         }
 
+        // Add the new note
         newSelections[noteName] = [...newSelections[noteName], option];
 
+        // Default to 10% for that note
         const oldPcts = { ...percentages };
         const newPcts = { ...oldPcts, [option]: 10 };
 
@@ -126,7 +165,7 @@ export const StepTwo = ({ onNext, onBack }) => {
             `사용자 지정 비율(${stepOneRatio}%)을 초과할 수 없습니다.`,
           );
           setShowModal(true);
-          return prev;
+          return prev; // revert
         }
 
         setPercentages(newPcts);
@@ -135,6 +174,7 @@ export const StepTwo = ({ onNext, onBack }) => {
     });
   };
 
+  // Adjust a note's percentage
   const adjustPercentage = (option, amount, e) => {
     e.stopPropagation();
     e.preventDefault();
@@ -145,6 +185,7 @@ export const StepTwo = ({ onNext, onBack }) => {
       let newVal = Math.max(10, Math.min(100, oldVal + amount));
       copy[option] = newVal;
 
+      // Check if we exceed stepOneRatio
       const totalPct = getTotalPercentages(copy);
       if (stepOneRatio && totalPct > stepOneRatio) {
         // Revert
@@ -158,16 +199,19 @@ export const StepTwo = ({ onNext, onBack }) => {
     });
   };
 
+  // Sync to Redux
   useEffect(() => {
     dispatch(setStepTwoSelections({ selectedOptions, percentages }));
   }, [selectedOptions, percentages, dispatch]);
 
+  // Reset if unmounted
   useEffect(() => {
     return () => {
       resetSelections();
     };
   }, [dispatch]);
 
+  // Step navigation
   const handleNext = () => {
     dispatch(setStepTwoSelections({ selectedOptions, percentages }));
     onNext(selectedOptions, percentages);
@@ -175,11 +219,18 @@ export const StepTwo = ({ onNext, onBack }) => {
 
   const handleBack = () => {
     resetSelections();
-    onBack(); // Proceed to previous step
+    onBack();
   };
 
-  const totalSelected = getTotalSelectedCount(selectedOptions);
-  const canProceed = totalSelected > 0;
+  // =========== KEY CHANGE: "canProceed" if leftover is 0 OR bigNumber is 100 ===========
+  // leftover = stepOneRatio - totalUsed
+  const totalUsed = getTotalPercentages(percentages);
+  const leftover = stepOneRatio - totalUsed;
+
+  // If leftover <= 0 => means we've hit or exceeded 100% of the target
+  // Also require at least one note has been selected
+  const totalNotes = getTotalSelectedCount(selectedOptions);
+  const canProceed = leftover <= 0 && totalNotes > 0 && stepOneRatio > 0;
 
   return (
     <>
@@ -194,23 +245,37 @@ export const StepTwo = ({ onNext, onBack }) => {
             const isOpen = openAccordion === note.name;
             const currentSelections = selectedOptions[note.name] || [];
 
+            // Find the matching data in the translated array
+            const matchingData = translatedData.find(
+              (item) => item.id === note.categoryId,
+            ) || {
+              label: "Unknown Data",
+              description: "No data found for this category ID.",
+              additionalInfo: [],
+              chartData: [],
+            };
+
             return (
               <div key={note.name} className="w-full border-b border-black">
                 {/* Accordion Header */}
                 <div className="flex flex-col">
                   <button
                     onClick={() => handleAccordionToggle(note.name)}
-                    className="w-full flex justify-between items-center px-4 py-3 text-lg font-medium bg-white text-black"
+                    className="w-full flex justify-between items-center pl-[4px] pr-[4px] py-3 text-[16px] font-medium bg-white text-black"
                   >
                     <div className="flex items-center space-x-2">
                       <span>{note.name}</span>
-                      {/* If there's any selection for this note, show "chips" */}
+                      {/* InfoButton */}
+                      <div onClick={(e) => e.stopPropagation()}>
+                        <InfoButton option={matchingData} />
+                      </div>
+                      {/* Selected "chips" */}
                       {currentSelections.length > 0 && (
                         <div className="flex items-center flex-wrap gap-2">
                           {currentSelections.map((opt) => (
                             <div
                               key={opt}
-                              className="bg-white text-black border border-black pl-2 text-sm flex items-center space-x-1"
+                              className="bg-white text-black border border-black pl-2 text-[10px] flex items-center space-x-1"
                             >
                               <span>{opt}</span>
                               <button
@@ -241,6 +306,7 @@ export const StepTwo = ({ onNext, onBack }) => {
                   </button>
                 </div>
 
+                {/* Accordion Content */}
                 <div
                   className={`overflow-hidden transition-all duration-500 ${
                     isOpen
@@ -253,7 +319,6 @@ export const StepTwo = ({ onNext, onBack }) => {
                       const isSelected = currentSelections.includes(
                         optionObj.name,
                       );
-
                       return (
                         <div key={optionObj.id}>
                           <div className="flex flex-col bg-white justify-center text-black w-full px-4 py-2 border border-black h-[52px]">
@@ -308,24 +373,38 @@ export const StepTwo = ({ onNext, onBack }) => {
           })}
         </div>
 
-        <div className="flex justify-between mt-4">
-          <button
-            className="bg-gray-600 text-white py-2 px-4 rounded-md"
-            onClick={handleBack}
-          >
-            이전 단계로 돌아가기
-          </button>
-          <button
-            className={`py-2 px-4 rounded-md ${
-              canProceed
-                ? "bg-black text-white"
-                : "bg-gray-300 text-gray-600 cursor-not-allowed"
-            }`}
-            onClick={handleNext}
-            disabled={!canProceed}
-          >
-            다음 단계로 이동하기
-          </button>
+        {/* Bottom Buttons */}
+        <div className="px-6">
+          <div className="flex justify-between mt-4">
+            {/* Go Back */}
+            <div className="min-w-[140px]">
+              <button
+                className="noanimationbutton flex items-center justify-center w-full"
+                role="button"
+                onClick={handleBack}
+              >
+                <span className="text">이전 단계로 돌아가기</span>
+                <span className="text" />
+              </button>
+            </div>
+
+            {/* Next / Save Feedback */}
+            <div className="w-[145px]">
+              <button
+                className={`noanimationbutton flex items-center justify-center w-full ${
+                  canProceed
+                    ? "bg-white"
+                    : "bg-gray-300 text-gray-600 cursor-not-allowed"
+                }`}
+                role="button"
+                onClick={handleNext}
+                disabled={!canProceed}
+              >
+                <span className="text">피드백 저장하기</span>
+                <span className="text" />
+              </button>
+            </div>
+          </div>
         </div>
       </div>
 

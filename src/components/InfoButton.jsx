@@ -44,7 +44,7 @@ export const InfoButton = ({ option }) => {
         <PortalModal
           isOpen={isInfoModalOpen}
           onClose={closeInfoModal}
-          title={`Information about ${option.label}`}
+          title={` ${option.label}`}
         >
           <div
             className="modal-content flex flex-col space-y-6"
