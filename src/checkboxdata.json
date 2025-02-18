@@ -1,0 +1,99 @@
+[
+  {
+    "id": 1,
+    "label": "checkboxData.label1",
+    "description": "checkboxData.description1",
+    "additionalInfo": [
+      "checkboxData.additionalInfo1_1",
+      "checkboxData.additionalInfo1_2",
+      "checkboxData.additionalInfo1_3",
+      "checkboxData.additionalInfo1_4"
+    ],
+    "chartData": [
+      { "name": "chartData.sweetness", "value": 6 },
+      { "name": "chartData.freshness", "value": 9 },
+      { "name": "chartData.weight", "value": 3 },
+      { "name": "chartData.uniqueness", "value": 6 }
+    ]
+  },
+  {
+    "id": 2,
+    "label": "checkboxData.label2",
+    "description": "checkboxData.description2",
+    "additionalInfo": [
+      "checkboxData.additionalInfo2_1",
+      "checkboxData.additionalInfo2_2",
+      "checkboxData.additionalInfo2_3"
+    ],
+    "chartData": [
+      { "name": "chartData.sweetness", "value": 8 },
+      { "name": "chartData.freshness", "value": 5 },
+      { "name": "chartData.weight", "value": 4 },
+      { "name": "chartData.uniqueness", "value": 5 }
+    ]
+  },
+  {
+    "id": 3,
+    "label": "checkboxData.label3",
+    "description": "checkboxData.description3",
+    "additionalInfo": [
+      "checkboxData.additionalInfo3_1",
+      "checkboxData.additionalInfo3_2",
+      "checkboxData.additionalInfo3_3"
+    ],
+    "chartData": [
+      { "name": "chartData.sweetness", "value": 3 },
+      { "name": "chartData.freshness", "value": 4 },
+      { "name": "chartData.weight", "value": 9 },
+      { "name": "chartData.uniqueness", "value": 8 }
+    ]
+  },
+  {
+    "id": 4,
+    "label": "checkboxData.label4",
+    "description": "checkboxData.description4",
+    "additionalInfo": [
+      "checkboxData.additionalInfo4_1",
+      "checkboxData.additionalInfo4_2",
+      "checkboxData.additionalInfo4_3"
+    ],
+    "chartData": [
+      { "name": "chartData.sweetness", "value": 7 },
+      { "name": "chartData.freshness", "value": 3 },
+      { "name": "chartData.weight", "value": 5 },
+      { "name": "chartData.uniqueness", "value": 6 }
+    ]
+  },
+  {
+    "id": 5,
+    "label": "checkboxData.label5",
+    "description": "checkboxData.description5",
+    "additionalInfo": [
+      "checkboxData.additionalInfo5_1",
+      "checkboxData.additionalInfo5_2",
+      "checkboxData.additionalInfo5_3"
+    ],
+    "chartData": [
+      { "name": "chartData.sweetness", "value": 9 },
+      { "name": "chartData.freshness", "value": 7 },
+      { "name": "chartData.weight", "value": 4 },
+      { "name": "chartData.uniqueness", "value": 5 }
+    ]
+  },
+  {
+    "id": 6,
+    "label": "checkboxData.label6",
+    "description": "checkboxData.description6",
+    "additionalInfo": [
+      "checkboxData.additionalInfo6_1",
+      "checkboxData.additionalInfo6_2",
+      "checkboxData.additionalInfo6_3"
+    ],
+    "chartData": [
+      { "name": "chartData.sweetness", "value": 4 },
+      { "name": "chartData.freshness", "value": 3 },
+      { "name": "chartData.weight", "value": 8 },
+      { "name": "chartData.uniqueness", "value": 9 }
+    ]
+  }
+]
