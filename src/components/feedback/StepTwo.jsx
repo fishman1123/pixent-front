@@ -1,5 +1,4 @@
 // src/components/stepTwo/StepTwo.jsx
-
 import React, { useState, useEffect } from "react";
 import downIcon from "../../assets/down.svg";
 import PrimeModal from "../PrimeModal";
@@ -12,80 +11,97 @@ import {
   setStepTwoSelections,
 } from "../../store/feedbackSlice.js";
 
-// 1) Import the raw JSON data
 import rawCheckboxData from "../../checkboxData.json";
-
-// 2) Import your InfoButton
 import { InfoButton } from "../InfoButton";
-
-// 3) Import i18n
 import { useTranslation } from "react-i18next";
+
+// 🟢 Import the ToastModal
+import ToastModal from "../ToastModal";
+import barChart from "../../assets/barchart.svg";
 
 export const StepTwo = ({ onNext, onBack }) => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
 
   const stepOneRatio = useSelector((state) => state.feedback.stepOneRatio);
+
   const [openAccordion, setOpenAccordion] = useState(null);
   const [selectedOptions, setSelectedOptions] = useState({});
   const [percentages, setPercentages] = useState({});
   const [modalMessage, setModalMessage] = useState("");
   const [showModal, setShowModal] = useState(false);
 
-  // 4) Translated JSON data state
+  // 🟢 Local state for showing/hiding Toast
+  const [showToast, setShowToast] = useState(false);
+
   const [translatedData, setTranslatedData] = useState([]);
 
-  // Prepare fragrance notes
-  const fragranceNotes = [
+  const rawFragranceNotes = [
     {
-      name: "시트러스",
-      content: "상큼한 과일 향이 가득한 시트러스 향.",
+      nameKey: "fragranceNotes.citrusName",
+      contentKey: "fragranceNotes.citrusContent",
       categoryId: 1,
     },
     {
-      name: "플로럴",
-      content: "우아한 꽃향기가 조화를 이루는 플로럴 계열.",
+      nameKey: "fragranceNotes.floralName",
+      contentKey: "fragranceNotes.floralContent",
       categoryId: 2,
     },
     {
-      name: "우디",
-      content: "고급스러운 나무 향이 특징인 우디 계열.",
+      nameKey: "fragranceNotes.woodyName",
+      contentKey: "fragranceNotes.woodyContent",
       categoryId: 3,
     },
-    { name: "머스크", content: "부드럽고 포근한 머스크 향.", categoryId: 4 },
     {
-      name: "프루티",
-      content: "달콤하고 신선한 과일 향이 나는 프루티 계열.",
+      nameKey: "fragranceNotes.muskName",
+      contentKey: "fragranceNotes.muskContent",
+      categoryId: 4,
+    },
+    {
+      nameKey: "fragranceNotes.fruityName",
+      contentKey: "fragranceNotes.fruityContent",
       categoryId: 5,
     },
     {
-      name: "스파이시",
-      content: "강렬하고 매콤한 스파이시 향.",
+      nameKey: "fragranceNotes.spicyName",
+      contentKey: "fragranceNotes.spicyContent",
       categoryId: 6,
     },
-  ].map((note) => ({
-    ...note,
-    options: optionData.filter(
-      (option) => option.categoryId === note.categoryId,
-    ),
+  ];
+
+  // Dynamically translate each note name/content
+  const fragranceNotes = rawFragranceNotes.map((note) => ({
+    name: t(note.nameKey),
+    content: t(note.contentKey),
+    categoryId: note.categoryId,
+    options: optionData.filter((opt) => opt.categoryId === note.categoryId),
   }));
 
-  // 5) Translate `rawCheckboxData` on mount or language change
   useEffect(() => {
-    const data = rawCheckboxData.map((item) => ({
-      ...item,
-      label: t(item.label),
-      description: t(item.description),
-      additionalInfo: item.additionalInfo.map((info) => t(info)),
-      chartData: item.chartData.map((d) => ({
+    const data = rawCheckboxData.map((item) => {
+      const labelTranslated = t(item.label);
+      const descTranslated = t(item.description);
+
+      const additionalInfoTranslated = item.additionalInfo.map((info) =>
+        t(info),
+      );
+      const chartDataTranslated = item.chartData.map((d) => ({
         ...d,
         name: t(d.name),
-      })),
-    }));
+      }));
+
+      return {
+        ...item,
+        label: labelTranslated,
+        description: descTranslated,
+        additionalInfo: additionalInfoTranslated,
+        chartData: chartDataTranslated,
+      };
+    });
+
     setTranslatedData(data);
   }, [t]);
 
-  // Helpers
   const resetSelections = () => {
     dispatch(resetStepTwoSelections());
     setSelectedOptions({});
@@ -97,15 +113,12 @@ export const StepTwo = ({ onNext, onBack }) => {
     setOpenAccordion(openAccordion === noteName ? null : noteName);
   };
 
-  // Count how many note picks are selected
   const getTotalSelectedCount = (optionsObj) =>
     Object.values(optionsObj).reduce((sum, arr) => sum + arr.length, 0);
 
-  // Sum of all assigned percentages
   const getTotalPercentages = (pcts) =>
     Object.values(pcts).reduce((sum, val) => sum + (val || 0), 0);
 
-  // Remove a note selection and its percentage
   const removeSelection = (noteName, option) => {
     setSelectedOptions((prev) => {
       const copy = { ...prev };
@@ -119,27 +132,22 @@ export const StepTwo = ({ onNext, onBack }) => {
     });
   };
 
-  // Select / Deselect a note
   const handleOptionSelect = (noteName, option) => {
     setSelectedOptions((prev) => {
       const newSelections = { ...prev };
       if (!newSelections[noteName]) newSelections[noteName] = [];
 
       const alreadySelected = newSelections[noteName].includes(option);
-
       if (alreadySelected) {
-        // Remove the note
         newSelections[noteName] = newSelections[noteName].filter(
           (o) => o !== option,
         );
-        // Also remove from percentages
         setPercentages((prevP) => {
           const copy = { ...prevP };
           delete copy[option];
           return copy;
         });
       } else {
-        // Ensure total note picks won't exceed 2
         const totalIfWeAdd = getTotalSelectedCount({
           ...prev,
           [noteName]: [...newSelections[noteName], option],
@@ -152,10 +160,8 @@ export const StepTwo = ({ onNext, onBack }) => {
           return prev; // revert
         }
 
-        // Add the new note
         newSelections[noteName] = [...newSelections[noteName], option];
 
-        // Default to 10% for that note
         const oldPcts = { ...percentages };
         const newPcts = { ...oldPcts, [option]: 10 };
 
@@ -165,7 +171,7 @@ export const StepTwo = ({ onNext, onBack }) => {
             `사용자 지정 비율(${stepOneRatio}%)을 초과할 수 없습니다.`,
           );
           setShowModal(true);
-          return prev; // revert
+          return prev;
         }
 
         setPercentages(newPcts);
@@ -174,7 +180,6 @@ export const StepTwo = ({ onNext, onBack }) => {
     });
   };
 
-  // Adjust a note's percentage
   const adjustPercentage = (option, amount, e) => {
     e.stopPropagation();
     e.preventDefault();
@@ -182,13 +187,11 @@ export const StepTwo = ({ onNext, onBack }) => {
     setPercentages((prev) => {
       const copy = { ...prev };
       const oldVal = copy[option] ?? 10;
-      let newVal = Math.max(10, Math.min(100, oldVal + amount));
+      const newVal = Math.max(10, Math.min(100, oldVal + amount));
       copy[option] = newVal;
 
-      // Check if we exceed stepOneRatio
       const totalPct = getTotalPercentages(copy);
       if (stepOneRatio && totalPct > stepOneRatio) {
-        // Revert
         copy[option] = oldVal;
         setModalMessage(
           `사용자 지정 비율(${stepOneRatio}%)을 초과할 수 없습니다.`,
@@ -199,22 +202,31 @@ export const StepTwo = ({ onNext, onBack }) => {
     });
   };
 
-  // Sync to Redux
   useEffect(() => {
     dispatch(setStepTwoSelections({ selectedOptions, percentages }));
   }, [selectedOptions, percentages, dispatch]);
 
-  // Reset if unmounted
   useEffect(() => {
     return () => {
       resetSelections();
     };
   }, [dispatch]);
 
-  // Step navigation
+  // The button handler
   const handleNext = () => {
     dispatch(setStepTwoSelections({ selectedOptions, percentages }));
-    onNext(selectedOptions, percentages);
+
+    // Convert the entire selection to a string
+    const noteNames = Object.keys(selectedOptions);
+    let firstSelectedNote = "";
+    if (noteNames.length > 0) {
+      firstSelectedNote = noteNames[0];
+    }
+
+    console.log("DEBUG => Passing a string to onNext:", firstSelectedNote);
+
+    // 🟢 Show the "success" toast
+    setShowToast(true);
   };
 
   const handleBack = () => {
@@ -222,13 +234,8 @@ export const StepTwo = ({ onNext, onBack }) => {
     onBack();
   };
 
-  // =========== KEY CHANGE: "canProceed" if leftover is 0 OR bigNumber is 100 ===========
-  // leftover = stepOneRatio - totalUsed
   const totalUsed = getTotalPercentages(percentages);
   const leftover = stepOneRatio - totalUsed;
-
-  // If leftover <= 0 => means we've hit or exceeded 100% of the target
-  // Also require at least one note has been selected
   const totalNotes = getTotalSelectedCount(selectedOptions);
   const canProceed = leftover <= 0 && totalNotes > 0 && stepOneRatio > 0;
 
@@ -236,7 +243,7 @@ export const StepTwo = ({ onNext, onBack }) => {
     <>
       <div className="w-full">
         <h2 className="text-black text-lg mb-4">
-          2단계: 어떤 향을 더 강조하고 싶으신가요?
+          {t("2단계: 어떤 향을 더 강조하고 싶으신가요?")}
         </h2>
 
         {/* Accordion List */}
@@ -245,7 +252,7 @@ export const StepTwo = ({ onNext, onBack }) => {
             const isOpen = openAccordion === note.name;
             const currentSelections = selectedOptions[note.name] || [];
 
-            // Find the matching data in the translated array
+            // matchingData used for InfoButton
             const matchingData = translatedData.find(
               (item) => item.id === note.categoryId,
             ) || {
@@ -256,20 +263,20 @@ export const StepTwo = ({ onNext, onBack }) => {
             };
 
             return (
-              <div key={note.name} className="w-full border-b border-black">
-                {/* Accordion Header */}
+              <div
+                key={note.categoryId}
+                className="w-full border-b border-black"
+              >
                 <div className="flex flex-col">
                   <button
-                    onClick={() => handleAccordionToggle(note.name)}
+                    onClick={() => setOpenAccordion(isOpen ? null : note.name)}
                     className="w-full flex justify-between items-center pl-[4px] pr-[4px] py-3 text-[16px] font-medium bg-white text-black"
                   >
                     <div className="flex items-center space-x-2">
                       <span>{note.name}</span>
-                      {/* InfoButton */}
                       <div onClick={(e) => e.stopPropagation()}>
                         <InfoButton option={matchingData} />
                       </div>
-                      {/* Selected "chips" */}
                       {currentSelections.length > 0 && (
                         <div className="flex items-center flex-wrap gap-2">
                           {currentSelections.map((opt) => (
@@ -322,7 +329,6 @@ export const StepTwo = ({ onNext, onBack }) => {
                       return (
                         <div key={optionObj.id}>
                           <div className="flex flex-col bg-white justify-center text-black w-full px-4 py-2 border border-black h-[52px]">
-                            {/* The button to select/deselect */}
                             <button
                               type="button"
                               className="flex justify-between items-center w-full"
@@ -361,7 +367,6 @@ export const StepTwo = ({ onNext, onBack }) => {
                               )}
                             </button>
                           </div>
-                          {/* Show ScentProfile if selected */}
                           {isSelected && <ScentProfile data={optionObj} />}
                         </div>
                       );
@@ -373,10 +378,9 @@ export const StepTwo = ({ onNext, onBack }) => {
           })}
         </div>
 
-        {/* Bottom Buttons */}
+        {/* Buttons at the bottom */}
         <div className="px-6">
           <div className="flex justify-between mt-4">
-            {/* Go Back */}
             <div className="min-w-[140px]">
               <button
                 className="noanimationbutton flex items-center justify-center w-full"
@@ -388,7 +392,6 @@ export const StepTwo = ({ onNext, onBack }) => {
               </button>
             </div>
 
-            {/* Next / Save Feedback */}
             <div className="w-[145px]">
               <button
                 className={`noanimationbutton flex items-center justify-center w-full ${
@@ -416,6 +419,52 @@ export const StepTwo = ({ onNext, onBack }) => {
       >
         <p className="text-black">{modalMessage}</p>
       </PrimeModal>
+
+      {/* the contents inside of the toast wrapper needs to be separated */}
+      {showToast && (
+        <ToastModal onClose={() => setShowToast(false)}>
+          <div className="w-full px-2">
+            <div className="w-full p-2 mb-3 bg-gray-200">
+              <div className="mb-2">
+                <p>파생향 등록안내M</p>
+              </div>
+              <div></div>
+              <p>파생향 등록을 위해서는 관리자 승인이 필요합니다.</p>
+              <p>승인을 위해 관리자 키를 입력해주세요.</p>
+            </div>
+            <div className="flex gap-4">
+              <div className="w-full">
+                <button className="noanimationbutton flex flex-col items-center p-4 min-w-32 w-full h-auto">
+                  <span className="text-sm text-gray-700">
+                    <img
+                      src={barChart}
+                      alt="chart"
+                      className="w-10 h-10 font-light"
+                    />
+                  </span>
+                  <span className="text-[12px] font-bold text-black">
+                    상세 보고서 확인하기
+                  </span>
+                </button>
+              </div>
+              <div className="w-full">
+                <button className="noanimationbutton flex flex-col items-center p-4 min-w-32 w-full h-auto">
+                  <span className="text-sm text-gray-700">
+                    <img
+                      src={barChart}
+                      alt="chart"
+                      className="w-10 h-10 font-light"
+                    />
+                  </span>
+                  <span className="text-[12px] font-bold text-black">
+                    상세 보고서 확인하기
+                  </span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </ToastModal>
+      )}
     </>
   );
 };

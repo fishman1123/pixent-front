@@ -13,38 +13,36 @@ export const FeedBackPage = () => {
   const location = useLocation();
   const dispatch = useDispatch();
 
-  // Pulled from route state
   const subId = location.state?.subId;
   const perfumeName = location.state?.perfumeName;
-  console.log("we got it: ", subId);
-  console.log("we got this too: ", perfumeName);
+  console.log("we got it:", subId);
+  console.log("we got this too:", perfumeName);
 
   // Step state (0 -> 1 -> 2)
   const [step, setStep] = useState(0);
 
-  // 1) Pull stepOneRatio (the user-chosen ratio in Step One) from Redux
+  // Pull stepOneRatio (user-chosen ratio) from Redux
   const stepOneRatio = useSelector((state) => state.feedback.stepOneRatio) || 0;
 
-  // 2) Pull Step Two data from Redux
+  // Pull Step Two data from Redux
   const { percentages, selectedOptions } = useSelector(
     (state) => state.feedback.stepTwoSelections,
   );
 
-  // 3) The sum of all assigned percentages in Step Two
+  // Sum of assigned percentages
   const selectedOption = Object.values(percentages).reduce(
     (sum, val) => sum + val,
     0,
   );
 
-  // 4) leftover: how many % still need to be added to reach the chosen ratio from Step One
+  // leftover: how many % still needed to fill
   const leftover = Math.max(stepOneRatio - selectedOption, 0);
 
-  // 5) bigNumber: (100 - stepOneRatio) + selectedOption, capped at 100
-  //    If user picks 30% => we start at 70%. As user adds ratio, it climbs up to 100% max
+  // bigNumber: base leftover plus assigned ratio, capped at 100
   const bigNumber = Math.min(100, 100 - stepOneRatio + selectedOption);
 
-  // Local state for storing an emphasized note from Step Two (if needed)
-  const [selectedNote, setSelectedNote] = useState(null);
+  // Local state for storing the chosen note's name (as a string)
+  const [selectedNote, setSelectedNote] = useState("");
 
   // Dummy data for demonstration
   const dummydataforfeed = {
@@ -69,7 +67,7 @@ export const FeedBackPage = () => {
     createdAt: "2025-02-05T00:00:00.000Z",
   };
 
-  // Format createdAt as desired (e.g., "2025년 2월 5일")
+  // Format purchase date
   const createdAtString = new Date(
     dummydataforfeed.createdAt,
   ).toLocaleDateString("ko-KR", {
@@ -78,7 +76,7 @@ export const FeedBackPage = () => {
     day: "numeric",
   });
 
-  // On mount, store original chart data in Redux
+  // Store original chart data in Redux on mount
   useEffect(() => {
     dispatch(
       setOriginalChartData({
@@ -93,11 +91,15 @@ export const FeedBackPage = () => {
   }, [dispatch]);
 
   // Step navigation
-  const nextStep = (value) => {
+  const nextStep = (noteName) => {
+    // noteName is guaranteed to be a string from StepTwo now
+    console.log("DEBUG => nextStep received:", noteName);
+
+    // If we're on Step 1 => Step 2, store the chosen note name
     if (step === 1) {
-      // from StepTwo => store note if needed
-      setSelectedNote(value);
+      setSelectedNote(noteName);
     }
+
     setStep((prev) => prev + 1);
   };
 
@@ -105,7 +107,7 @@ export const FeedBackPage = () => {
     setStep((prev) => (prev > 0 ? prev - 1 : 0));
   };
 
-  // We'll only show these UI blocks if user has chosen a ratio in Step One
+  // Only show leftover UI if user chose a ratio in Step One
   const shouldShowUI = stepOneRatio > 0;
 
   return (
@@ -116,31 +118,26 @@ export const FeedBackPage = () => {
 
       <div className="rounded-md bg-white p-4 mb-4">
         <div className="flex justify-between">
+          {/* Perfume Info */}
           <div className="flex flex-col">
             <h2 className="text-lg font-bold text-black">{perfumeName}</h2>
 
-            {/*
-              SMOOTH SLIDE-DOWN ANIMATION:
-              - Show date + leftover only if stepOneRatio > 0
-            */}
+            {/* Slide-down area */}
             <div
               className={`transition-all duration-500 overflow-hidden ${
                 shouldShowUI ? "max-h-32 mt-2" : "max-h-0"
               }`}
             >
-              {/* Left text: leftover is how many % still to fill from stepOneRatio */}
               <p className="text-gray-600 text-sm">
                 향을 {leftover}% 더 추가해주세요
               </p>
-
-              {/* Purchase date */}
               <p className="text-gray-600 text-[12px]">
                 구매일자: {createdAtString}
               </p>
             </div>
           </div>
 
-          {/* Right big text: how many % base remains plus added ratio, capped at 100 */}
+          {/* Big number on right */}
           <div
             className={`transition-all duration-500 overflow-hidden flex items-center ${
               shouldShowUI ? "max-h-32" : "max-h-0"
@@ -150,7 +147,7 @@ export const FeedBackPage = () => {
           </div>
         </div>
 
-        {/* Summarychart example */}
+        {/* Summary Chart */}
         <Summarychart
           inputCitrus={dummydataforfeed.citrus}
           inputFloral={dummydataforfeed.floral}
@@ -161,7 +158,7 @@ export const FeedBackPage = () => {
         />
       </div>
 
-      {/* Horizontal Step Slider */}
+      {/* Step Slider */}
       <div className="overflow-hidden w-full relative">
         <div
           className="flex transition-transform duration-500 ease-in-out"
@@ -174,26 +171,21 @@ export const FeedBackPage = () => {
 
           {/* Step 2 */}
           <div className="w-full shrink-0">
-            <StepTwo onNext={nextStep} onBack={prevStep} />
+            <StepTwo onBack={prevStep} />
           </div>
 
           {/* Step 3 */}
           <div className="w-full shrink-0">
-            <StepThree onBack={prevStep} />
+            <StepThree />
           </div>
         </div>
       </div>
 
-      {/* Extra info at the bottom (optional) */}
+      {/* Optional UI */}
       <div className="mt-6 text-center">
         {shouldShowUI && (
           <p className="text-gray-700 text-sm">
             현재까지 할당된 수정 비율(전체 합): {selectedOption}%
-          </p>
-        )}
-        {selectedNote && (
-          <p className="text-gray-700 text-sm">
-            선택한 강조 노트: {selectedNote}
           </p>
         )}
       </div>

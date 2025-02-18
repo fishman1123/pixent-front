@@ -73,7 +73,6 @@ export const Summarychart = ({
   }));
 
   const blended = useSelector(selectBlendedChartData);
-  console.log("SummaryChart >> blended from Redux:", blended);
 
   let finalData;
   if (blended) {
@@ -88,8 +87,6 @@ export const Summarychart = ({
   } else {
     finalData = originalData;
   }
-
-  console.log("SummaryChart >> final data used for chart:", finalData);
 
   return (
     <div className="w-full max-w-md mx-auto">
