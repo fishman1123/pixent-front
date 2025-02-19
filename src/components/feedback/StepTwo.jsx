@@ -13,7 +13,7 @@ import {
   setStepTwoSelections,
 } from "../../store/feedbackSlice.js";
 
-import rawCheckboxData from "../../../public/data/checkboxData.json";
+import rawCheckboxData from "../../../public/data/checkboxdata.json";
 import { InfoButton } from "../InfoButton";
 import { useTranslation } from "react-i18next";
 
