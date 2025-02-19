@@ -3,7 +3,7 @@ import React from "react";
 import { useDispatch } from "react-redux";
 import { setStepOneRatio } from "../../store/feedbackSlice"; // Adjust path as needed
 
-export const FeedbackOptions = ({ onSelect }) => {
+export const FeedBackOptions = ({ onSelect }) => {
   const dispatch = useDispatch();
 
   const options = [
