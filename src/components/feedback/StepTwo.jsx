@@ -5,7 +5,7 @@ import PrimeModal from "../PrimeModal";
 import cancelIcon from "../../assets/ax.svg";
 import chartIcon from "../../assets/newchart.svg";
 import reservationIcon from "../../assets/reservation.svg";
-import optionData from "../../../public/data/feedbackoptions.json";
+import optionData from "../../../public/data/feedbackchoice.json";
 import ScentProfile from "./ScentProfile";
 import { useSelector, useDispatch } from "react-redux";
 import {
