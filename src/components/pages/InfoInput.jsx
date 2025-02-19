@@ -9,7 +9,7 @@ import { InputTextTop } from "../inputInfo/InputTextTop";
 import { SelectForm } from "../inputInfo/SelectForm";
 import { Checkbox } from "../inputInfo/CheckBox";
 import { InputTextCenter } from "../inputInfo/InputTextCenter";
-import checkboxDataJson from "../../checkboxData.json"; // Import JSON data
+import checkboxDataJson from "../../../public/data/checkboxdata.json"; // Import JSON data
 
 export const InfoInput = () => {
   const { t } = useTranslation();
