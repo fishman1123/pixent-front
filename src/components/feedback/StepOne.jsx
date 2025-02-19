@@ -1,5 +1,5 @@
 import React from "react";
-import { FeedbackOptions } from "./FeedbackOptions";
+import { FeedbackOptions } from "./FeedbackOptions.jsx";
 
 export const StepOne = ({ onNext }) => {
   return (
