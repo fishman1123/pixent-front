@@ -112,9 +112,9 @@ export const FeedBackPage = () => {
 
   return (
     <div className="flex-col min-h-screen w-full pt-[10px] px-4 scrollbar-hide">
-      <h1 className="text-center text-xl font-bold text-black">
-        피드백 작성하기
-      </h1>
+      {/*<h1 className="text-center text-xl font-bold text-black">*/}
+      {/*  피드백 작성하기*/}
+      {/*</h1>*/}
 
       <div className="rounded-md bg-white p-4 mb-4">
         <div className="flex justify-between">

@@ -26,6 +26,8 @@ import { UserPage } from "./components/pages/UserPage.jsx";
 import { Collection } from "./components/pages/Collection.jsx";
 import { FeedBackPage } from "./components/pages/FeedBackPage.jsx";
 import NewChart from "./components/pages/NewChart.jsx";
+import { FeedBackChart } from "./components/FeedBackChart.jsx";
+import { FeedBackDetailPage } from "./components/pages/FeedBackDetailPage.jsx";
 
 export const RouterList = [
   {
@@ -92,7 +94,7 @@ export const RouterList = [
               },
               {
                 path: "dummy",
-                element: <NewChart />,
+                element: <FeedBackChart />,
               },
               {
                 path: "testTwo",
@@ -113,7 +115,16 @@ export const RouterList = [
               },
               {
                 path: "feedback",
-                element: <FeedBackPage />,
+                children: [
+                  {
+                    index: true,
+                    element: <FeedBackPage />,
+                  },
+                  {
+                    path: ":id",
+                    element: <FeedBackDetailPage />,
+                  },
+                ],
               },
               {
                 path: "report",

@@ -3,6 +3,8 @@ import React, { useState, useEffect } from "react";
 import downIcon from "../../assets/down.svg";
 import PrimeModal from "../PrimeModal";
 import cancelIcon from "../../assets/ax.svg";
+import chartIcon from "../../assets/newchart.svg";
+import reservationIcon from "../../assets/reservation.svg";
 import optionData from "../../feedbackoptions.json";
 import ScentProfile from "./ScentProfile";
 import { useSelector, useDispatch } from "react-redux";
@@ -15,9 +17,8 @@ import rawCheckboxData from "../../checkboxData.json";
 import { InfoButton } from "../InfoButton";
 import { useTranslation } from "react-i18next";
 
-// 🟢 Import the ToastModal
 import ToastModal from "../ToastModal";
-import barChart from "../../assets/barchart.svg";
+import FeedBackFinal from "./FeedBackFinal.jsx";
 
 export const StepTwo = ({ onNext, onBack }) => {
   const { t } = useTranslation();
@@ -31,7 +32,6 @@ export const StepTwo = ({ onNext, onBack }) => {
   const [modalMessage, setModalMessage] = useState("");
   const [showModal, setShowModal] = useState(false);
 
-  // 🟢 Local state for showing/hiding Toast
   const [showToast, setShowToast] = useState(false);
 
   const [translatedData, setTranslatedData] = useState([]);
@@ -225,7 +225,6 @@ export const StepTwo = ({ onNext, onBack }) => {
 
     console.log("DEBUG => Passing a string to onNext:", firstSelectedNote);
 
-    // 🟢 Show the "success" toast
     setShowToast(true);
   };
 
@@ -423,46 +422,7 @@ export const StepTwo = ({ onNext, onBack }) => {
       {/* the contents inside of the toast wrapper needs to be separated */}
       {showToast && (
         <ToastModal onClose={() => setShowToast(false)}>
-          <div className="w-full px-2">
-            <div className="w-full p-2 mb-3 bg-gray-200">
-              <div className="mb-2">
-                <p>파생향 등록안내M</p>
-              </div>
-              <div></div>
-              <p>파생향 등록을 위해서는 관리자 승인이 필요합니다.</p>
-              <p>승인을 위해 관리자 키를 입력해주세요.</p>
-            </div>
-            <div className="flex gap-4">
-              <div className="w-full">
-                <button className="noanimationbutton flex flex-col items-center p-4 min-w-32 w-full h-auto">
-                  <span className="text-sm text-gray-700">
-                    <img
-                      src={barChart}
-                      alt="chart"
-                      className="w-10 h-10 font-light"
-                    />
-                  </span>
-                  <span className="text-[12px] font-bold text-black">
-                    상세 보고서 확인하기
-                  </span>
-                </button>
-              </div>
-              <div className="w-full">
-                <button className="noanimationbutton flex flex-col items-center p-4 min-w-32 w-full h-auto">
-                  <span className="text-sm text-gray-700">
-                    <img
-                      src={barChart}
-                      alt="chart"
-                      className="w-10 h-10 font-light"
-                    />
-                  </span>
-                  <span className="text-[12px] font-bold text-black">
-                    상세 보고서 확인하기
-                  </span>
-                </button>
-              </div>
-            </div>
-          </div>
+          <FeedBackFinal />
         </ToastModal>
       )}
     </>

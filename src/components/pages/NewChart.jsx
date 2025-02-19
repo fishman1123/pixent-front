@@ -1,52 +1,114 @@
-import React, { useState } from "react";
+import React from "react";
 
-const ScentController = () => {
-  const [scentData, setScentData] = useState([
-    { name: "Citrus", start: 1.5, end: 10.0, change: 8.5 },
-    { name: "Floral", start: 6.0, end: 4.0, change: -2.0 },
-    { name: "Woody", start: 2.0, end: 6.0, change: 4.0 },
-    { name: "Musk", start: 2.0, end: 0.0, change: -2.0 },
-    { name: "Fruity", start: 0.0, end: 8.0, change: 0.0 },
-    { name: "Spicy", start: 0.0, end: 1.0, change: 0.0 },
-  ]);
+/**
+ * Props expected:
+ *  - inputCitrusOne, inputFloralOne, inputWoodyOne, inputMuskOne, inputFreshOne, inputSpicyOne
+ *  - inputCitrusTwo, inputFloralTwo, inputWoodyTwo, inputMuskTwo, inputFreshTwo, inputSpicyTwo
+ *
+ * Example usage:
+ *  <NewChart
+ *    // original
+ *    inputCitrusOne={dummyOne.citrus}
+ *    inputFloralOne={dummyOne.floral}
+ *    inputWoodyOne={dummyOne.woody}
+ *    inputMuskOne={dummyOne.musk}
+ *    inputFreshOne={dummyOne.fresh}
+ *    inputSpicyOne={dummyOne.spicy}
+ *    // new
+ *    inputCitrusTwo={dummyTwo.citrus}
+ *    inputFloralTwo={dummyTwo.floral}
+ *    inputWoodyTwo={dummyTwo.woody}
+ *    inputMuskTwo={dummyTwo.musk}
+ *    inputFreshTwo={dummyTwo.fresh}
+ *    inputSpicyTwo={dummyTwo.spicy}
+ *  />
+ */
+const NewChart = ({
+  // Original data
+  inputCitrusOne = 0,
+  inputFloralOne = 0,
+  inputWoodyOne = 0,
+  inputMuskOne = 0,
+  inputFreshOne = 0,
+  inputSpicyOne = 0,
 
-  const maxWidth = 240;
-  const scale = 24;
+  // New data
+  inputCitrusTwo = 0,
+  inputFloralTwo = 0,
+  inputWoodyTwo = 0,
+  inputMuskTwo = 0,
+  inputFreshTwo = 0,
+  inputSpicyTwo = 0,
+}) => {
+  const scentData = [
+    {
+      name: "Citrus",
+      start: inputCitrusOne,
+      end: inputCitrusTwo,
+      change: inputCitrusTwo - inputCitrusOne,
+    },
+    {
+      name: "Floral",
+      start: inputFloralOne,
+      end: inputFloralTwo,
+      change: inputFloralTwo - inputFloralOne,
+    },
+    {
+      name: "Woody",
+      start: inputWoodyOne,
+      end: inputWoodyTwo,
+      change: inputWoodyTwo - inputWoodyOne,
+    },
+    {
+      name: "Musk",
+      start: inputMuskOne,
+      end: inputMuskTwo,
+      change: inputMuskTwo - inputMuskOne,
+    },
+    {
+      name: "Fruity",
+      start: inputFreshOne,
+      end: inputFreshTwo,
+      change: inputFreshTwo - inputFreshOne,
+    },
+    {
+      name: "Spicy",
+      start: inputSpicyOne,
+      end: inputSpicyTwo,
+      change: inputSpicyTwo - inputSpicyOne,
+    },
+  ];
 
-  const formatNumber = (num) => {
-    return Number(num.toFixed(1)).toString();
-  };
+  // Defines how wide the chart can be (in px) and a scaling factor
+  const maxWidth = 130;
+  const scale = 3; // Multiply each data point by 2.4px to control bar length
 
-  const updateScentValue = (index, field, value) => {
-    const newData = [...scentData];
-    let newValue = parseFloat(value) || 0; // parseFloat로 변경하여 소수점 지원
+  // Small helper function to display numbers (e.g., rounding or formatting)
+  const formatNumber = (num) => `${num}`;
 
-    if (field !== "change") {
-      newValue = Math.max(0, newValue);
-      newValue = Math.round(newValue * 10) / 10; // 소수점 첫째자리까지만 유지
-    }
-
-    newData[index] = {
-      ...newData[index],
-      [field]: newValue,
-      change:
-        field === "start"
-          ? Number((newData[index].end - newValue).toFixed(1))
-          : field === "end"
-            ? Number((newValue - newData[index].start).toFixed(1))
-            : newValue,
-    };
-
-    setScentData(newData);
-  };
-
+  /**
+   * Component that renders a single horizontal line showing:
+   * 1. Start (original) -> End (new) range
+   * 2. A dashed portion if there's a negative difference
+   * 3. A label for the difference
+   */
   const ScentLine = ({ name, start, end, change }) => {
+    const left = Math.min(start, end) * scale; // left boundary in px
+    const width = Math.abs(end - start) * scale; // difference in px
+
     return (
       <div className="mb-8">
-        <div className="flex items-center">
+        <div className="flex justify-center items-center">
+          {/* Scent name on the left */}
           <span className="w-20 text-gray-500 text-sm">{name}</span>
+
+          {/* The bar container, fixed width (maxWidth) */}
           <div className="relative" style={{ width: maxWidth }}>
             <div className="flex items-center">
+              {/* The black line from 0 to end if you want a baseline:
+                  you could do:
+                  style={{ width: `${end * scale}px` }}
+                  but let's represent only the 'segment' from 0 up to end */}
               <div
                 className="h-[1px] border-t border-black"
                 style={{ width: `${end * scale}px` }}
@@ -61,12 +123,13 @@ const ScentController = () => {
                       top: "-6px",
                     }}
                   />
-
                   <div
-                    className={`absolute h-[1px] border-t ${change < 0 ? "border-dashed" : ""} border-black`}
+                    className={`absolute h-[1px] border-t ${
+                      change < 0 ? "border-dashed" : ""
+                    } border-black`}
                     style={{
-                      left: `${Math.min(start, end) * scale}px`,
-                      width: `${Math.abs(change) * scale}px`,
+                      left: `${left}px`,
+                      width: `${width}px`,
                     }}
                   />
 
@@ -78,10 +141,11 @@ const ScentController = () => {
                     }}
                   />
 
+                  {/* The difference label (e.g., +20 or -15) */}
                   <span
                     className="absolute -top-5 text-sm"
                     style={{
-                      left: `${((start + end) * scale) / 2}px`,
+                      left: `${((start + end) / 2) * scale}px`,
                       transform: "translateX(-50%)",
                     }}
                   >
@@ -93,6 +157,8 @@ const ScentController = () => {
               )}
             </div>
           </div>
+
+          {/* The "end" value label on the far right */}
           <span className="ml-8 text-sm w-8 text-right">
             {formatNumber(end)}
           </span>
@@ -104,9 +170,9 @@ const ScentController = () => {
   return (
     <div className="p-4 flex gap-8">
       <div className="flex-1">
-        {scentData.map((scent, index) => (
+        {scentData.map((scent, idx) => (
           <ScentLine
-            key={index}
+            key={idx}
             name={scent.name}
             start={scent.start}
             end={scent.end}
@@ -114,45 +180,8 @@ const ScentController = () => {
           />
         ))}
       </div>
-
-      <div className="w-72 p-4 bg-gray-50 rounded-lg">
-        <h3 className="text-lg font-medium mb-4">값 조정</h3>
-        {scentData.map((scent, index) => (
-          <div key={index} className="mb-4">
-            <h4 className="font-medium mb-2">{scent.name}</h4>
-            <div className="space-y-2">
-              <div className="flex items-center gap-2">
-                <label className="text-sm w-16">시작값:</label>
-                <input
-                  type="number"
-                  value={scent.start}
-                  onChange={(e) =>
-                    updateScentValue(index, "start", e.target.value)
-                  }
-                  className="w-24 px-2 py-1 border rounded"
-                  min="0"
-                  step="0.1"
-                />
-              </div>
-              <div className="flex items-center gap-2">
-                <label className="text-sm w-16">최종값:</label>
-                <input
-                  type="number"
-                  value={scent.end}
-                  onChange={(e) =>
-                    updateScentValue(index, "end", e.target.value)
-                  }
-                  className="w-24 px-2 py-1 border rounded"
-                  min="0"
-                  step="0.1"
-                />
-              </div>
-            </div>
-          </div>
-        ))}
-      </div>
     </div>
   );
 };
 
-export default ScentController;
+export default NewChart;

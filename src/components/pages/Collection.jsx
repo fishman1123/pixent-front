@@ -7,6 +7,27 @@ export const Collection = () => {
     user_report: [
       {
         user_uuid: "10101010", //user_id
+        id: 450,
+        userName: "카리나",
+        perfumeName: "AC'SCENT17",
+        mainNote: "레몬페퍼",
+        middleNote: "인센스",
+        baseNote: "오리스",
+        userImageUrl:
+          "https://pixent-image.s3.ap-northeast-2.amazonaws.com/user/2025-02-05-16-15-28-asdasd.jpg",
+        citrus: 10,
+        floral: 10,
+        woody: 70,
+        musk: 10,
+        fruity: 10,
+        spicy: 70,
+        uuid: "xxxxxxxxx",
+        hasfeedback: true,
+        hasCollection: true,
+        createdAt: "2025-02-05T00:00:00.000Z",
+      },
+      {
+        user_uuid: "10101010", //user_id
         id: 451,
         userName: "카리나",
         perfumeName: "AC'SCENT17",

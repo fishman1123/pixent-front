@@ -17,6 +17,11 @@ export const CollectionTop = ({ dataOne, dataTwo }) => {
     navigate("/feedback", { state: { subId, perfumeName } });
   };
 
+  const handleFeedBackCheck = (subId) => {
+    if (!subId) return;
+    // Navigate to feedback/:id, where `id` is the subId
+    navigate(`/feedback/${subId}`);
+  };
   const slides = dataOne.user_report.map((report) => {
     const matched = dataTwo.user_report.filter((item) => item.id === report.id);
     // Build "items"
@@ -43,7 +48,7 @@ export const CollectionTop = ({ dataOne, dataTwo }) => {
         musk: report.musk ?? 0,
         fruity: report.fruity ?? 0,
         spicy: report.spicy ?? 0,
-        subId: null,
+        subId: report.uuid,
         hasfeedback: report.hasfeedback ?? false,
       },
     });
@@ -205,16 +210,34 @@ export const CollectionTop = ({ dataOne, dataTwo }) => {
                         key={idx2}
                         className="flex items-center justify-between bg-[#333] p-3 mb-6"
                       >
+                        {/* Left side: Bullet point, item name, button, and subName */}
                         <div>
-                          <span className="mr-2">•</span>
-                          <span className="font-[inter]">{item.name}</span>
+                          <div className="flex items-center gap-3">
+                            <span>•</span>
+                            <span className="font-[inter]">{item.name}</span>
+
+                            {/* Button right next to item.name */}
+                            <div className="flex justify-center">
+                              {idx2 === 0 ? (
+                                ""
+                              ) : (
+                                <div className="noanimationbutton flex items-center justify-center min-h-[20px] px-2 py-1 pt-0 bg-black border border-white text-white">
+                                  <span className="text-sm font-medium tracking-wide">
+                                    A/S
+                                  </span>
+                                </div>
+                              )}
+                            </div>
+                          </div>
                           {item.subName && (
                             <p className="text-gray-400 text-sm">
                               {item.subName}
                             </p>
                           )}
                         </div>
-                        <div className="text-sm">{item.date}</div>
+
+                        {/* Right side: item.date */}
+                        <div className="text-sm ml-6">{item.date}</div>
                       </div>
                     ))}
                   </div>
@@ -343,7 +366,10 @@ export const CollectionTop = ({ dataOne, dataTwo }) => {
             <div className="mx-[20px]">
               <div className="flex gap-4 mt-6">
                 <div className="w-full">
-                  <button className="noanimationbutton flex border flex-col items-center p-4 min-w-32 w-full h-auto">
+                  <button
+                    className="noanimationbutton flex border flex-col items-center p-4 min-w-32 w-full h-auto"
+                    onClick={() => handleFeedBackCheck(chart.data.subId)}
+                  >
                     <span className="text-sm text-gray-700">
                       <img
                         src={barChart}
