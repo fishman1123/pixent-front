@@ -1,5 +1,5 @@
 import React from "react";
-import { FeedbackOptions } from "./FeedbackOptions.jsx";
+import { FeedbBckOptions } from "./FeedBackOptions";
 
 export const StepOne = ({ onNext }) => {
   return (
@@ -7,7 +7,7 @@ export const StepOne = ({ onNext }) => {
       <h2 className="text-black text-lg mb-4">
         1단계: 현재 향수를 얼마나 유지하고 싶으신가요?
       </h2>
-      <FeedbackOptions onSelect={onNext} />
+      <FeedbBckOptions onSelect={onNext} />
     </div>
   );
 };
