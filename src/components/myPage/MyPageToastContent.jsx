@@ -48,7 +48,9 @@ export const MyPageToastContent = ({
         </div>
         <div className="flex flex-col justify-center">
           <div className="text-[12px] text-end">분석일자</div>
-          <div className="text-[14px] text-[#666666]">2024-10-23</div>
+          <div className="text-[14px] text-[#666666]">
+            {selectedReport.createdAt}
+          </div>
         </div>
       </div>
 

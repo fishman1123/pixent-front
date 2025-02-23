@@ -33,14 +33,6 @@ export function UserPage() {
     },
   ];
 
-  if (isLoading) {
-    return <div>Loading ...</div>;
-  }
-
-  if (isError) {
-    return <div>Something went wrong fetching user info.</div>;
-  }
-
   useEffect(() => {
     if (!userInfo) return;
 
@@ -133,6 +125,7 @@ export function UserPage() {
           </div>
         </div>
       </PortalModal>
+
       {/*payment part*/}
 
       {/*<div className="w-full border-t border-black mt-6">*/}

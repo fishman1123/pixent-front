@@ -7,10 +7,13 @@ export const useGetUserAllReport = (enabled = false) => {
     queryKey: ["userAllReport"],
     queryFn: async () => {
       const response = await AxiosInstance.get("/api/user/report");
+      console.log("Fetched userAllReport:", response.data);
       return response.data;
     },
     enabled,
+
     staleTime: Infinity,
+    cacheTime: Infinity,
     refetchOnWindowFocus: false,
     refetchOnMount: false,
   });
