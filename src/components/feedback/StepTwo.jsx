@@ -5,7 +5,7 @@ import PrimeModal from "../PrimeModal";
 import cancelIcon from "../../assets/ax.svg";
 import chartIcon from "../../assets/newchart.svg";
 import reservationIcon from "../../assets/reservation.svg";
-import optionData from "../../../public/data/feedbackchoice.json";
+import optionData from "../../data/feedbackchoice.json";
 import ScentProfile from "./ScentProfile";
 import { useSelector, useDispatch } from "react-redux";
 import {
@@ -13,7 +13,7 @@ import {
   setStepTwoSelections,
 } from "../../store/feedbackSlice.js";
 
-import rawCheckboxData from "../../../public/data/checkboxdata.json";
+import rawCheckboxData from "../../data/checkboxdata.json";
 import { InfoButton } from "../InfoButton";
 import { useTranslation } from "react-i18next";
 

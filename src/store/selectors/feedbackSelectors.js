@@ -1,5 +1,5 @@
 import { createSelector } from "@reduxjs/toolkit";
-import optionData from "../../../public/data/feedbackchoice.json";
+import optionData from "../../data/feedbackchoice.json";
 
 export const selectBlendedChartData = createSelector(
   [
