@@ -52,7 +52,7 @@ export const Intro = () => {
           nickname: userInfo.username,
           email: userInfo.email,
           provider: userInfo.provider,
-          viewChance: userInfo.usageLimit,
+          usageLimit: userInfo.usageLimit,
         }),
       );
     }
