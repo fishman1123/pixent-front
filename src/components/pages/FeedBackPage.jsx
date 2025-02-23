@@ -9,75 +9,79 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setOriginalChartData } from "../../store/feedbackSlice.js";
 
+// 1) The new Suspense-based hook
+import { useNewGetReportByUuid } from "../../hooks/useNewGetReportByUuid";
+
 export const FeedBackPage = () => {
   const location = useLocation();
   const dispatch = useDispatch();
 
+  // subId & optional perfumeName from route state
   const subId = location.state?.subId;
-  const perfumeName = location.state?.perfumeName;
-  console.log("we got it:", subId);
-  console.log("we got this too:", perfumeName);
+  const routePerfumeName = location.state?.perfumeName;
 
-  // Step state (0 -> 1 -> 2)
+  // 2) Unconditionally call our Suspense hook. Must be inside a <Suspense> boundary.
+  const { data: reportData } = useNewGetReportByUuid(subId);
+
+  // 3) We'll store the reconstructed dummy object in state
+  const [dummydataforfeed, setDummydataforfeed] = useState(null);
+
+  // 4) Reconstruct once we have the server data
+  useEffect(() => {
+    if (!reportData) return; // Typically won't happen if Suspense ensures data is loaded
+
+    console.log("Fetched reportData via Suspense:", reportData);
+
+    // Provide a fallback date if 'createdAt' is missing
+    const safeDate = reportData.createdAt || "2025-02-05T00:00:00.000Z";
+
+    // Build the dummy shape
+    const reconstructed = {
+      user_uuid: reportData.userId ?? "UnknownUUID",
+      id: reportData.id ?? 0,
+      userName: reportData.userName ?? "UnknownUser",
+      perfumeName: reportData.perfumeName ?? "UnknownPerfume",
+      mainNote: reportData.mainNote ?? "",
+      middleNote: reportData.middleNote ?? "",
+      baseNote: reportData.baseNote ?? "",
+      userImageUrl: reportData.userImageUrl ?? "",
+      citrus: reportData.citrus ?? 0,
+      floral: reportData.floral ?? 0,
+      woody: reportData.woody ?? 0,
+      musk: reportData.musk ?? 0,
+      fruity: reportData.fruity ?? 0,
+      spicy: reportData.spicy ?? 0,
+      uuid: reportData.uuid ?? "",
+      hasfeedback: reportData.hasFeedback ?? false,
+      hasCollection: reportData.collection ?? false,
+      createdAt: safeDate,
+    };
+
+    console.log("Reconstructed dummydataforfeed:", reconstructed);
+    setDummydataforfeed(reconstructed);
+  }, [reportData]);
+
+  // 5) Step and Redux logic. We always call these hooks, even if we don't yet have dummydataforfeed.
   const [step, setStep] = useState(0);
 
-  // Pull stepOneRatio (user-chosen ratio) from Redux
   const stepOneRatio = useSelector((state) => state.feedback.stepOneRatio) || 0;
-
-  // Pull Step Two data from Redux
-  const { percentages, selectedOptions } = useSelector(
+  const { percentages } = useSelector(
     (state) => state.feedback.stepTwoSelections,
   );
 
-  // Sum of assigned percentages
   const selectedOption = Object.values(percentages).reduce(
     (sum, val) => sum + val,
     0,
   );
-
-  // leftover: how many % still needed to fill
   const leftover = Math.max(stepOneRatio - selectedOption, 0);
-
-  // bigNumber: base leftover plus assigned ratio, capped at 100
   const bigNumber = Math.min(100, 100 - stepOneRatio + selectedOption);
 
-  // Local state for storing the chosen note's name (as a string)
   const [selectedNote, setSelectedNote] = useState("");
 
-  // Dummy data for demonstration
-  const dummydataforfeed = {
-    user_uuid: "10101010",
-    id: 451,
-    userName: "카리나",
-    perfumeName: "AC'SCENT17",
-    mainNote: "레몬페퍼",
-    middleNote: "인센스",
-    baseNote: "오리스",
-    userImageUrl:
-      "https://pixent-image.s3.ap-northeast-2.amazonaws.com/user/2025-02-05-16-15-28-asdasd.jpg",
-    citrus: 10,
-    floral: 10,
-    woody: 70,
-    musk: 10,
-    fruity: 10,
-    spicy: 70,
-    uuid: "xxxxxxxxx",
-    hasfeedback: true,
-    hasCollection: true,
-    createdAt: "2025-02-05T00:00:00.000Z",
-  };
-
-  // Format purchase date
-  const createdAtString = new Date(
-    dummydataforfeed.createdAt,
-  ).toLocaleDateString("ko-KR", {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  });
-
-  // Store original chart data in Redux on mount
+  // 6) When dummydataforfeed is updated, store chart data. But we do NOT skip any hooks if it's null.
   useEffect(() => {
+    if (!dummydataforfeed) return;
+
     dispatch(
       setOriginalChartData({
         citrus: dummydataforfeed.citrus,
@@ -88,18 +92,13 @@ export const FeedBackPage = () => {
         spicy: dummydataforfeed.spicy,
       }),
     );
-  }, [dispatch]);
+  }, [dispatch, dummydataforfeed]);
 
-  // Step navigation
   const nextStep = (noteName) => {
-    // noteName is guaranteed to be a string from StepTwo now
     console.log("DEBUG => nextStep received:", noteName);
-
-    // If we're on Step 1 => Step 2, store the chosen note name
     if (step === 1) {
       setSelectedNote(noteName);
     }
-
     setStep((prev) => prev + 1);
   };
 
@@ -107,88 +106,100 @@ export const FeedBackPage = () => {
     setStep((prev) => (prev > 0 ? prev - 1 : 0));
   };
 
-  // Only show leftover UI if user chose a ratio in Step One
   const shouldShowUI = stepOneRatio > 0;
 
-  return (
-    <div className="flex-col min-h-screen w-full pt-[10px] px-4 scrollbar-hide">
-      {/*<h1 className="text-center text-xl font-bold text-black">*/}
-      {/*  피드백 작성하기*/}
-      {/*</h1>*/}
+  // 7) Instead of returning early, we conditionally render if dummydataforfeed is null
+  let content;
 
-      <div className="rounded-md bg-white p-4 mb-4">
-        <div className="flex justify-between">
-          {/* Perfume Info */}
-          <div className="flex flex-col">
-            <h2 className="text-lg font-bold text-black">{perfumeName}</h2>
+  if (!dummydataforfeed) {
+    // Suspense might have loaded 'reportData' but we haven't reconstructed yet
+    content = <div>Reconstructing data from the server...</div>;
+  } else {
+    // We have our dummy object
+    const createdAtString = new Date(
+      dummydataforfeed.createdAt,
+    ).toLocaleDateString("ko-KR", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    });
 
-            {/* Slide-down area */}
+    const finalPerfumeName = routePerfumeName || dummydataforfeed.perfumeName;
+
+    content = (
+      <>
+        <div className="rounded-md bg-white p-4 mb-4">
+          <div className="flex justify-between">
+            <div className="flex flex-col">
+              <h2 className="text-lg font-bold text-black">
+                {finalPerfumeName}
+              </h2>
+
+              <div
+                className={`transition-all duration-500 overflow-hidden ${
+                  shouldShowUI ? "max-h-32 mt-2" : "max-h-0"
+                }`}
+              >
+                <p className="text-gray-600 text-sm">
+                  향을 {leftover}% 더 추가해주세요
+                </p>
+                <p className="text-gray-600 text-[12px]">
+                  구매일자: {createdAtString}
+                </p>
+              </div>
+            </div>
+
             <div
-              className={`transition-all duration-500 overflow-hidden ${
-                shouldShowUI ? "max-h-32 mt-2" : "max-h-0"
+              className={`transition-all duration-500 overflow-hidden flex items-center ${
+                shouldShowUI ? "max-h-32" : "max-h-0"
               }`}
             >
-              <p className="text-gray-600 text-sm">
-                향을 {leftover}% 더 추가해주세요
-              </p>
-              <p className="text-gray-600 text-[12px]">
-                구매일자: {createdAtString}
-              </p>
+              <p className="text-[54px] text-black font-bold">{bigNumber}%</p>
             </div>
           </div>
 
-          {/* Big number on right */}
+          <Summarychart
+            inputCitrus={dummydataforfeed.citrus}
+            inputFloral={dummydataforfeed.floral}
+            inputWoody={dummydataforfeed.woody}
+            inputMusk={dummydataforfeed.musk}
+            inputSpicy={dummydataforfeed.spicy}
+            inputFresh={dummydataforfeed.fruity}
+          />
+        </div>
+
+        <div className="overflow-hidden w-full relative">
           <div
-            className={`transition-all duration-500 overflow-hidden flex items-center ${
-              shouldShowUI ? "max-h-32" : "max-h-0"
-            }`}
+            className="flex transition-transform duration-500 ease-in-out"
+            style={{ transform: `translateX(-${step * 100}%)` }}
           >
-            <p className="text-[54px] text-black font-bold">{bigNumber}%</p>
+            <div className="w-full shrink-0">
+              <StepOne onNext={nextStep} />
+            </div>
+            <div className="w-full shrink-0">
+              <StepTwo onBack={prevStep} />
+            </div>
+            <div className="w-full shrink-0">
+              <StepThree />
+            </div>
           </div>
         </div>
 
-        {/* Summary Chart */}
-        <Summarychart
-          inputCitrus={dummydataforfeed.citrus}
-          inputFloral={dummydataforfeed.floral}
-          inputWoody={dummydataforfeed.woody}
-          inputMusk={dummydataforfeed.musk}
-          inputSpicy={dummydataforfeed.spicy}
-          inputFresh={dummydataforfeed.fruity}
-        />
-      </div>
-
-      {/* Step Slider */}
-      <div className="overflow-hidden w-full relative">
-        <div
-          className="flex transition-transform duration-500 ease-in-out"
-          style={{ transform: `translateX(-${step * 100}%)` }}
-        >
-          {/* Step 1 */}
-          <div className="w-full shrink-0">
-            <StepOne onNext={nextStep} />
-          </div>
-
-          {/* Step 2 */}
-          <div className="w-full shrink-0">
-            <StepTwo onBack={prevStep} />
-          </div>
-
-          {/* Step 3 */}
-          <div className="w-full shrink-0">
-            <StepThree />
-          </div>
+        <div className="mt-6 text-center">
+          {shouldShowUI && (
+            <p className="text-gray-700 text-sm">
+              현재까지 할당된 수정 비율(전체 합): {selectedOption}%
+            </p>
+          )}
         </div>
-      </div>
+      </>
+    );
+  }
 
-      {/* Optional UI */}
-      <div className="mt-6 text-center">
-        {shouldShowUI && (
-          <p className="text-gray-700 text-sm">
-            현재까지 할당된 수정 비율(전체 합): {selectedOption}%
-          </p>
-        )}
-      </div>
+  // 8) Return everything. All hooks were called unconditionally above.
+  return (
+    <div className="flex-col min-h-screen w-full pt-[10px] px-4 scrollbar-hide">
+      {content}
     </div>
   );
 };

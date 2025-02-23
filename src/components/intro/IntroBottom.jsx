@@ -64,13 +64,6 @@ export const IntroBottom = () => {
       .catch((err) => console.error("Failed to copy:", err));
   };
 
-  /**
-   * handleCollectionClick:
-   *  - Sets local state to "pending"
-   *  - Calls POST /api/user/report/:uuid
-   *  - On success => toggle "default" ↔ "added"
-   *  - On error => revert to old state
-   */
   const handleCollectionClick = (reportId) => {
     const currentState = collectionStates[reportId] || "default";
     const report = reportList.find((r) => r.id === reportId);
@@ -85,6 +78,7 @@ export const IntroBottom = () => {
     postCollectionCheck(report.uuid, {
       onSuccess: () => {
         const nextState = currentState === "default" ? "added" : "default";
+        console.log("check here :", selectedReport.collection);
         setCollectionStates((prev) => ({
           ...prev,
           [reportId]: nextState,

@@ -20,10 +20,14 @@ import { useTranslation } from "react-i18next";
 import ToastModal from "../ToastModal";
 import FeedBackFinal from "./FeedBackFinal.jsx";
 
+// ADD: We'll need setAttribute from feedbackPostSlice
+import { setAttribute } from "../../store/feedbackPostSlice.js";
+
 export const StepTwo = ({ onNext, onBack }) => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
 
+  // This ratio is decided in StepOne
   const stepOneRatio = useSelector((state) => state.feedback.stepOneRatio);
 
   const [openAccordion, setOpenAccordion] = useState(null);
@@ -36,6 +40,7 @@ export const StepTwo = ({ onNext, onBack }) => {
 
   const [translatedData, setTranslatedData] = useState([]);
 
+  // The full set of major fragrance categories
   const rawFragranceNotes = [
     {
       nameKey: "fragranceNotes.citrusName",
@@ -69,7 +74,7 @@ export const StepTwo = ({ onNext, onBack }) => {
     },
   ];
 
-  // Dynamically translate each note name/content
+  // Convert each note to: { name, content, categoryId, options: [...] }
   const fragranceNotes = rawFragranceNotes.map((note) => ({
     name: t(note.nameKey),
     content: t(note.contentKey),
@@ -78,6 +83,7 @@ export const StepTwo = ({ onNext, onBack }) => {
   }));
 
   useEffect(() => {
+    // Translate data from rawCheckboxData
     const data = rawCheckboxData.map((item) => {
       const labelTranslated = t(item.label);
       const descTranslated = t(item.description);
@@ -139,6 +145,7 @@ export const StepTwo = ({ onNext, onBack }) => {
 
       const alreadySelected = newSelections[noteName].includes(option);
       if (alreadySelected) {
+        // Deselect
         newSelections[noteName] = newSelections[noteName].filter(
           (o) => o !== option,
         );
@@ -202,29 +209,58 @@ export const StepTwo = ({ onNext, onBack }) => {
     });
   };
 
+  // Sync local changes to feedbackSlice
   useEffect(() => {
     dispatch(setStepTwoSelections({ selectedOptions, percentages }));
   }, [selectedOptions, percentages, dispatch]);
 
+  // On unmount, reset
   useEffect(() => {
     return () => {
       resetSelections();
     };
   }, [dispatch]);
 
-  // The button handler
+  // ADD: A lookup from categoryId -> key in feedbackPost
+  const categoryMapping = {
+    1: "citrus",
+    2: "floral",
+    3: "woody",
+    4: "musk",
+    5: "fruity",
+    6: "spicy",
+  };
+
+  // NEW: Each time selectedOptions or percentages changes,
+  // calculate how much each major note (citrus/floral/etc.) was allocated
+  useEffect(() => {
+    let sums = {
+      citrus: 0,
+      floral: 0,
+      woody: 0,
+      musk: 0,
+      fruity: 0,
+      spicy: 0,
+    };
+
+    // Go through each top-level fragrance category
+    fragranceNotes.forEach((note) => {
+      const catKey = categoryMapping[note.categoryId]; // e.g. 'citrus'
+      const selectedInThisNote = selectedOptions[note.name] || [];
+      // Sum all selected sub-options' percentages
+      selectedInThisNote.forEach((optionName) => {
+        sums[catKey] += percentages[optionName] || 0;
+      });
+    });
+
+    // Store these sums in feedbackPost
+    Object.entries(sums).forEach(([key, value]) => {
+      dispatch(setAttribute({ key, value }));
+    });
+  }, [fragranceNotes, selectedOptions, percentages, dispatch]);
+
   const handleNext = () => {
-    dispatch(setStepTwoSelections({ selectedOptions, percentages }));
-
-    // Convert the entire selection to a string
-    const noteNames = Object.keys(selectedOptions);
-    let firstSelectedNote = "";
-    if (noteNames.length > 0) {
-      firstSelectedNote = noteNames[0];
-    }
-
-    console.log("DEBUG => Passing a string to onNext:", firstSelectedNote);
-
+    // We can still do a final dispatch, but the sums are already up-to-date in feedbackPost
     setShowToast(true);
   };
 
@@ -387,7 +423,6 @@ export const StepTwo = ({ onNext, onBack }) => {
                 onClick={handleBack}
               >
                 <span className="text">이전 단계로 돌아가기</span>
-                <span className="text" />
               </button>
             </div>
 
@@ -403,7 +438,6 @@ export const StepTwo = ({ onNext, onBack }) => {
                 disabled={!canProceed}
               >
                 <span className="text">피드백 저장하기</span>
-                <span className="text" />
               </button>
             </div>
           </div>
@@ -419,7 +453,7 @@ export const StepTwo = ({ onNext, onBack }) => {
         <p className="text-black">{modalMessage}</p>
       </PrimeModal>
 
-      {/* the contents inside of the toast wrapper needs to be separated */}
+      {/* Toast with final screen */}
       {showToast && (
         <ToastModal onClose={() => setShowToast(false)}>
           <FeedBackFinal />

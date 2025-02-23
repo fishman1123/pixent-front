@@ -11,6 +11,7 @@ import {
 
 import { useSelector } from "react-redux";
 import { selectBlendedChartData } from "../../store/selectors/feedbackSelectors";
+import { useDispatch } from "react-redux";
 
 export const Summarychart = ({
   inputCitrus,

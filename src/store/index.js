@@ -8,6 +8,7 @@ import responseDataReducer from "./responseDataSlice";
 import checkboxSelectionsReducer from "./checkboxSelectionSlice";
 import checkboxDataReducer from "./checkboxDataSlice";
 import feedbackReducer from "./feedbackSlice";
+import feedbackPostReducer from "./feedbackPostSlice";
 
 export const store = configureStore({
   reducer: {
@@ -20,6 +21,7 @@ export const store = configureStore({
     checkboxData: checkboxDataReducer,
     checkboxSelection: checkboxSelectionsReducer,
     feedback: feedbackReducer,
+    feedbackPost: feedbackPostReducer,
   },
 });
 

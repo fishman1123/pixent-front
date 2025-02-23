@@ -1,12 +1,66 @@
-import { CollectionTop } from "../collection/CollectionTop.jsx";
-import { CollectionCenter } from "../collection/CollectionCenter.jsx";
+// Collection.jsx
+import React, { useEffect, useState } from "react";
+import { CollectionTop } from "../collection/CollectionTop";
+import { CollectionCenter } from "../collection/CollectionCenter";
+import { useGetUserCollection } from "../../hooks/useGetUserCollection";
 
 export const Collection = () => {
+  // 1) Fetch data from /api/user/report/collection
+  const {
+    data: collectionData,
+    isLoading,
+    isError,
+  } = useGetUserCollection(true);
+
+  // 2) We'll store our reconstructed data in local state
+  const [reconstructedData, setReconstructedData] = useState(null);
+
+  // 3) Once collectionData is available, reconstruct it in useEffect
+  useEffect(() => {
+    if (!collectionData) return;
+
+    // Reconstruct data object in "dummyDataOne" style
+    const newObject = {
+      user_uuid: collectionData.userId, // from 'userId'
+      user_report: collectionData.reportList.map((report) => ({
+        id: report.id,
+        userName: report.userName,
+        perfumeName: report.perfumeName,
+        mainNote: report.mainNote,
+        middleNote: report.middleNote,
+        baseNote: report.baseNote,
+        userImageUrl: report.userImageUrl,
+        citrus: report.citrus,
+        floral: report.floral,
+        woody: report.woody,
+        musk: report.musk,
+        fruity: report.fruity,
+        spicy: report.spicy,
+        uuid: report.uuid,
+        hasFeedback: report.hasFeedback, // rename 'hasFeedback' to 'hasfeedback' if needed
+        collection: report.collection, // rename 'collection' to 'hasCollection' if needed
+        createdAt: report.createdAt,
+      })),
+    };
+
+    // Store it in state
+    setReconstructedData(newObject);
+
+    // Log both the server data & reconstructed object
+    console.log("Collection -> Original serverData:", collectionData);
+    console.log("Collection -> Reconstructed (dummyDataOne style):", newObject);
+  }, [collectionData]);
+
+  // 4) Handle loading / error states
+  if (isLoading) return <div>Loading user collection...</div>;
+  if (isError) return <div>Failed to load user collection.</div>;
+
+  // 5) Our existing dummy data
   const dummyDataOne = {
-    user_uuid: "10101010", //user_id
+    user_uuid: "10101010",
     user_report: [
       {
-        user_uuid: "10101010", //user_id
+        user_uuid: "10101010",
         id: 450,
         userName: "카리나",
         perfumeName: "AC'SCENT17",
@@ -27,7 +81,7 @@ export const Collection = () => {
         createdAt: "2025-02-05T00:00:00.000Z",
       },
       {
-        user_uuid: "10101010", //user_id
+        user_uuid: "10101010",
         id: 451,
         userName: "카리나",
         perfumeName: "AC'SCENT17",
@@ -87,11 +141,12 @@ export const Collection = () => {
       },
     ],
   };
+
   const dummyDataTwo = {
-    user_uuid: "10101010", //user_id
+    user_uuid: "10101010",
     user_report: [
       {
-        user_uuid: "10101010", //user_id
+        user_uuid: "10101010",
         id: 451,
         subId: 45101,
         userName: "카리나",
@@ -209,9 +264,23 @@ export const Collection = () => {
     ],
   };
 
+  // 6) Log your dummy data as well
+  console.log("Collection -> dummyDataOne:", dummyDataOne);
+  console.log("Collection -> dummyDataTwo:", dummyDataTwo);
+
+  // 7) If reconstructedData is still null (before useEffect runs), handle that
+  if (!reconstructedData) {
+    // Possibly show a small loading or "no data" message
+    return <div>Reconstructing collection data...</div>;
+  }
+
+  // 8) Render
   return (
     <div className="flex-col min-h-screen w-full pt-[10px] scrollbar-hide">
-      <CollectionTop dataOne={dummyDataOne} dataTwo={dummyDataTwo} />
+      {/* Now pass your dummyDataOne or reconstructedData to your child components */}
+      {/*<CollectionTop dataOne={dummyDataOne} dataTwo={dummyDataTwo} />*/}
+
+      <CollectionTop dataOne={reconstructedData} dataTwo={dummyDataTwo} />
     </div>
   );
 };
