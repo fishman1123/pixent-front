@@ -1,16 +1,22 @@
-import React, { useState } from "react";
+// UserPage.jsx
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import downIcon from "../../assets/down.svg";
-import { IntroBottom } from "../intro/IntroBottom.jsx";
-import { PortalModal } from "../PortalModal";
-import { SerialNumberBox } from "../input/SerialNumberBox.jsx";
+import { Navigate } from "react-router-dom";
 
-export const UserPage = () => {
+import { setAuthState } from "../../store/authSlice";
+import { useGetUserInfo } from "../../hooks/useGetUserInfo";
+
+import downIcon from "../../assets/down.svg";
+import { IntroBottom } from "../intro/IntroBottom";
+import { PortalModal } from "../PortalModal";
+import { SerialNumberBox } from "../input/SerialNumberBox";
+
+export function UserPage() {
   const dispatch = useDispatch();
   const authState = useSelector((state) => state.auth);
+  const { data: userInfo, isLoading, isError } = useGetUserInfo(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isAccordionOpen, setIsAccordionOpen] = useState(false);
-
   const paymentHistory = [
     {
       year: "2024년 1월",
@@ -26,6 +32,40 @@ export const UserPage = () => {
       ],
     },
   ];
+
+  if (isLoading) {
+    return <div>Loading ...</div>;
+  }
+
+  if (isError) {
+    return <div>Something went wrong fetching user info.</div>;
+  }
+
+  useEffect(() => {
+    if (!userInfo) return;
+
+    const needsUpdate =
+      authState.nickname !== userInfo.username ||
+      authState.userEmail !== userInfo.email ||
+      authState.viewChance !== userInfo.usageLimit ||
+      authState.userProvider !== userInfo.provider;
+
+    if (needsUpdate) {
+      dispatch(
+        setAuthState({
+          isAuthenticated: true,
+          nickname: userInfo.username,
+          email: userInfo.email,
+          userProvider: userInfo.provider,
+          usageLimit: userInfo.usageLimit,
+          viewAttempts: authState.viewAttempts,
+        }),
+      );
+    }
+  }, [userInfo, authState, dispatch]);
+  // if (!authState.isAuthenticated) {
+  //   return <Navigate to="/login" replace />;
+  // }
 
   return (
     <div className="flex-col min-h-screen w-full pt-[10px] scrollbar-hide">
@@ -88,10 +128,12 @@ export const UserPage = () => {
             </div>
           </div>
           <div className="w-full min-w-[260px]">
+            {/* SerialNumberBox presumably handles the actual nickname update */}
             <SerialNumberBox path="/api/user/username" />
           </div>
         </div>
       </PortalModal>
+      {/*payment part*/}
 
       {/*<div className="w-full border-t border-black mt-6">*/}
       {/*  <button*/}
@@ -120,10 +162,10 @@ export const UserPage = () => {
       {/*          key={idx}*/}
       {/*          className={`mb-4 ${idx !== 0 ? "border-t border-black pt-4" : ""}`}*/}
       {/*        >*/}
-      {/*          /!* Year Header with Conditional Border *!/*/}
+      {/*          /!* Year Header *!/*/}
       {/*          <p className="text-gray-400 text-sm mb-2">{section.year}</p>*/}
 
-      {/*          /!* Transactions List *!/*/}
+      {/*          /!* Transactions *!/*/}
       {/*          {section.transactions.map((tx, index) => (*/}
       {/*            <div*/}
       {/*              key={index}*/}
@@ -152,4 +194,4 @@ export const UserPage = () => {
       </div>
     </div>
   );
-};
+}
