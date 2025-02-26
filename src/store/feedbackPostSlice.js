@@ -8,9 +8,8 @@ const initialState = {
   fruity: 0,
   spicy: 0,
   feedbackElement: [
-    { elementName: "string", elementRatio: 0 },
-    { elementName: "string", elementRatio: 0 },
-    { elementName: "string", elementRatio: 0 },
+    { elementName: "", elementRatio: 0 },
+    { elementName: "", elementRatio: 0 },
   ],
 };
 
@@ -20,7 +19,8 @@ const feedbackPostSlice = createSlice({
   reducers: {
     setAttribute: (state, action) => {
       const { key, value } = action.payload;
-      if (key in state) {
+      if (key in state && state[key] !== value) {
+        console.log(`🔹 Updating Redux state: ${key} -> ${value}`);
         state[key] = value;
       }
     },
@@ -34,12 +34,32 @@ const feedbackPostSlice = createSlice({
       }
     },
     addFeedbackElement: (state, action) => {
-      state.feedbackElement.push(action.payload);
+      const { elementName, elementRatio } = action.payload;
+
+      // Check if the element already exists
+      const existingIndex = state.feedbackElement.findIndex(
+        (el) => el.elementName === elementName,
+      );
+      if (existingIndex !== -1) {
+        // If it exists, update its ratio
+        state.feedbackElement[existingIndex].elementRatio = elementRatio;
+      } else {
+        // Find an empty slot and assign the element
+        const emptyIndex = state.feedbackElement.findIndex(
+          (el) => el.elementName === "",
+        );
+        if (emptyIndex !== -1) {
+          state.feedbackElement[emptyIndex].elementName = elementName;
+          state.feedbackElement[emptyIndex].elementRatio = elementRatio;
+        }
+      }
     },
     removeFeedbackElement: (state, action) => {
       state.feedbackElement.splice(action.payload, 1);
     },
-    resetFeedback: () => initialState,
+    resetFeedback: () => {
+      return { ...initialState };
+    },
   },
 });
 
@@ -50,4 +70,5 @@ export const {
   removeFeedbackElement,
   resetFeedback,
 } = feedbackPostSlice.actions;
+
 export default feedbackPostSlice.reducer;

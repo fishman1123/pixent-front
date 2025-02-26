@@ -1,17 +1,17 @@
 // src/hooks/useGetUserInfo.js
-import { useQuery } from '@tanstack/react-query';
-import AxiosInstance from '../api/axiosInstance';
+import { useSuspenseQuery } from "@tanstack/react-query";
+import AxiosInstance from "../api/axiosInstance";
 
-export const useGetUserInfo = (enabled = false) => {
-    return useQuery({
-        queryKey: ['userInfo'],
-        queryFn: async () => {
-            const response = await AxiosInstance.get('/api/user/info');
-            return response.data;
-        },
-        enabled,
-        staleTime: Infinity,
-        refetchOnWindowFocus: false,
-        refetchOnMount: false, // Don't auto-refetch if cached
-    });
+export const useGetUserInfo = (enabled = true) => {
+  return useSuspenseQuery({
+    queryKey: ["userInfo"],
+    queryFn: async () => {
+      const response = await AxiosInstance.get("/api/user/info");
+      return response.data;
+    },
+    staleTime: Infinity,
+    refetchOnWindowFocus: false,
+    refetchOnMount: false,
+    enabled, // don't run if enabled = false
+  });
 };

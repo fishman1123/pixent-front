@@ -1,30 +1,63 @@
 import React from "react";
-import { useParams } from "react-router-dom";
+import { useLocation } from "react-router-dom";
+import { useGetReportFeedback } from "../../hooks/useGetReportFeedback.js";
 import { FeedBackChart } from "../FeedBackChart.jsx";
 import NewChart from "./NewChart.jsx";
 
 export const FeedBackDetailPage = () => {
-  // 1) Grab the dynamic param from the URL
-  const { id } = useParams(); // This 'id' is actually your subId
+  // 1) Access the location and extract data from state
+  const { state } = useLocation() || {};
 
-  // 2) Create some dummy data
+  // Destructure the data passed via navigate("/collection/add", { state: { ... } })
+  const {
+    subid, // 'subId' from the calling component
+    citrus, // e.g. chart.data.citrus
+    floral,
+    woody,
+    musk,
+    fresh,
+    spicy,
+  } = state || {};
+
+  // 2) Use 'subid' to fetch additional data from your API endpoint
+  //    /api/user/report/{subid}/feedback
+  const { data, isLoading, isError, error } = useGetReportFeedback(subid);
+
+  // 3) Handle loading/error states
+  if (isLoading) {
+    return <div>Loading feedback data...</div>;
+  }
+  if (isError) {
+    return (
+      <div>Error: {error?.message || "Could not fetch feedback data"}</div>
+    );
+  }
+
+  // 4) Replace dummyOne with data from location.state
+  //    Fallback to some default values if a field is undefined
   const dummyOne = {
-    citrus: 25,
-    floral: 40,
-    woody: 10,
-    musk: 30,
-    fresh: 15,
-    spicy: 50,
+    citrus: citrus ?? 0,
+    floral: floral ?? 0,
+    woody: woody ?? 0,
+    musk: musk ?? 0,
+    fresh: fresh ?? 0,
+    spicy: spicy ?? 0,
   };
 
+  // 5) Keep dummyTwo from the API response
+  //    Adjust property names according to your actual response structure
   const dummyTwo = {
-    citrus: 50,
-    floral: 20,
-    woody: 30,
-    musk: 10,
-    fresh: 45,
-    spicy: 10,
+    citrus: data?.citrus ?? 0,
+    floral: data?.floral ?? 0,
+    woody: data?.woody ?? 0,
+    musk: data?.musk ?? 0,
+    fresh: data?.fresh ?? 0,
+    spicy: data?.spicy ?? 0,
   };
+
+  // Debug logs
+  console.log("Location-based Scent Data (dummyOne):", dummyOne);
+  console.log("API-based Feedback Data (dummyTwo):", dummyTwo);
 
   return (
     <div className="p-4">
@@ -32,15 +65,16 @@ export const FeedBackDetailPage = () => {
         <h1 className="text-xl mb-4">Scent Profile</h1>
       </div>
 
+      {/* --- Radar Charts --- */}
       <FeedBackChart
-        // Pass the dummy data for the first radar
+        // Radar 1 => data from navigate state
         inputCitrusOne={dummyOne.citrus}
         inputFloralOne={dummyOne.floral}
         inputWoodyOne={dummyOne.woody}
         inputMuskOne={dummyOne.musk}
         inputFreshOne={dummyOne.fresh}
         inputSpicyOne={dummyOne.spicy}
-        // And for the second radar
+        // Radar 2 => data from API
         inputCitrusTwo={dummyTwo.citrus}
         inputFloralTwo={dummyTwo.floral}
         inputWoodyTwo={dummyTwo.woody}
@@ -51,13 +85,14 @@ export const FeedBackDetailPage = () => {
 
       <div className="px-4">
         <NewChart
+          // Radar 1 => data from navigate state
           inputCitrusOne={dummyOne.citrus}
           inputFloralOne={dummyOne.floral}
           inputWoodyOne={dummyOne.woody}
           inputMuskOne={dummyOne.musk}
           inputFreshOne={dummyOne.fresh}
           inputSpicyOne={dummyOne.spicy}
-          // And for the second radar
+          // Radar 2 => data from API
           inputCitrusTwo={dummyTwo.citrus}
           inputFloralTwo={dummyTwo.floral}
           inputWoodyTwo={dummyTwo.woody}
@@ -72,13 +107,8 @@ export const FeedBackDetailPage = () => {
           className="noanimationbutton flex items-center justify-center w-full h-[60px] px-5 py-4"
           role="button"
           onClick={() => {}}
-          disabled=""
         >
-          <span className="text-black text-[16px] pt-1">
-            {/*this need to be conditional rendering*/}
-            {/*{index === 0 ? "구매하기" : "매장 예약하기"}*/}
-            구매 or A/S
-          </span>
+          <span className="text-black text-[16px] pt-1">구매 or A/S</span>
         </button>
       </div>
     </div>

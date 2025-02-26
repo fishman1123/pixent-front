@@ -34,11 +34,11 @@ function App() {
     <Provider store={store}>
       <QueryClientProvider client={queryClient}>
         <ErrorBoundary>
-          <AuthInitializer>
-            <Suspense fallback={<div>Loading suspense-based routes...</div>}>
+          <Suspense fallback={<div>Loading suspense-based routes...</div>}>
+            <AuthInitializer>
               <RouterProvider router={router} />
-            </Suspense>
-          </AuthInitializer>
+            </AuthInitializer>
+          </Suspense>
         </ErrorBoundary>
         <ErrorModal />
       </QueryClientProvider>

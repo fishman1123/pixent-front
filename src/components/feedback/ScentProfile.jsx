@@ -1,6 +1,5 @@
 import React from "react";
 
-// Map internal keys to display labels
 const LABELS = {
   citrus: "Citrus",
   floral: "Floral",
@@ -22,22 +21,17 @@ function ScentProfile({ data }) {
         </div>
         {scentKeys.map((key) => {
           const value = data[key];
-          const barFill = (value / maxValue) * 100; // scale so largest = 100%
+          const barFill = (value / maxValue) * 100;
 
           return (
             <div className="flex items-center" key={key}>
-              {/* Label */}
               <div className="w-16 text-sm text-gray-500">{LABELS[key]}</div>
-
-              {/* Bar */}
               <div className="relative flex-1 h-[2px] mx-2 bg-gray-200 rounded">
                 <div
                   className="absolute left-0 top-0 h-full bg-black transition-all duration-300"
                   style={{ width: `${barFill}%` }}
                 />
               </div>
-
-              {/* Value */}
               <div className="w-8 text-right text-sm text-gray-800">
                 {value}
               </div>

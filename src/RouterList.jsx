@@ -19,8 +19,6 @@ import { LoginRedirectPage } from "./components/pages/LoginRedirectPage";
 import { NicknamePage } from "./components/pages/NicknamePage";
 import Test from "./components/summary/Test";
 import TestTwo from "./components/summary/TestTwo";
-
-// The new protected layout
 import { ProtectedLayout } from "./components/layout/ProtectedLayout";
 import { UserPage } from "./components/pages/UserPage.jsx";
 import { Collection } from "./components/pages/Collection.jsx";
@@ -28,11 +26,18 @@ import { FeedBackPage } from "./components/pages/FeedBackPage.jsx";
 import NewChart from "./components/pages/NewChart.jsx";
 import { FeedBackChart } from "./components/FeedBackChart.jsx";
 import { FeedBackDetailPage } from "./components/pages/FeedBackDetailPage.jsx";
+import { AnalysisRequest } from "./components/AnalysisRequest.jsx";
+import AuthInitializer from "./components/AuthInitializer.jsx";
 
 export const RouterList = [
   {
     path: "/",
-    element: <AppLayout />,
+    // Wrap AppLayout in AuthInitializer, so the entire subtree is protected
+    element: (
+      <AuthInitializer>
+        <AppLayout />
+      </AuthInitializer>
+    ),
     children: [
       {
         index: true,
@@ -60,8 +65,7 @@ export const RouterList = [
         children: [
           {
             path: "",
-            // Our ProtectedLayout automatically checks isAuthenticated
-            // and redirects if needed.
+
             element: <ProtectedLayout />,
             children: [
               {
@@ -94,11 +98,15 @@ export const RouterList = [
               },
               {
                 path: "dummy",
-                element: <FeedBackChart />,
+                element: <AnalysisRequest />,
               },
               {
                 path: "testTwo",
                 element: <TestTwo />,
+              },
+              {
+                path: "charge",
+                element: <AnalysisRequest />,
               },
               {
                 path: "user",
@@ -111,7 +119,20 @@ export const RouterList = [
               },
               {
                 path: "collection",
-                element: <Collection />,
+                children: [
+                  {
+                    index: true,
+                    element: <Collection />,
+                  },
+                  {
+                    path: "add",
+                    element: <NicknamePage />,
+                  },
+                  {
+                    path: "addOrigin",
+                    element: <AnalysisRequest />,
+                  },
+                ],
               },
               {
                 path: "feedback",

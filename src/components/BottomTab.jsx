@@ -24,7 +24,7 @@ export const BottomTab = () => {
   const handleCloseToast = () => setShowToast(false);
 
   const handleCharge = () => {
-    navigate("/");
+    navigate("/charge");
     handleCloseToast();
   };
   const handleAnalysis = () => {

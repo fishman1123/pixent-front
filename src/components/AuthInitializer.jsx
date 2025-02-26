@@ -1,31 +1,19 @@
-// src/components/AuthInitializer.jsx
-
-import React, { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { setAuthState } from '../store/authSlice';
+// AuthInitializer.jsx
+import React, { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { checkAuth } from "../store/authSlice";
 
 /**
- * AuthInitializer:
- * - Checks localStorage for 'gToken'
- * - Sets auth.isAuthenticated accordingly (Redux Toolkit)
- * - Shows a small loading fallback until the check is complete
+ * Checks localStorage for 'gToken', verifies token if present.
  */
 function AuthInitializer({ children }) {
-    const [initialized, setInitialized] = useState(false);
-    const dispatch = useDispatch();
+  const dispatch = useDispatch();
 
-    useEffect(() => {
-        const token = localStorage.getItem('gToken');
-        dispatch(setAuthState({ isAuthenticated: !!token }));
-        setInitialized(true);
-    }, [dispatch]);
+  useEffect(() => {
+    dispatch(checkAuth());
+  }, [dispatch]);
 
-    if (!initialized) {
-        // Could be a spinner, skeleton, or just null
-        return <div>Checking login...</div>;
-    }
-
-    return children;
+  return children;
 }
 
 export default AuthInitializer;

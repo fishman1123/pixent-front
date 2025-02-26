@@ -3,6 +3,9 @@ import React, { useEffect, useState } from "react";
 import { CollectionTop } from "../collection/CollectionTop";
 import { CollectionCenter } from "../collection/CollectionCenter";
 import { useGetUserCollection } from "../../hooks/useGetUserCollection";
+import { useDispatch } from "react-redux";
+import { resetFeedback } from "../../store/feedbackPostSlice.js";
+import { resetStepTwoSelections } from "../../store/feedbackSlice.js";
 
 export const Collection = () => {
   // 1) Fetch data from /api/user/report/collection
@@ -11,6 +14,13 @@ export const Collection = () => {
     isLoading,
     isError,
   } = useGetUserCollection(true);
+  const dispatch = useDispatch();
+  // 1) Reset feedback slices as soon as user arrives here
+  useEffect(() => {
+    // Clear out any leftover data from a previous feedback session
+    dispatch(resetFeedback());
+    dispatch(resetStepTwoSelections());
+  }, [dispatch]);
 
   // 2) We'll store our reconstructed data in local state
   const [reconstructedData, setReconstructedData] = useState(null);
@@ -265,8 +275,8 @@ export const Collection = () => {
   };
 
   // 6) Log your dummy data as well
-  console.log("Collection -> dummyDataOne:", dummyDataOne);
-  console.log("Collection -> dummyDataTwo:", dummyDataTwo);
+  // console.log("Collection -> dummyDataOne:", dummyDataOne);
+  // console.log("Collection -> dummyDataTwo:", dummyDataTwo);
 
   // 7) If reconstructedData is still null (before useEffect runs), handle that
   if (!reconstructedData) {

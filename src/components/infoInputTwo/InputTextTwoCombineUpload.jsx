@@ -1,19 +1,16 @@
 // src/components/InputTextTwoCombineUpload.jsx
 
 import React, { useState } from "react";
-import { useSelector, useDispatch } from "react-redux"; // Import Redux hooks
+import { useSelector, useDispatch } from "react-redux";
 import imageUploadIcon from "../../assets/upload.svg";
 import { DataButton } from "../DataButton.jsx";
-import { setUserState } from "../../store/userSlice"; // Import Redux action
+import { setUserState } from "../../store/userSlice";
 import { useTranslation } from "react-i18next";
 import { useReportSubmit } from "../../hooks/useReportSubmit.jsx";
 import LoadingAnimation from "../pages/Loading.jsx";
 import imageCompression from "browser-image-compression";
 import { PersonalAgreement } from "./PersonalAgreement.jsx";
-// REMOVE or comment out old modal import:
-// import { Modal } from "../Modal.jsx";
 
-// IMPORT your new PortalModal:
 import { PortalModal } from "../PortalModal.jsx";
 
 export const InputTextTwoCombineUpload = () => {
@@ -103,7 +100,6 @@ export const InputTextTwoCombineUpload = () => {
     return true;
   };
 
-  // Submit logic
   const handleFormSubmit = () => {
     const isValid = validateForm();
     if (!isValid) return;

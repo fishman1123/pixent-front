@@ -1,17 +1,17 @@
 // src/components/stepTwo/FeedBackFinal.jsx
 import React, { useEffect } from "react";
-import { useSelector } from "react-redux"; // <-- Add this
+import { useDispatch, useSelector } from "react-redux"; // <-- Add this
 import chartIcon from "../../assets/newchart.svg";
 import reservationIcon from "../../assets/reservation.svg";
 import { useNavigate } from "react-router-dom";
+import { resetFeedback } from "../../store/feedbackPostSlice.js";
 
 const FeedBackFinal = () => {
   const navigation = useNavigate();
 
   // 1) Grab final adjusted values from feedbackPost
-  const { citrus, floral, woody, musk, fruity, spicy } = useSelector(
-    (state) => state.feedbackPost,
-  );
+  const { citrus, floral, woody, musk, fruity, spicy, feedbackElement } =
+    useSelector((state) => state.feedbackPost);
 
   // 2) Log them whenever the component mounts or these values change
   useEffect(() => {
@@ -22,9 +22,14 @@ const FeedBackFinal = () => {
     console.log("musk:", musk);
     console.log("fruity:", fruity);
     console.log("spicy:", spicy);
-  }, [citrus, floral, woody, musk, fruity, spicy]);
 
-  const handlecheckfeedback = () => {
+    console.log("=== Feedback Elements ===");
+    feedbackElement.forEach((element, index) => {
+      console.log(`Element ${index + 1}:`, element);
+    });
+  }, [citrus, floral, woody, musk, fruity, spicy, feedbackElement]);
+
+  const handleCheckFeedback = () => {
     navigation("/user");
   };
 
@@ -45,7 +50,7 @@ const FeedBackFinal = () => {
           <div className="w-full">
             <button
               className="noanimationbutton flex flex-col items-center p-4 min-w-32 w-full h-auto"
-              onClick={handlecheckfeedback}
+              onClick={handleCheckFeedback}
             >
               <span className="text-sm text-gray-700">
                 <img

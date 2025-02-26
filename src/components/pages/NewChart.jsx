@@ -1,28 +1,5 @@
 import React from "react";
 
-/**
- * Props expected:
- *  - inputCitrusOne, inputFloralOne, inputWoodyOne, inputMuskOne, inputFreshOne, inputSpicyOne
- *  - inputCitrusTwo, inputFloralTwo, inputWoodyTwo, inputMuskTwo, inputFreshTwo, inputSpicyTwo
- *
- * Example usage:
- *  <NewChart
- *    // original
- *    inputCitrusOne={dummyOne.citrus}
- *    inputFloralOne={dummyOne.floral}
- *    inputWoodyOne={dummyOne.woody}
- *    inputMuskOne={dummyOne.musk}
- *    inputFreshOne={dummyOne.fresh}
- *    inputSpicyOne={dummyOne.spicy}
- *    // new
- *    inputCitrusTwo={dummyTwo.citrus}
- *    inputFloralTwo={dummyTwo.floral}
- *    inputWoodyTwo={dummyTwo.woody}
- *    inputMuskTwo={dummyTwo.musk}
- *    inputFreshTwo={dummyTwo.fresh}
- *    inputSpicyTwo={dummyTwo.spicy}
- *  />
- */
 const NewChart = ({
   // Original data
   inputCitrusOne = 0,
@@ -79,19 +56,11 @@ const NewChart = ({
     },
   ];
 
-  // Defines how wide the chart can be (in px) and a scaling factor
-  const maxWidth = 130;
-  const scale = 3; // Multiply each data point by 2.4px to control bar length
+  const maxWidth = 160;
+  const scale = 2;
 
-  // Small helper function to display numbers (e.g., rounding or formatting)
   const formatNumber = (num) => `${num}`;
 
-  /**
-   * Component that renders a single horizontal line showing:
-   * 1. Start (original) -> End (new) range
-   * 2. A dashed portion if there's a negative difference
-   * 3. A label for the difference
-   */
   const ScentLine = ({ name, start, end, change }) => {
     const left = Math.min(start, end) * scale; // left boundary in px
     const width = Math.abs(end - start) * scale; // difference in px
@@ -102,13 +71,8 @@ const NewChart = ({
           {/* Scent name on the left */}
           <span className="w-20 text-gray-500 text-sm">{name}</span>
 
-          {/* The bar container, fixed width (maxWidth) */}
           <div className="relative" style={{ width: maxWidth }}>
             <div className="flex items-center">
-              {/* The black line from 0 to end if you want a baseline:
-                  you could do:
-                  style={{ width: `${end * scale}px` }}
-                  but let's represent only the 'segment' from 0 up to end */}
               <div
                 className="h-[1px] border-t border-black"
                 style={{ width: `${end * scale}px` }}
@@ -141,7 +105,6 @@ const NewChart = ({
                     }}
                   />
 
-                  {/* The difference label (e.g., +20 or -15) */}
                   <span
                     className="absolute -top-5 text-sm"
                     style={{

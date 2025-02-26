@@ -1,77 +1,56 @@
+// src/components/intro/Intro.jsx
 import React, { useEffect, useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { setAuthState } from "../../store/authSlice";
-import { setUserState } from "../../store/userSlice";
-import { useGetUserInfo } from "../../hooks/useGetUserInfo";
+import { useSelector } from "react-redux";
+
+import { useTranslation } from "react-i18next";
+import { useLocation, useNavigate } from "react-router-dom";
+
 import PrimeModal from "../PrimeModal";
 import { IntroTop } from "../intro/IntroTop";
 import { IntroCenter } from "../intro/IntroCenter";
-import { IntroBottom } from "../intro/IntroBottom.jsx";
+import { IntroBottom } from "../intro/IntroBottom";
 import { ProcedureButton } from "../ProcedureButton";
-import { useTranslation } from "react-i18next";
-import { useLocation } from "react-router-dom";
+import { isFeedbackEmpty } from "../isFeedbackEmpty"; // helper to check empty feedback
+
+// For the feedback toast
+import ToastModal from "../ToastModal";
+import FeedBackFinal from "../feedback/FeedBackFinal";
 
 export const Intro = () => {
-  const dispatch = useDispatch();
   const { t } = useTranslation();
   const location = useLocation();
+  const navigate = useNavigate();
 
   const authState = useSelector((state) => state.auth);
+  const feedbackPost = useSelector((state) => state.feedbackPost);
 
-  const nicknameUpdated = location.state?.from === "/login/nickname";
-
+  // Session expired modal (optional)
   const [showExpiredModal, setShowExpiredModal] = useState(false);
 
-  useEffect(() => {
-    const token = localStorage.getItem("gToken");
-    dispatch(setAuthState({ isAuthenticated: !!token }));
-  }, [dispatch]);
-
-  const {
-    data: userInfo,
-    error,
-    isError,
-    refetch,
-  } = useGetUserInfo(authState.isAuthenticated);
+  // Feedback toast
+  const [showFeedbackToast, setShowFeedbackToast] = useState(false);
 
   useEffect(() => {
-    if (nicknameUpdated) {
-      refetch();
+    if (location.state?.from === "/feedback") {
+      if (!isFeedbackEmpty(feedbackPost)) {
+        setShowFeedbackToast(true);
+        navigate(location.pathname, { replace: true, state: {} });
+      }
     }
-  }, [nicknameUpdated, refetch]);
+  }, [location, feedbackPost, navigate]);
 
-  useEffect(() => {
-    if (userInfo) {
-      // Update user slice
-      dispatch(setUserState({ userName: userInfo.username }));
+  // Close the feedback toast
+  const handleCloseFeedbackToast = () => {
+    setShowFeedbackToast(false);
+  };
 
-      // Update auth slice
-      dispatch(
-        setAuthState({
-          isAuthenticated: true,
-          nickname: userInfo.username,
-          email: userInfo.email,
-          provider: userInfo.provider,
-          usageLimit: userInfo.usageLimit,
-        }),
-      );
-    }
-  }, [userInfo, dispatch]);
-
-  useEffect(() => {
-    if (isError && error?.response?.status === 403) {
-      setShowExpiredModal(true);
-    }
-  }, [isError, error]);
-
+  // Close the session expired modal
   const handleCloseExpiredModal = () => {
     setShowExpiredModal(false);
   };
-  console.log(userInfo);
 
   return (
     <div className="flex-col justify-center items-center min-h-screen w-full text-center">
-      {/* Example UI */}
       <IntroTop>
         <div className="mt-[120px] mb-[40px]">
           <div className="text-[40px] font-extralight">{t("DISCOVER")}</div>
@@ -83,7 +62,7 @@ export const Intro = () => {
       </IntroTop>
 
       <div className="mb-[48px]">
-        <div className=" mx-20">
+        <div className="mx-20">
           <ProcedureButton
             text={t("Start Analysis")}
             route="/which"
@@ -122,6 +101,7 @@ export const Intro = () => {
         </div>
       </div>
 
+      {/* Session expired modal (triggered externally if needed) */}
       <PrimeModal
         isOpen={showExpiredModal}
         onClose={handleCloseExpiredModal}
@@ -129,6 +109,13 @@ export const Intro = () => {
       >
         <p>the login time is expired, login again</p>
       </PrimeModal>
+
+      {/* Feedback toast */}
+      {showFeedbackToast && (
+        <ToastModal onClose={handleCloseFeedbackToast}>
+          <FeedBackFinal />
+        </ToastModal>
+      )}
     </div>
   );
 };

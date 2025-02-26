@@ -1,41 +1,42 @@
 // src/components/feedback/FeedBackPage.jsx
 
 import { useLocation } from "react-router-dom";
-import { Summarychart } from "../result/SummaryChart.jsx";
+import { SummaryChart } from "../result/SummaryChart.jsx";
 import { StepOne } from "../feedback/StepOne";
 import { StepTwo } from "../feedback/StepTwo";
 import { StepThree } from "../feedback/StepThree";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setOriginalChartData } from "../../store/feedbackSlice.js";
 
-// 1) The new Suspense-based hook
+// Import the reset actions
+import { resetFeedback } from "../../store/feedbackPostSlice";
+import {
+  resetStepTwoSelections,
+  setOriginalChartData,
+} from "../../store/feedbackSlice.js";
+
 import { useNewGetReportByUuid } from "../../hooks/useNewGetReportByUuid";
 
 export const FeedBackPage = () => {
   const location = useLocation();
   const dispatch = useDispatch();
 
-  // subId & optional perfumeName from route state
+  // 2) Retrieve subId/perfumeName from route state
   const subId = location.state?.subId;
   const routePerfumeName = location.state?.perfumeName;
 
-  // 2) Unconditionally call our Suspense hook. Must be inside a <Suspense> boundary.
+  // 3) Use your custom hook to get the report data
   const { data: reportData } = useNewGetReportByUuid(subId);
 
-  // 3) We'll store the reconstructed dummy object in state
+  // 4) Local state to store a “dummy” version of that data
   const [dummydataforfeed, setDummydataforfeed] = useState(null);
 
-  // 4) Reconstruct once we have the server data
+  // 5) On fetch success, build the shape you need
   useEffect(() => {
-    if (!reportData) return; // Typically won't happen if Suspense ensures data is loaded
+    if (!reportData) return;
 
-    console.log("Fetched reportData via Suspense:", reportData);
-
-    // Provide a fallback date if 'createdAt' is missing
     const safeDate = reportData.createdAt || "2025-02-05T00:00:00.000Z";
 
-    // Build the dummy shape
     const reconstructed = {
       user_uuid: reportData.userId ?? "UnknownUUID",
       id: reportData.id ?? 0,
@@ -57,13 +58,13 @@ export const FeedBackPage = () => {
       createdAt: safeDate,
     };
 
-    console.log("Reconstructed dummydataforfeed:", reconstructed);
     setDummydataforfeed(reconstructed);
   }, [reportData]);
 
-  // 5) Step and Redux logic. We always call these hooks, even if we don't yet have dummydataforfeed.
+  // 6) Local step-based UI
   const [step, setStep] = useState(0);
 
+  // 7) Pull data from Redux to calculate leftover, etc.
   const stepOneRatio = useSelector((state) => state.feedback.stepOneRatio) || 0;
   const { percentages } = useSelector(
     (state) => state.feedback.stepTwoSelections,
@@ -78,10 +79,9 @@ export const FeedBackPage = () => {
 
   const [selectedNote, setSelectedNote] = useState("");
 
-  // 6) When dummydataforfeed is updated, store chart data. But we do NOT skip any hooks if it's null.
+  // 8) Once we have “dummydataforfeed,” also set the original chart data
   useEffect(() => {
     if (!dummydataforfeed) return;
-
     dispatch(
       setOriginalChartData({
         citrus: dummydataforfeed.citrus,
@@ -94,8 +94,8 @@ export const FeedBackPage = () => {
     );
   }, [dispatch, dummydataforfeed]);
 
+  // 9) Step transitions
   const nextStep = (noteName) => {
-    console.log("DEBUG => nextStep received:", noteName);
     if (step === 1) {
       setSelectedNote(noteName);
     }
@@ -106,16 +106,14 @@ export const FeedBackPage = () => {
     setStep((prev) => (prev > 0 ? prev - 1 : 0));
   };
 
+  // 10) Decide if we show some UI elements only if user has a stepOneRatio
   const shouldShowUI = stepOneRatio > 0;
 
-  // 7) Instead of returning early, we conditionally render if dummydataforfeed is null
+  // 11) Decide the main content to render
   let content;
-
   if (!dummydataforfeed) {
-    // Suspense might have loaded 'reportData' but we haven't reconstructed yet
     content = <div>Reconstructing data from the server...</div>;
   } else {
-    // We have our dummy object
     const createdAtString = new Date(
       dummydataforfeed.createdAt,
     ).toLocaleDateString("ko-KR", {
@@ -128,6 +126,7 @@ export const FeedBackPage = () => {
 
     content = (
       <>
+        {/* Perfume info + chart */}
         <div className="rounded-md bg-white p-4 mb-4">
           <div className="flex justify-between">
             <div className="flex flex-col">
@@ -158,7 +157,7 @@ export const FeedBackPage = () => {
             </div>
           </div>
 
-          <Summarychart
+          <SummaryChart
             inputCitrus={dummydataforfeed.citrus}
             inputFloral={dummydataforfeed.floral}
             inputWoody={dummydataforfeed.woody}
@@ -168,17 +167,23 @@ export const FeedBackPage = () => {
           />
         </div>
 
+        {/* Step-based container */}
         <div className="overflow-hidden w-full relative">
           <div
             className="flex transition-transform duration-500 ease-in-out"
             style={{ transform: `translateX(-${step * 100}%)` }}
           >
+            {/* StepOne */}
             <div className="w-full shrink-0">
               <StepOne onNext={nextStep} />
             </div>
+
+            {/* StepTwo */}
             <div className="w-full shrink-0">
-              <StepTwo onBack={prevStep} />
+              <StepTwo onBack={prevStep} reportId={dummydataforfeed.uuid} />
             </div>
+
+            {/* StepThree */}
             <div className="w-full shrink-0">
               <StepThree />
             </div>
@@ -196,7 +201,7 @@ export const FeedBackPage = () => {
     );
   }
 
-  // 8) Return everything. All hooks were called unconditionally above.
+  // 12) Finally return the overall layout
   return (
     <div className="flex-col min-h-screen w-full pt-[10px] px-4 scrollbar-hide">
       {content}
