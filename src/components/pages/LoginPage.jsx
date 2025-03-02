@@ -8,18 +8,18 @@ export const LoginPage = () => {
   const handleLogin = (provider) => {
     switch (provider) {
       case "Google": {
-        const googleAuthUrl = `${baseUrl}oauth2/authorization/google`;
+        const googleAuthUrl = `${baseUrl}/oauth2/authorization/google`;
         window.location.href = googleAuthUrl;
         break;
       }
       case "Kakao": {
         // need to fix this
-        const kakaoAuthUrl = `${baseUrl}oauth2/authorization/kakao`;
+        const kakaoAuthUrl = `${baseUrl}/oauth2/authorization/kakao`;
         window.location.href = kakaoAuthUrl;
         break;
       }
       case "Naver": {
-        const naverAuthUrl = `${baseUrl}oauth2/authorization/naver`;
+        const naverAuthUrl = `${baseUrl}/oauth2/authorization/naver`;
         window.location.href = naverAuthUrl;
         break;
       }
