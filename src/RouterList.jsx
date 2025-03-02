@@ -1,3 +1,4 @@
+// src/RouterList.js
 import React from "react";
 import { Intro } from "./components/pages/Intro.jsx";
 import { Input } from "./components/pages/Input.jsx";
@@ -36,14 +37,13 @@ import { ValidationPage } from "./components/pages/ValidationPage.jsx";
 export const RouterList = [
   {
     path: "/",
-    // Wrap AppLayout in AuthInitializer, so the entire subtree is protected
-    element: <AppLayout />,
+    element: <AppLayout />, // top layout
     children: [
+      // index ("/")
       {
         index: true,
         element: <Intro />,
       },
-
       {
         path: "login",
         children: [
@@ -61,135 +61,100 @@ export const RouterList = [
         path: "oauth2/login/redirect",
         element: <LoginRedirectPage />,
       },
-      {
-        children: [
-          {
-            path: "",
 
-            element: <ProtectedLayout />,
-            children: [
-              {
-                path: "basic",
-                element: <Input />,
-              },
-              {
-                path: "which",
-                element: <Preference />,
-              },
-              {
-                path: "input",
-                element: <InfoInput />,
-              },
-              {
-                path: "inputTwo",
-                element: <InfoInputTwo />,
-              },
-              {
-                path: "🌚",
-                element: <Admin />,
-              },
-              {
-                path: "🌝",
-                element: <AdminUsers />,
-              },
-              {
-                path: "loading",
-                element: <Loading />,
-              },
-              {
-                path: "test",
-                element: <ReportSummary />,
-              },
-              {
-                path: "dummy",
-                element: <AnalysisRequest />,
-              },
-              {
-                path: "testTwo",
-                element: <TestTwo />,
-              },
-              {
-                path: "charge",
-                element: <AnalysisRequest />,
-              },
-              {
-                path: "user",
-                children: [
-                  {
-                    index: true,
-                    element: <UserPage />,
-                  },
-                ],
-              },
-              {
-                path: "collection",
-                children: [
-                  {
-                    index: true,
-                    element: <Collection />,
-                  },
-                  {
-                    path: "add",
-                    element: <NicknamePage />,
-                  },
-                  {
-                    path: "addOrigin",
-                    element: <AddOriginPage />,
-                  },
-                  {
-                    path: "validation",
-                    element: <ValidationPage />,
-                  },
-                ],
-              },
-              {
-                path: "feedback",
-                children: [
-                  {
-                    index: true,
-                    element: <FeedBackPage />,
-                  },
-                  {
-                    path: "variation",
-                    element: <AdditionalFeedBackPage />,
-                  },
-                  {
-                    path: ":id",
-                    element: <FeedBackDetailPage />,
-                  },
-                ],
-              },
-              {
-                path: "report",
-                element: <ReportViewer />,
-                children: [
-                  {
-                    path: ":id",
-                    element: <ReportViewerResult />,
-                  },
-                ],
-              },
-            ],
-          },
+      // -- ALL PROTECTED ROUTES UNDER /protected --
+      {
+        path: "protected",
+        element: <ProtectedLayout />,
+        children: [
+          { path: "basic", element: <Input /> },
+          { path: "which", element: <Preference /> },
+          { path: "input", element: <InfoInput /> },
+          { path: "inputTwo", element: <InfoInputTwo /> },
+          { path: "🌚", element: <Admin /> },
+          { path: "🌝", element: <AdminUsers /> },
+          { path: "loading", element: <Loading /> },
+          { path: "test", element: <ReportSummary /> },
+          { path: "dummy", element: <AnalysisRequest /> },
+          { path: "testTwo", element: <TestTwo /> },
+          { path: "charge", element: <AnalysisRequest /> },
           {
-            path: "result",
-            element: <ResultLayout />,
+            path: "user",
             children: [
               {
                 index: true,
-                element: <ResultPage />,
-              },
-              {
-                path: "reportsummary",
-                element: <ReportSummary />,
+                element: <UserPage />,
               },
             ],
           },
           {
-            path: "summary",
-            element: <PrintReport />,
+            path: "collection",
+            children: [
+              {
+                index: true,
+                element: <Collection />,
+              },
+              {
+                path: "add",
+                element: <NicknamePage />,
+              },
+              {
+                path: "addOrigin",
+                element: <AddOriginPage />,
+              },
+              {
+                path: "validation",
+                element: <ValidationPage />,
+              },
+            ],
+          },
+          {
+            path: "feedback",
+            children: [
+              {
+                index: true,
+                element: <FeedBackPage />,
+              },
+              {
+                path: "variation",
+                element: <AdditionalFeedBackPage />,
+              },
+              {
+                path: ":id",
+                element: <FeedBackDetailPage />,
+              },
+            ],
+          },
+          {
+            path: "report",
+            element: <ReportViewer />,
+            children: [
+              {
+                path: ":id",
+                element: <ReportViewerResult />,
+              },
+            ],
           },
         ],
+      },
+
+      {
+        path: "result",
+        element: <ResultLayout />,
+        children: [
+          {
+            index: true,
+            element: <ResultPage />,
+          },
+          {
+            path: "reportsummary",
+            element: <ReportSummary />,
+          },
+        ],
+      },
+      {
+        path: "summary",
+        element: <PrintReport />,
       },
       {
         path: "*",
