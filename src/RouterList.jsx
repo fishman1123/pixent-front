@@ -37,11 +37,7 @@ export const RouterList = [
   {
     path: "/",
     // Wrap AppLayout in AuthInitializer, so the entire subtree is protected
-    element: (
-      <AuthInitializer>
-        <AppLayout />
-      </AuthInitializer>
-    ),
+    element: <AppLayout />,
     children: [
       {
         index: true,
