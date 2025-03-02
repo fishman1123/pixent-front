@@ -6,6 +6,7 @@ import { ResultChart } from "../result/ResultChart.jsx";
 import { RedirectButton } from "../RedirectButton.jsx";
 import { ImagePerfumeButton } from "../result/ImagePerfumeButton.jsx";
 import CopyIcon from "../../assets/copy.svg";
+import { LoadingData } from "./LoadingData.jsx";
 
 export const ReportViewerResult = () => {
   const { id: uuid } = useParams();
@@ -14,7 +15,11 @@ export const ReportViewerResult = () => {
   const [copySuccess, setCopySuccess] = useState(false);
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return (
+      <div>
+        <LoadingData />
+      </div>
+    );
   }
 
   if (isError) {

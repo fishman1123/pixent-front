@@ -20,7 +20,6 @@ const feedbackPostSlice = createSlice({
     setAttribute: (state, action) => {
       const { key, value } = action.payload;
       if (key in state && state[key] !== value) {
-        console.log(`🔹 Updating Redux state: ${key} -> ${value}`);
         state[key] = value;
       }
     },

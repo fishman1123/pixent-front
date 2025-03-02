@@ -72,34 +72,34 @@ export const Intro = () => {
       </div>
 
       {/* Show user info if authenticated */}
-      {authState.isAuthenticated ? (
-        <div className="flex flex-col">
-          <div>login is done (nickname: {authState.nickname || "N/A"})</div>
-          <div>view amount left: {authState.viewChance || "N/A"}</div>
-          <div>user email: {authState.userEmail || "N/A"}</div>
-          <div>user provider: {authState.userProvider || "N/A"}</div>
-        </div>
-      ) : (
-        <div>login is not done</div>
-      )}
+      {/*{authState.isAuthenticated ? (*/}
+      {/*  <div className="flex flex-col">*/}
+      {/*    <div>login is done (nickname: {authState.nickname || "N/A"})</div>*/}
+      {/*    <div>view amount left: {authState.viewChance || "N/A"}</div>*/}
+      {/*    <div>user email: {authState.userEmail || "N/A"}</div>*/}
+      {/*    <div>user provider: {authState.userProvider || "N/A"}</div>*/}
+      {/*  </div>*/}
+      {/*) : (*/}
+      {/*  <div>login is not done</div>*/}
+      {/*)}*/}
 
-      <IntroCenter />
+      {/*<IntroCenter />*/}
 
-      <IntroTop>
-        <div className="mt-[20px] mb-[40px]">
-          <div className="text-[40px] font-extralight">{t("REFINE")}</div>
-          <div className="text-[40px] font-extralight">{t("YOUR_SCENT")}</div>
-          <div className="text-[14px] mt-[40px] text-black">
-            {t("COMPLETE WITH OUR EXPERTS")}
-          </div>
-        </div>
-      </IntroTop>
+      {/*<IntroTop>*/}
+      {/*  <div className="mt-[20px] mb-[40px]">*/}
+      {/*    <div className="text-[40px] font-extralight">{t("REFINE")}</div>*/}
+      {/*    <div className="text-[40px] font-extralight">{t("YOUR_SCENT")}</div>*/}
+      {/*    <div className="text-[14px] mt-[40px] text-black">*/}
+      {/*      {t("COMPLETE WITH OUR EXPERTS")}*/}
+      {/*    </div>*/}
+      {/*  </div>*/}
+      {/*</IntroTop>*/}
 
-      <div className="mb-[48px]">
-        <div className="mx-20">
-          <ProcedureButton text={t("Get A/S")} route="/which" confirm={false} />
-        </div>
-      </div>
+      {/*<div className="mb-[48px]">*/}
+      {/*  <div className="mx-20">*/}
+      {/*    <ProcedureButton text={t("Get A/S")} route="/which" confirm={false} />*/}
+      {/*  </div>*/}
+      {/*</div>*/}
 
       {/* Session expired modal (triggered externally if needed) */}
       <PrimeModal

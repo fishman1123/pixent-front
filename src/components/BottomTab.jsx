@@ -64,7 +64,10 @@ export const BottomTab = () => {
               isReserveActive ? "font-bold text-black" : "text-[#8E8E8E]"
             }`}
             disabled={isReserveActive}
-            onClick={() => navigate("/reserve")}
+            onClick={() => {
+              window.location.href =
+                "https://booking.naver.com/booking/6/bizes/1002529";
+            }}
           >
             <ReserveIcon
               className={`w-6 h-6 fill-current ${

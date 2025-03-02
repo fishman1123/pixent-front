@@ -46,7 +46,6 @@ export const LoginRedirectPage = () => {
   // 4) Once nicknameData is fetched, decide route
   useEffect(() => {
     if (nicknameSuccess && nicknameData !== undefined) {
-      console.log("nicknameData from server:", nicknameData);
       // If the server says { isValid: true }, user has a nickname => go "/"
       if (nicknameData?.isValid === true) {
         window.location.href = "/";

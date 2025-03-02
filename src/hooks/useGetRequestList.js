@@ -1,17 +1,17 @@
+// src/hooks/useGetRequestList.js
 import { useQuery } from "@tanstack/react-query";
 import AxiosInstance from "../api/axiosInstance";
 
-export const useGetReportFeedback = (reportId) => {
+export const useGetRequestList = (page, size) => {
   return useQuery({
-    queryKey: ["feedback", reportId],
+    queryKey: ["requests", page, size],
     queryFn: async () => {
       const response = await AxiosInstance.get(
-        `/api/user/report/${reportId}/feedback`,
+        `/api/user?page=${page}&size=${size}&sort=createdAt,asc`,
       );
       return response.data;
     },
-    // Only run query if 'reportId' has a value
-    enabled: !!reportId,
+    keepPreviousData: true,
     refetchOnWindowFocus: false,
   });
 };

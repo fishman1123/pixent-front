@@ -1,7 +1,7 @@
 // StepOne.jsx
 import React from "react";
 import { useDispatch } from "react-redux";
-import { setStepOneRatio } from "../../store/feedbackSlice"; // Adjust path as needed
+import { setStepOneRatio } from "../../store/feedbackSlice";
 
 export const FeedBackOptions = ({ onSelect }) => {
   const dispatch = useDispatch();
@@ -16,9 +16,7 @@ export const FeedBackOptions = ({ onSelect }) => {
   ];
 
   const handleSelect = (val) => {
-    // Store ratio in Redux
     dispatch(setStepOneRatio(val));
-    // Also propagate to parent's "onNext" or "onSelect"
     onSelect(val);
   };
 

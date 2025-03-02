@@ -76,14 +76,11 @@ export const SerialNumberBox = ({
     setIsSubmitting(true);
 
     try {
-      console.log("🚀 isFromCollection:", isFromCollection); // Debug log before the condition
-
       if (isFromCollection) {
         postFeedback.mutate(
           { adminPW: serialNumber, reportId },
           {
             onSuccess: () => {
-              console.log("✅ Feedback submitted successfully.");
               navigate("/collection");
             },
             onError: (err) => {
@@ -98,7 +95,7 @@ export const SerialNumberBox = ({
           },
         );
       } else {
-        console.log("POST to", path, "with:", { username: serialNumber });
+        // console.log("POST to", path, "with:", { username: serialNumber });
         const response = await AxiosInstance.post(path, {
           username: serialNumber,
         });

@@ -1,37 +1,51 @@
-// Collection.jsx
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+
 import { CollectionTop } from "../collection/CollectionTop";
 import { CollectionCenter } from "../collection/CollectionCenter";
 import { useGetUserCollection } from "../../hooks/useGetUserCollection";
-import { useDispatch } from "react-redux";
+import { useGetSecondCollection } from "../../hooks/useGetSecondCollection";
+
 import { resetFeedback } from "../../store/feedbackPostSlice.js";
 import { resetStepTwoSelections } from "../../store/feedbackSlice.js";
+import { setUuidList } from "../../store/uuidSlice.js";
+
+import { LoadingData } from "./LoadingData.jsx";
+import PrimeModal from "../PrimeModal.jsx";
 
 export const Collection = () => {
-  // 1) Fetch data from /api/user/report/collection
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
   const {
     data: collectionData,
     isLoading,
     isError,
   } = useGetUserCollection(true);
-  const dispatch = useDispatch();
-  // 1) Reset feedback slices as soon as user arrives here
+
+  const [reconstructedData, setReconstructedData] = useState(null);
+  const [showModal, setShowModal] = useState(false);
+
   useEffect(() => {
-    // Clear out any leftover data from a previous feedback session
     dispatch(resetFeedback());
     dispatch(resetStepTwoSelections());
   }, [dispatch]);
 
-  // 2) We'll store our reconstructed data in local state
-  const [reconstructedData, setReconstructedData] = useState(null);
-
-  // 3) Once collectionData is available, reconstruct it in useEffect
   useEffect(() => {
     if (!collectionData) return;
 
-    // Reconstruct data object in "dummyDataOne" style
+    const isEmptyList =
+      !Array.isArray(collectionData.reportList) ||
+      collectionData.reportList.length === 0;
+
+    if (isEmptyList) {
+      setShowModal(true);
+      return;
+    }
+
     const newObject = {
-      user_uuid: collectionData.userId, // from 'userId'
+      user_uuid: collectionData.userId,
       user_report: collectionData.reportList.map((report) => ({
         id: report.id,
         userName: report.userName,
@@ -47,250 +61,70 @@ export const Collection = () => {
         fruity: report.fruity,
         spicy: report.spicy,
         uuid: report.uuid,
-        hasFeedback: report.hasFeedback, // rename 'hasFeedback' to 'hasfeedback' if needed
-        collection: report.collection, // rename 'collection' to 'hasCollection' if needed
+        hasFeedback: report.hasFeedback,
+        collection: report.collection,
         createdAt: report.createdAt,
       })),
     };
 
-    // Store it in state
     setReconstructedData(newObject);
 
-    // Log both the server data & reconstructed object
-    console.log("Collection -> Original serverData:", collectionData);
-    console.log("Collection -> Reconstructed (dummyDataOne style):", newObject);
-  }, [collectionData]);
+    const uuids = newObject.user_report.map((r) => r.uuid);
+    dispatch(setUuidList(uuids));
+    //
+    // console.log("Collection -> Original serverData:", collectionData);
+    // console.log("Collection -> Reconstructed:", newObject);
+  }, [collectionData, dispatch]);
 
-  // 4) Handle loading / error states
-  if (isLoading) return <div>Loading user collection...</div>;
-  if (isError) return <div>Failed to load user collection.</div>;
+  // 5) Query for second collection
+  const uuidList = useSelector((state) => state.uuid.uuidList);
+  const { data: secondCollectionData, isLoading: isSecondLoading } =
+    useGetSecondCollection(uuidList.length > 0 ? uuidList : []);
 
-  // 5) Our existing dummy data
-  const dummyDataOne = {
-    user_uuid: "10101010",
-    user_report: [
-      {
-        user_uuid: "10101010",
-        id: 450,
-        userName: "카리나",
-        perfumeName: "AC'SCENT17",
-        mainNote: "레몬페퍼",
-        middleNote: "인센스",
-        baseNote: "오리스",
-        userImageUrl:
-          "https://pixent-image.s3.ap-northeast-2.amazonaws.com/user/2025-02-05-16-15-28-asdasd.jpg",
-        citrus: 10,
-        floral: 10,
-        woody: 70,
-        musk: 10,
-        fruity: 10,
-        spicy: 70,
-        uuid: "xxxxxxxxx",
-        hasfeedback: true,
-        hasCollection: true,
-        createdAt: "2025-02-05T00:00:00.000Z",
-      },
-      {
-        user_uuid: "10101010",
-        id: 451,
-        userName: "카리나",
-        perfumeName: "AC'SCENT17",
-        mainNote: "레몬페퍼",
-        middleNote: "인센스",
-        baseNote: "오리스",
-        userImageUrl:
-          "https://pixent-image.s3.ap-northeast-2.amazonaws.com/user/2025-02-05-16-15-28-asdasd.jpg",
-        citrus: 10,
-        floral: 10,
-        woody: 70,
-        musk: 10,
-        fruity: 10,
-        spicy: 70,
-        uuid: "xxxxxxxxx",
-        hasfeedback: true,
-        hasCollection: true,
-        createdAt: "2025-02-05T00:00:00.000Z",
-      },
-      {
-        id: 452,
-        userName: "아리아",
-        perfumeName: "AC'SCENT12",
-        mainNote: "로즈마리",
-        middleNote: "화이트 머스크",
-        baseNote: "샌달우드",
-        userImageUrl:
-          "https://pixent-image.s3.ap-northeast-2.amazonaws.com/user/2025-02-05-16-15-28-asdasd.jpg",
-        citrus: 30,
-        floral: 50,
-        woody: 40,
-        musk: 60,
-        fruity: 20,
-        spicy: 20,
-        uuid: "yyyyyyyyy",
-        hasfeedback: true,
-        hasCollection: true,
-      },
-      {
-        id: 453,
-        userName: "아메리카",
-        perfumeName: "AC'SCENT13",
-        mainNote: "로즈마리",
-        middleNote: "화이트 머스크",
-        baseNote: "샌달우드",
-        userImageUrl:
-          "https://pixent-image.s3.ap-northeast-2.amazonaws.com/user/2025-02-05-16-15-28-asdasd.jpg",
-        citrus: 10,
-        floral: 10,
-        woody: 10,
-        musk: 90,
-        fruity: 10,
-        spicy: 10,
-        uuid: "yyyyyyyyy",
-        hasfeedback: false,
-        hasCollection: true,
-      },
-    ],
-  };
-
-  const dummyDataTwo = {
-    user_uuid: "10101010",
-    user_report: [
-      {
-        user_uuid: "10101010",
-        id: 451,
-        subId: 45101,
-        userName: "카리나",
-        perfumeName: "AC'SCENT17.1",
-        hasfeedback: false,
-        feedbackelement: [
-          {
-            elementName: "AC'SCENT17",
-            elementRatio: 75,
-          },
-          {
-            elementName: "시더우드",
-            elementRatio: 15,
-          },
-          {
-            elementName: "시티은행",
-            elementRatio: 10,
-          },
-        ],
-        citrus: 60,
-        floral: 10,
-        woody: 80,
-        musk: 30,
-        fruity: 10,
-        spicy: 70,
-        createdAt: "2025-02-05T00:00:00.000Z",
-      },
-      {
-        user_uuid: "10101010",
-        id: 452,
-        subId: 45201,
-        userName: "아리아",
-        perfumeName: "AC'SCENT12.1",
-        hasfeedback: true,
-        feedbackelement: [
-          {
-            elementName: "AC'SCENT12",
-            elementRatio: 75,
-          },
-          {
-            elementName: "시더우드",
-            elementRatio: 15,
-          },
-          {
-            elementName: "시티은행",
-            elementRatio: 10,
-          },
-        ],
-        citrus: 30,
-        floral: 50,
-        woody: 40,
-        musk: 60,
-        fruity: 20,
-        spicy: 40,
-        createdAt: "2025-02-05T00:00:00.000Z",
-      },
-      {
-        user_uuid: "10101010",
-        id: 452,
-        subId: 45202,
-        userName: "아리아",
-        perfumeName: "AC'SCENT12.2",
-        hasfeedback: true,
-        feedbackelement: [
-          {
-            elementName: "AC'SCENT12",
-            elementRatio: 75,
-          },
-          {
-            elementName: "시더우드",
-            elementRatio: 15,
-          },
-          {
-            elementName: "시티은행",
-            elementRatio: 10,
-          },
-        ],
-        citrus: 10,
-        floral: 10,
-        woody: 10,
-        musk: 90,
-        fruity: 90,
-        spicy: 90,
-        createdAt: "2025-02-05T00:00:00.000Z",
-      },
-      {
-        user_uuid: "10101010",
-        id: 452,
-        subId: 45203,
-        userName: "아리아",
-        perfumeName: "AC'SCENT12.3",
-        hasfeedback: false,
-        feedbackelement: [
-          {
-            elementName: "AC'SCENT12",
-            elementRatio: 75,
-          },
-          {
-            elementName: "시더우드",
-            elementRatio: 15,
-          },
-          {
-            elementName: "시티은행",
-            elementRatio: 10,
-          },
-        ],
-        citrus: 10,
-        floral: 90,
-        woody: 90,
-        musk: 90,
-        fruity: 90,
-        spicy: 90,
-        createdAt: "2025-02-05T00:00:00.000Z",
-      },
-    ],
-  };
-
-  // 6) Log your dummy data as well
-  // console.log("Collection -> dummyDataOne:", dummyDataOne);
-  // console.log("Collection -> dummyDataTwo:", dummyDataTwo);
-
-  // 7) If reconstructedData is still null (before useEffect runs), handle that
-  if (!reconstructedData) {
-    // Possibly show a small loading or "no data" message
-    return <div>Reconstructing collection data...</div>;
+  // 6) Handle loading / error
+  if (isLoading || isSecondLoading) {
+    return <LoadingData />;
   }
+  if (isError) {
+    return <div>Failed to load user collection.</div>;
+  }
+
+  // 7) If the user had *some* data, we built `reconstructedData`.
+  //    If we STILL don't have it, we show loading again
+  //    (this can happen if `collectionData` was null or undefined).
+  if (!reconstructedData && !showModal) {
+    return <LoadingData />;
+  }
+
+  // Close the modal => navigate home
+  const handleCloseModal = () => {
+    setShowModal(false);
+    navigate("/");
+  };
+
+  // Example "disable" array
+  const checkDisableList = [];
 
   // 8) Render
   return (
     <div className="flex-col min-h-screen w-full pt-[10px] scrollbar-hide">
-      {/* Now pass your dummyDataOne or reconstructedData to your child components */}
-      {/*<CollectionTop dataOne={dummyDataOne} dataTwo={dummyDataTwo} />*/}
+      {/* If we have valid data (reconstructedData) and NO modal, render <CollectionTop> */}
+      {!showModal && reconstructedData && (
+        <CollectionTop
+          dataOne={reconstructedData}
+          isDisabledList={checkDisableList}
+          arrayData={secondCollectionData}
+        />
+      )}
 
-      <CollectionTop dataOne={reconstructedData} dataTwo={dummyDataTwo} />
+      {/* If user_report was empty, or some empty scenario => show modal */}
+      <PrimeModal
+        isOpen={showModal}
+        title="컬렉션 조회결과"
+        onClose={handleCloseModal}
+      >
+        <p>컬렉션으로 추가한 향이 없습니다.</p>
+      </PrimeModal>
     </div>
   );
 };

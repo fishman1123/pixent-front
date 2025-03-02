@@ -13,7 +13,6 @@ import {
 } from "../../store/feedbackPostSlice.js";
 import { usePostFeedbackReport } from "../../hooks/usePostFeedbackReport.js";
 
-// UI etc.
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import ToastModal from "../ToastModal";
@@ -39,21 +38,14 @@ export const StepTwo = ({ onBack, reportId }) => {
     (state) => state.feedbackPost.feedbackElement,
   );
 
-  // Local states
   const [openAccordion, setOpenAccordion] = useState(null);
   const [selectedOptions, setSelectedOptions] = useState({});
   const [percentages, setPercentages] = useState({});
   const [modalMessage, setModalMessage] = useState("");
   const [showModal, setShowModal] = useState(false);
 
-  // If you want to show a local toast before the redirect, keep it here
-  // but in your requirement, you want to show the toast after you arrive at "/"
-  // So we won't show it here. Instead we navigate with state.
-  // const [showToast, setShowToast] = useState(false);
-
   const [translatedData, setTranslatedData] = useState([]);
 
-  // Example fragrance notes
   const rawFragranceNotes = [
     {
       nameKey: "fragranceNotes.citrusName",
@@ -108,13 +100,11 @@ export const StepTwo = ({ onBack, reportId }) => {
     setTranslatedData(data);
   }, [t]);
 
-  // Helpers
   const getTotalSelectedCount = (optionsObj) =>
     Object.values(optionsObj).reduce((sum, arr) => sum + arr.length, 0);
   const getTotalPercentages = (pcts) =>
     Object.values(pcts).reduce((sum, val) => sum + (val || 0), 0);
 
-  // Cleanup
   const resetSelections = () => {
     dispatch(resetStepTwoSelections());
     dispatch(resetFeedback());
@@ -123,12 +113,10 @@ export const StepTwo = ({ onBack, reportId }) => {
     setOpenAccordion(null);
   };
 
-  // Toggle
   const handleAccordionToggle = (noteName) => {
     setOpenAccordion(openAccordion === noteName ? null : noteName);
   };
 
-  // Remove selection
   const removeSelection = (noteName, option) => {
     setSelectedOptions((prev) => {
       const copy = { ...prev };
@@ -142,29 +130,22 @@ export const StepTwo = ({ onBack, reportId }) => {
     });
   };
 
-  // Add/Remove sub-options
   const handleOptionSelect = (noteName, option) => {
-    // 1) Make shallow copies of local states so we can modify them safely
     const newSelections = { ...selectedOptions };
-    // Also clone the specific array to avoid mutating the original
     newSelections[noteName] = [...(newSelections[noteName] || [])];
 
     const newPercentages = { ...percentages };
 
-    // 2) We’ll decide what to dispatch at the end
     let actionToDispatch = null;
 
-    // Check if the option is already selected
     const alreadySelected = newSelections[noteName].includes(option);
 
     if (alreadySelected) {
-      // Deselect
       newSelections[noteName] = newSelections[noteName].filter(
         (o) => o !== option,
       );
       delete newPercentages[option];
 
-      // Find index in the feedbackElement slice
       const index = feedbackElement.findIndex(
         (el) => el.elementName === option,
       );
@@ -172,39 +153,33 @@ export const StepTwo = ({ onBack, reportId }) => {
         actionToDispatch = removeFeedbackElement(index);
       }
     } else {
-      // Limit selection to 2
       if (feedbackElement.filter((el) => el.elementName !== "").length >= 2) {
         setModalMessage("두 개 이상의 노트를 선택하실 수 없습니다. (최대 2개)");
         setShowModal(true);
-        return; // Important: Exit early, no local state or dispatch
+        return;
       }
 
-      // Add new option locally
       newSelections[noteName].push(option);
       newPercentages[option] = 10;
 
-      // Check ratio limit
       const newTotal = getTotalPercentages(newPercentages);
       if (stepOneRatio && newTotal > stepOneRatio) {
         setModalMessage(
           `사용자 지정 비율(${stepOneRatio}%)을 초과할 수 없습니다.`,
         );
         setShowModal(true);
-        return; // Exit early again
+        return;
       }
 
-      // Update or add in Redux feedbackElement
       const existingIndex = feedbackElement.findIndex(
         (el) => el.elementName === option,
       );
       if (existingIndex !== -1) {
-        // Already in the store, just update its ratio
         actionToDispatch = updateFeedbackElement({
           index: existingIndex,
           elementRatio: 10,
         });
       } else {
-        // Find an empty slot
         const emptyIndex = feedbackElement.findIndex(
           (el) => el.elementName === "",
         );
@@ -218,17 +193,14 @@ export const StepTwo = ({ onBack, reportId }) => {
       }
     }
 
-    // 3) Now that we have our new local states, set them
     setSelectedOptions(newSelections);
     setPercentages(newPercentages);
 
-    // 4) If we decided on a Redux action, dispatch it here
     if (actionToDispatch) {
       dispatch(actionToDispatch);
     }
   };
 
-  // +/- ratio
   const adjustPercentage = (option, amount, e) => {
     e.stopPropagation();
     e.preventDefault();
@@ -260,12 +232,10 @@ export const StepTwo = ({ onBack, reportId }) => {
     });
   };
 
-  // Sync local changes to feedbackSlice
   useEffect(() => {
     dispatch(setStepTwoSelections({ selectedOptions, percentages }));
   }, [selectedOptions, percentages, dispatch]);
 
-  // Attempt to proceed
   const handleNext = () => {
     if (!reportId) {
       setModalMessage("Report ID가 없습니다.");
@@ -275,7 +245,6 @@ export const StepTwo = ({ onBack, reportId }) => {
 
     mutate(reportId, {
       onSuccess: () => {
-        // ** Redirect to "/" and pass from: "/feedback" **
         navigate("/", { state: { from: "/feedback" } });
       },
       onError: (error) => {
@@ -288,10 +257,9 @@ export const StepTwo = ({ onBack, reportId }) => {
 
   const handleBack = () => {
     resetSelections();
-    onBack(); // call parent prop
+    onBack();
   };
 
-  // Calculation for enabling "피드백 저장하기"
   const totalUsed = getTotalPercentages(percentages);
   const leftover = stepOneRatio - totalUsed;
   const totalNotes = getTotalSelectedCount(selectedOptions);
@@ -371,7 +339,6 @@ export const StepTwo = ({ onBack, reportId }) => {
                   </button>
                 </div>
 
-                {/* Accordion Content */}
                 <div
                   className={`overflow-hidden transition-all duration-500 ${
                     isOpen
@@ -467,7 +434,6 @@ export const StepTwo = ({ onBack, reportId }) => {
         </div>
       </div>
 
-      {/* Error Modal */}
       <PrimeModal
         isOpen={showModal}
         title="알림"

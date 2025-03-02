@@ -23,12 +23,10 @@ export const NicknamePage = ({ reportId: propReportId }) => {
     subTitle = "ㅎㅇㅎㅇ";
     status = reportId;
   } else if (isFromCollection) {
-    path = "/test";
+    path = "/api/user/report/variation";
     mainTitle = "관리자 페이지입니다";
     subTitle = "ㅎㅇㅎㅇ";
   }
-
-  console.log("✅ NicknamePage -> isFromCollection:", isFromCollection);
 
   return (
     <div className="min-h-screen flex justify-center w-full p-4">
@@ -42,7 +40,6 @@ export const NicknamePage = ({ reportId: propReportId }) => {
         </div>
 
         <div className="w-full min-w-[290px]">
-          {/* ✅ Ensure `isFromCollection` is passed correctly */}
           <SerialNumberBox
             path={path}
             status={status}

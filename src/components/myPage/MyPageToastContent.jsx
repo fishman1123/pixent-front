@@ -5,6 +5,7 @@ import CopyIcon from "../../assets/copy.svg";
 import cartIcon from "../../assets/cart.svg";
 import rightIcon from "../../assets/rightarrow.svg";
 import cancelIcon from "../../assets/ax.svg";
+import { useQueryClient } from "@tanstack/react-query";
 
 export const MyPageToastContent = ({
   selectedReport,
@@ -15,6 +16,7 @@ export const MyPageToastContent = ({
 }) => {
   // We use useNavigate hook from react-router-dom for navigation
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
   if (!selectedReport) return null;
 
@@ -35,8 +37,10 @@ export const MyPageToastContent = ({
     if (!bottomButtonDisabled) {
       console.log("Navigating to 향수 컬렉션…");
       // Here is the actual navigation to /user/collection
-      // navigate("/collection");
-      window.location.href = "/collection";
+      queryClient.invalidateQueries(["userCollection"]);
+
+      navigate("/collection");
+      // window.location.href = "/collection";
     }
   };
 

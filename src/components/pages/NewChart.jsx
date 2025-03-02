@@ -18,52 +18,28 @@ const NewChart = ({
   inputSpicyTwo = 0,
 }) => {
   const scentData = [
-    {
-      name: "Citrus",
-      start: inputCitrusOne,
-      end: inputCitrusTwo,
-      change: inputCitrusTwo - inputCitrusOne,
-    },
-    {
-      name: "Floral",
-      start: inputFloralOne,
-      end: inputFloralTwo,
-      change: inputFloralTwo - inputFloralOne,
-    },
-    {
-      name: "Woody",
-      start: inputWoodyOne,
-      end: inputWoodyTwo,
-      change: inputWoodyTwo - inputWoodyOne,
-    },
-    {
-      name: "Musk",
-      start: inputMuskOne,
-      end: inputMuskTwo,
-      change: inputMuskTwo - inputMuskOne,
-    },
-    {
-      name: "Fruity",
-      start: inputFreshOne,
-      end: inputFreshTwo,
-      change: inputFreshTwo - inputFreshOne,
-    },
-    {
-      name: "Spicy",
-      start: inputSpicyOne,
-      end: inputSpicyTwo,
-      change: inputSpicyTwo - inputSpicyOne,
-    },
+    { name: "Citrus", start: inputCitrusOne, end: inputCitrusTwo },
+    { name: "Floral", start: inputFloralOne, end: inputFloralTwo },
+    { name: "Woody", start: inputWoodyOne, end: inputWoodyTwo },
+    { name: "Musk", start: inputMuskOne, end: inputMuskTwo },
+    { name: "Fruity", start: inputFreshOne, end: inputFreshTwo },
+    { name: "Spicy", start: inputSpicyOne, end: inputSpicyTwo },
   ];
 
+  // Find the highest value in the dataset (either start or end values)
+  const maxValue = Math.max(...scentData.flatMap((d) => [d.start, d.end]));
+
+  // Adjust scale based on max value condition
+  const scale = maxValue > 100 ? 1.6 : 1.9;
+
   const maxWidth = 160;
-  const scale = 2;
 
   const formatNumber = (num) => `${num}`;
 
-  const ScentLine = ({ name, start, end, change }) => {
-    const left = Math.min(start, end) * scale; // left boundary in px
-    const width = Math.abs(end - start) * scale; // difference in px
+  const ScentLine = ({ name, start, end }) => {
+    const change = end - start;
+    const left = Math.min(start, end) * scale;
+    const width = Math.abs(change) * scale;
 
     return (
       <div className="mb-8">
@@ -96,7 +72,6 @@ const NewChart = ({
                       width: `${width}px`,
                     }}
                   />
-
                   <div
                     className="absolute h-3 border-l border-black"
                     style={{
@@ -104,7 +79,6 @@ const NewChart = ({
                       top: "-6px",
                     }}
                   />
-
                   <span
                     className="absolute -top-5 text-sm"
                     style={{
@@ -139,7 +113,6 @@ const NewChart = ({
             name={scent.name}
             start={scent.start}
             end={scent.end}
-            change={scent.change}
           />
         ))}
       </div>

@@ -3,12 +3,11 @@ import { useLocation } from "react-router-dom";
 import { useGetReportFeedback } from "../../hooks/useGetReportFeedback.js";
 import { FeedBackChart } from "../FeedBackChart.jsx";
 import NewChart from "./NewChart.jsx";
+import { LoadingData } from "./LoadingData.jsx";
 
 export const FeedBackDetailPage = () => {
-  // 1) Access the location and extract data from state
   const { state } = useLocation() || {};
 
-  // Destructure the data passed via navigate("/collection/add", { state: { ... } })
   const {
     subid, // 'subId' from the calling component
     citrus, // e.g. chart.data.citrus
@@ -19,13 +18,15 @@ export const FeedBackDetailPage = () => {
     spicy,
   } = state || {};
 
-  // 2) Use 'subid' to fetch additional data from your API endpoint
   //    /api/user/report/{subid}/feedback
   const { data, isLoading, isError, error } = useGetReportFeedback(subid);
 
-  // 3) Handle loading/error states
   if (isLoading) {
-    return <div>Loading feedback data...</div>;
+    return (
+      <div>
+        <LoadingData />
+      </div>
+    );
   }
   if (isError) {
     return (
@@ -33,8 +34,6 @@ export const FeedBackDetailPage = () => {
     );
   }
 
-  // 4) Replace dummyOne with data from location.state
-  //    Fallback to some default values if a field is undefined
   const dummyOne = {
     citrus: citrus ?? 0,
     floral: floral ?? 0,
@@ -44,8 +43,6 @@ export const FeedBackDetailPage = () => {
     spicy: spicy ?? 0,
   };
 
-  // 5) Keep dummyTwo from the API response
-  //    Adjust property names according to your actual response structure
   const dummyTwo = {
     citrus: data?.citrus ?? 0,
     floral: data?.floral ?? 0,
@@ -55,9 +52,8 @@ export const FeedBackDetailPage = () => {
     spicy: data?.spicy ?? 0,
   };
 
-  // Debug logs
-  console.log("Location-based Scent Data (dummyOne):", dummyOne);
-  console.log("API-based Feedback Data (dummyTwo):", dummyTwo);
+  // console.log("Location-based Scent Data (dummyOne):", dummyOne);
+  // console.log("API-based Feedback Data (dummyTwo):", dummyTwo);
 
   return (
     <div className="p-4">
@@ -65,7 +61,6 @@ export const FeedBackDetailPage = () => {
         <h1 className="text-xl mb-4">Scent Profile</h1>
       </div>
 
-      {/* --- Radar Charts --- */}
       <FeedBackChart
         // Radar 1 => data from navigate state
         inputCitrusOne={dummyOne.citrus}
@@ -85,14 +80,12 @@ export const FeedBackDetailPage = () => {
 
       <div className="px-4">
         <NewChart
-          // Radar 1 => data from navigate state
           inputCitrusOne={dummyOne.citrus}
           inputFloralOne={dummyOne.floral}
           inputWoodyOne={dummyOne.woody}
           inputMuskOne={dummyOne.musk}
           inputFreshOne={dummyOne.fresh}
           inputSpicyOne={dummyOne.spicy}
-          // Radar 2 => data from API
           inputCitrusTwo={dummyTwo.citrus}
           inputFloralTwo={dummyTwo.floral}
           inputWoodyTwo={dummyTwo.woody}

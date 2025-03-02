@@ -31,21 +31,12 @@ export function usePostFeedbackReport() {
           })),
       };
 
-      // Log data being sent
-      console.log(
-        "📤 Sending feedback data to server:",
-        JSON.stringify(formattedFeedbackData, null, 2),
-      );
-
       try {
         // POST request
         const response = await AxiosInstance.post(
           `/api/user/report/${reportId}/feedback`,
           formattedFeedbackData,
         );
-
-        // Log received response
-        console.log("📥 Received response from server:", response.data);
 
         return response.data;
       } catch (error) {

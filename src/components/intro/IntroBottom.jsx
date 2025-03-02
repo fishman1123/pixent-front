@@ -8,6 +8,7 @@ import cancelIcon from "../../assets/ax.svg";
 import { MyPageToastContent } from "../myPage/MyPageToastContent.jsx";
 import { useGetUserAllReport } from "../../hooks/useGetUserAllReport";
 import { usePostCollectionCheck } from "../../hooks/usePostCollectionCheck";
+import { useQueryClient } from "@tanstack/react-query";
 
 export const IntroBottom = () => {
   const [clickedId, setClickedId] = useState(null);
@@ -18,12 +19,11 @@ export const IntroBottom = () => {
 
   const { data: userAllReport, isLoading, isError } = useGetUserAllReport(true);
   const { mutate: postCollectionCheck } = usePostCollectionCheck();
-
   const { userId, reportAmount, reportList = [] } = userAllReport || {};
-
-  console.log("IntroBottom -> userId:", userId);
-  console.log("IntroBottom -> reportAmount:", reportAmount);
-  console.log("IntroBottom -> reportList:", reportList);
+  const queryClient = useQueryClient();
+  // console.log("IntroBottom -> userId:", userId);
+  // console.log("IntroBottom -> reportAmount:", reportAmount);
+  // console.log("IntroBottom -> reportList:", reportList);
 
   useEffect(() => {
     const newStates = {};
@@ -33,17 +33,17 @@ export const IntroBottom = () => {
     setCollectionStates(newStates);
   }, [reportList]);
 
-  console.log("IntroBottom -> collectionStates:", collectionStates);
+  // console.log("IntroBottom -> collectionStates:", collectionStates);
 
   // Show toast
   const handleClickButton = (id) => {
-    console.log(`handleClickButton -> clickedId=${id}`);
+    // console.log(`handleClickButton -> clickedId=${id}`);
     setClickedId(id);
     setShowToast(true);
   };
 
   const handleCloseToast = () => {
-    console.log("handleCloseToast -> closing toast");
+    // console.log("handleCloseToast -> closing toast");
     setShowToast(false);
     setClickedId(null);
   };
@@ -58,7 +58,7 @@ export const IntroBottom = () => {
       .writeText(urlToCopy)
       .then(() => {
         setCopySuccess(true);
-        console.log("handleCopy -> copied URL:", urlToCopy);
+        // console.log("handleCopy -> copied URL:", urlToCopy);
         setTimeout(() => setCopySuccess(false), 2000);
       })
       .catch((err) => console.error("Failed to copy:", err));
@@ -78,11 +78,12 @@ export const IntroBottom = () => {
     postCollectionCheck(report.uuid, {
       onSuccess: () => {
         const nextState = currentState === "default" ? "added" : "default";
-        console.log("check here :", selectedReport.collection);
+        // console.log("check here :", selectedReport.collection);
         setCollectionStates((prev) => ({
           ...prev,
           [reportId]: nextState,
         }));
+        queryClient.invalidateQueries(["userCollection"]);
       },
       onError: (error) => {
         console.error(

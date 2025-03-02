@@ -12,6 +12,7 @@ import ErrorModal from "./components/ErrorModal";
 import "./index.css";
 import "flowbite";
 import "./i18n";
+import { LoadingData } from "./components/pages/LoadingData.jsx";
 
 const router = createBrowserRouter(RouterList);
 const queryClient = new QueryClient();
@@ -34,7 +35,7 @@ function App() {
     <Provider store={store}>
       <QueryClientProvider client={queryClient}>
         <ErrorBoundary>
-          <Suspense fallback={<div>Loading suspense-based routes...</div>}>
+          <Suspense fallback={<LoadingData />}>
             <AuthInitializer>
               <RouterProvider router={router} />
             </AuthInitializer>

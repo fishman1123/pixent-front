@@ -1,29 +1,26 @@
 // src/components/stepTwo/FeedBackFinal.jsx
 import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux"; // <-- Add this
+import { useDispatch, useSelector } from "react-redux";
 import chartIcon from "../../assets/newchart.svg";
 import reservationIcon from "../../assets/reservation.svg";
 import { useNavigate } from "react-router-dom";
-import { resetFeedback } from "../../store/feedbackPostSlice.js";
 
 const FeedBackFinal = () => {
   const navigation = useNavigate();
 
-  // 1) Grab final adjusted values from feedbackPost
   const { citrus, floral, woody, musk, fruity, spicy, feedbackElement } =
     useSelector((state) => state.feedbackPost);
 
-  // 2) Log them whenever the component mounts or these values change
   useEffect(() => {
-    console.log("=== Final Adjusted Values from feedbackPost ===");
-    console.log("citrus:", citrus);
-    console.log("floral:", floral);
-    console.log("woody:", woody);
-    console.log("musk:", musk);
-    console.log("fruity:", fruity);
-    console.log("spicy:", spicy);
+    // console.log("=== Final Adjusted Values from feedbackPost ===");
+    // console.log("citrus:", citrus);
+    // console.log("floral:", floral);
+    // console.log("woody:", woody);
+    // console.log("musk:", musk);
+    // console.log("fruity:", fruity);
+    // console.log("spicy:", spicy);
 
-    console.log("=== Feedback Elements ===");
+    // console.log("=== Feedback Elements ===");
     feedbackElement.forEach((element, index) => {
       console.log(`Element ${index + 1}:`, element);
     });

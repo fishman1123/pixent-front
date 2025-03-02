@@ -10,7 +10,7 @@ export const CollectionCenter = ({ data }) => {
         inputFloral={firstUser.floral}
         inputWoody={firstUser.woody}
         inputMusk={firstUser.musk}
-        inputFresh={firstUser.fruity} // Assuming fruity represents fresh
+        inputFresh={firstUser.fruity}
         inputSpicy={firstUser.spicy}
       />
     </div>

@@ -10,7 +10,7 @@ import { AppLayout } from "./components/layout/AppLayout.jsx";
 import { Preference } from "./components/pages/Preference.jsx";
 import { ReportViewer } from "./components/pages/ReportViewer.jsx";
 import { ReportViewerResult } from "./components/pages/ReportViewerResult.jsx";
-import { Admin } from "./components/pages/Admin.jsx";
+import { Admin } from "./components/admin/Admin.jsx";
 import { PrintReport } from "./components/pages/PrintReport";
 import Loading from "./components/pages/Loading.jsx";
 import { ReportSummary } from "./components/pages/ReportSummary";
@@ -28,6 +28,10 @@ import { FeedBackChart } from "./components/FeedBackChart.jsx";
 import { FeedBackDetailPage } from "./components/pages/FeedBackDetailPage.jsx";
 import { AnalysisRequest } from "./components/AnalysisRequest.jsx";
 import AuthInitializer from "./components/AuthInitializer.jsx";
+import { AdditionalFeedBackPage } from "./components/pages/AdditionalFeedBackPage.jsx";
+import { AdminUsers } from "./components/admin/AdminUsers.jsx";
+import { AddOriginPage } from "./components/pages/AddOriginPage.jsx";
+import { ValidationPage } from "./components/pages/ValidationPage.jsx";
 
 export const RouterList = [
   {
@@ -89,6 +93,10 @@ export const RouterList = [
                 element: <Admin />,
               },
               {
+                path: "🌝",
+                element: <AdminUsers />,
+              },
+              {
                 path: "loading",
                 element: <Loading />,
               },
@@ -130,7 +138,11 @@ export const RouterList = [
                   },
                   {
                     path: "addOrigin",
-                    element: <AnalysisRequest />,
+                    element: <AddOriginPage />,
+                  },
+                  {
+                    path: "validation",
+                    element: <ValidationPage />,
                   },
                 ],
               },
@@ -140,6 +152,10 @@ export const RouterList = [
                   {
                     index: true,
                     element: <FeedBackPage />,
+                  },
+                  {
+                    path: "variation",
+                    element: <AdditionalFeedBackPage />,
                   },
                   {
                     path: ":id",

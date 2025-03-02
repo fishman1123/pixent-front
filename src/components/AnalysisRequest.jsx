@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { SerialNumberBox } from "./input/SerialNumberBox.jsx";
+import { StatusInputBox } from "./StatusInputBox.jsx";
 
 export const AnalysisRequest = () => {
   const [count, setCount] = useState(1);
@@ -14,8 +14,6 @@ export const AnalysisRequest = () => {
   const handleIncrement = () => {
     if (count < MAX_REQUEST) {
       setCount(count + 1);
-    } else {
-      console.warn("Max count reached!");
     }
   };
 
@@ -32,7 +30,6 @@ export const AnalysisRequest = () => {
           <div className="flex flex-col items-center p-5">
             {/* Counter Box */}
             <div className="flex w-full border-black border-2">
-              {/* Decrease Button */}
               <button
                 type="button"
                 onClick={handleDecrement}
@@ -40,19 +37,24 @@ export const AnalysisRequest = () => {
               >
                 -
               </button>
-              {/* Expandable Center Count */}
               <div className="w-full flex-grow text-center py-2">{count}개</div>
-              {/* Increase Button */}
               <button
                 type="button"
                 onClick={handleIncrement}
-                className="px-4 py-2 border-l-2 border-black focus:outline-none"
+                className={`px-4 py-2 border-l-2 border-black focus:outline-none ${
+                  count >= MAX_REQUEST ? "opacity-50 cursor-not-allowed" : ""
+                }`}
+                disabled={count >= MAX_REQUEST}
               >
                 +
               </button>
             </div>
           </div>
-          <SerialNumberBox path={"/api"} status={"request"} />
+          <StatusInputBox
+            path={"/api/user/request_limit"}
+            status={"request"}
+            count={count}
+          />
           <div className="flex flex-col items-center ml-5 mr-5 bg-gray-50 py-5 border">
             <div className="text-[14px] text-black">
               *요청 후 12시간 이내에 승인이 이뤄집니다.

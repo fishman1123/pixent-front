@@ -68,9 +68,6 @@ export const SummaryChart = ({
         blended[reduxKey] !== undefined &&
         blended[reduxKey] !== previousBlendedRef.current[reduxKey]
       ) {
-        console.log(
-          `🔥 Updating Redux with Blended Data: ${reduxKey} -> ${blended[reduxKey]}`,
-        );
         // Dispatch the new value
         dispatch(setAttribute({ key: reduxKey, value: blended[reduxKey] }));
       }

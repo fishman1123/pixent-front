@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import leftIcon from "../../assets/newleft.svg";
 import rightIcon from "../../assets/newright.svg";
@@ -8,19 +8,21 @@ import fixIcon from "../../assets/fix.svg";
 import upIcon from "../../assets/up.svg";
 import { SummaryChart } from "../result/SummaryChart.jsx";
 
-export const CollectionTop = ({ dataOne, dataTwo }) => {
+export const CollectionTop = ({ dataOne, arrayData }) => {
   const navigate = useNavigate();
 
   // -- Handler for navigating to feedback page
   const onClickFeedBack = (subId, perfumeName) => {
-    console.log("this is subid:", subId);
-    console.log("this is perfumeName:", perfumeName);
-    navigate("/feedback", { state: { subId, perfumeName } });
+    if (perfumeName.includes(".")) {
+      navigate("/feedback/variation", { state: { subId, perfumeName } });
+    } else {
+      navigate("/feedback", { state: { subId, perfumeName } });
+    }
   };
 
   // -- Handler for checking feedback details
   const handleFeedBackCheck = (subId, chartData) => {
-    console.log("Feedback status:", chartData.hasFeedback);
+    // console.log("Feedback status:", chartData.hasFeedback);
 
     if (!subId) return;
     navigate(`/feedback/${subId}`, {
@@ -36,16 +38,17 @@ export const CollectionTop = ({ dataOne, dataTwo }) => {
     });
   };
 
-  // -- Build slides from dataOne & dataTwo
+  // -- Build slides from dataOne & arrayData
   const slides = dataOne.user_report.map((report) => {
-    // debug log
-    console.log(
-      `Logging report: ${report.perfumeName}, hasFeedback:`,
-      report.hasFeedback,
-    );
+    // console.log(
+    //   `Logging report: ${report.perfumeName}, hasFeedback:`,
+    //   report.hasFeedback,
+    // );
 
-    // "Matched" items from dataTwo
-    const matched = dataTwo.user_report.filter((item) => item.id === report.id);
+    // Find matching feedback data
+    const matched = arrayData
+      .flatMap((entry) => entry.feedbackList) // Extract feedback items
+      .filter((item) => item.id === report.id); // Match by ID
 
     // "items" array for listing
     const items = [
@@ -58,40 +61,37 @@ export const CollectionTop = ({ dataOne, dataTwo }) => {
     ];
 
     // Build chartSet
-    const chartSet = [];
-
-    // ChartOne for "report"
-    chartSet.push({
-      id: "chartOne",
-      data: {
-        perfumeName: report.perfumeName,
-        mainNote: report.mainNote,
-        middleNote: report.middleNote,
-        baseNote: report.baseNote,
-        citrus: report.citrus,
-        floral: report.floral,
-        woody: report.woody,
-        musk: report.musk,
-        fruity: report.fruity,
-        spicy: report.spicy,
-        subId: report.uuid,
-        hasFeedback: report.hasFeedback,
+    const chartSet = [
+      {
+        id: "chartOne",
+        data: {
+          perfumeName: report.perfumeName,
+          mainNote: report.mainNote,
+          middleNote: report.middleNote,
+          baseNote: report.baseNote,
+          citrus: report.citrus,
+          floral: report.floral,
+          woody: report.woody,
+          musk: report.musk,
+          fruity: report.fruity,
+          spicy: report.spicy,
+          subId: report.uuid,
+          hasFeedback: report.hasFeedback,
+        },
       },
-    });
-
-    // Additional charts from matched data
-    matched.forEach((mItem, idx) => {
-      console.log(
-        `Matched item: ${mItem.perfumeName}, hasFeedback:`,
-        mItem.hasFeedback,
-      );
-      chartSet.push({
+      ...matched.map((mItem, idx) => ({
         id: `chartTwo-${idx}`,
         data: {
           perfumeName: mItem.perfumeName,
-          mainNote: `(${mItem.feedbackelement[0].elementName}) ${mItem.feedbackelement[0].elementRatio}%`,
-          middleNote: `${mItem.feedbackelement[1].elementName} ${mItem.feedbackelement[1].elementRatio}%`,
-          baseNote: `${mItem.feedbackelement[2].elementName} ${mItem.feedbackelement[2].elementRatio}%`,
+          mainNote: report.mainNote,
+          middleNote:
+            mItem.feedbackElementList.length > 1
+              ? `${mItem.feedbackElementList[0]?.elementName || "None"} ${mItem.feedbackElementList[0]?.elementRatio || 0}%`
+              : "None",
+          baseNote:
+            mItem.feedbackElementList.length > 2
+              ? `${mItem.feedbackElementList[1]?.elementName || "None"} ${mItem.feedbackElementList[1]?.elementRatio || 0}%`
+              : "None",
           citrus: mItem.citrus,
           floral: mItem.floral,
           woody: mItem.woody,
@@ -101,8 +101,8 @@ export const CollectionTop = ({ dataOne, dataTwo }) => {
           subId: mItem.subId ?? null,
           hasFeedback: mItem.hasFeedback,
         },
-      });
-    });
+      })),
+    ];
 
     return {
       title: report.perfumeName,
@@ -145,7 +145,7 @@ export const CollectionTop = ({ dataOne, dataTwo }) => {
     navigate("/collection/add", { state: { subid: subId } });
   };
   const handleAddOrigin = () => {
-    navigate("/charge");
+    navigate("/collection/validation");
   };
 
   return (
@@ -225,12 +225,13 @@ export const CollectionTop = ({ dataOne, dataTwo }) => {
                     </button>
                   </div>
 
-                  {/* Slide Title / Subtitle */}
                   <div className="mb-2">
                     <h1 className="text-[40px] text-center font-headerTitle">
                       {slide.title}
                     </h1>
-                    <p className="pl-12 text-sm">{slide.subtitle}</p>
+                    <p className="flex justify-center text-sm ">
+                      {slide.subtitle}
+                    </p>
                   </div>
                   <hr className="border-white mb-4" />
 
@@ -240,39 +241,40 @@ export const CollectionTop = ({ dataOne, dataTwo }) => {
                       isExpanded ? "max-h-[1000px]" : "max-h-[150px]"
                     }`}
                   >
-                    {slide.items.map((item, idx2) => (
-                      <div
-                        key={idx2}
-                        className="flex items-center justify-between bg-[#333] p-3 mb-6"
-                      >
-                        <div>
-                          <div className="flex items-center gap-3">
-                            <span>•</span>
-                            <span className="font-[inter]">{item.name}</span>
-                            {idx2 !== 0 && (
-                              <div
-                                className="noanimationbutton flex items-center justify-center min-h-[20px]
-                                  px-2 py-1 pt-0 bg-black border border-white text-white"
-                              >
-                                <span className="text-sm font-medium tracking-wide">
-                                  A/S
-                                </span>
-                              </div>
+                    {slide.items.map((item, idx2) => {
+                      return (
+                        <div
+                          key={idx2}
+                          className="flex items-center justify-between bg-[#333] p-3 mb-6"
+                        >
+                          <div>
+                            <div className="flex items-center gap-3">
+                              <span>•</span>
+                              <span className="font-[inter]">{item.name}</span>
+                              {idx2 !== 0 && (
+                                <div
+                                  className="noanimationbutton flex items-center justify-center min-h-[20px]
+              px-2 py-1 pt-0 bg-black border border-white text-white"
+                                >
+                                  <span className="text-sm font-medium tracking-wide">
+                                    A/S
+                                  </span>
+                                </div>
+                              )}
+                            </div>
+                            {item.subName && (
+                              <p className="text-gray-400 text-sm">
+                                {item.subName}
+                              </p>
                             )}
                           </div>
-                          {item.subName && (
-                            <p className="text-gray-400 text-sm">
-                              {item.subName}
-                            </p>
-                          )}
+                          <div className="text-sm ml-6">{item.date}</div>
                         </div>
-                        <div className="text-sm ml-6">{item.date}</div>
-                      </div>
-                    ))}
+                      );
+                    })}
                   </div>
 
-                  {/* Expand/Collapse Button (only if more than 3 items) */}
-                  {slide.items.length > 3 && (
+                  {slide.items.length > 2 && (
                     <div className="flex justify-center mt-2">
                       <button
                         className="noanimationbutton border bg-black border-white px-3 py-1 flex items-center justify-center w-full"
@@ -297,7 +299,6 @@ export const CollectionTop = ({ dataOne, dataTwo }) => {
           </div>
         </div>
 
-        {/* Dot Indicators */}
         <div className="flex items-center justify-center mt-4 space-x-2">
           {slides.map((_, dotIndex) => (
             <div
@@ -332,7 +333,6 @@ export const CollectionTop = ({ dataOne, dataTwo }) => {
               inputSpicy={chart.data.spicy}
             />
 
-            {/* Perfume Info */}
             <div className="text-black mb-2 border-t border-b border-black">
               <div className="m-[20px]">
                 <div className="flex justify-between">
@@ -344,9 +344,18 @@ export const CollectionTop = ({ dataOne, dataTwo }) => {
                   </div>
                   <div className="w-[80px] ml-[40px] flex justify-center">
                     <button
-                      className="noanimationbutton flex items-center justify-center min-w-[80px]
-                        min-h-[30px] px-2 py-1 border border-gray-600 text-black font-light"
+                      className={`noanimationbutton flex items-center justify-center min-w-[80px]
+    min-h-[30px] px-2 py-1 border border-gray-600 text-black font-light 
+    ${
+      idx !== activeSlide.chartSet.length - 1
+        ? "opacity-50 cursor-not-allowed"
+        : ""
+    }`}
                       onClick={() => handleAddFeedback(chart.data.subId)}
+                      disabled={
+                        chart.id !== "chartOne" &&
+                        idx !== activeSlide.chartSet.length - 1
+                      }
                     >
                       <span className="text-sm tracking-wide">ADD</span>
                       <svg
@@ -360,13 +369,13 @@ export const CollectionTop = ({ dataOne, dataTwo }) => {
                         <path d="M13 7H11V11H7V13H11V17H13V13H17V11H13V7Z" />
                         <path
                           d="M12 2C6.486 2 2 6.486 2 12
-                             C2 17.514 6.486 22 12 22
-                             C17.514 22 22 17.514 22 12
-                             C22 6.486 17.514 2 12 2ZM12 20
-                             C7.589 20 4 16.411 4 12
-                             C4 7.589 7.589 4 12 4
-                             C16.411 4 20 7.589 20 12
-                             C20 16.411 16.411 20 12 20Z"
+         C2 17.514 6.486 22 12 22
+         C17.514 22 22 17.514 22 12
+         C22 6.486 17.514 2 12 2ZM12 20
+         C7.589 20 4 16.411 4 12
+         C4 7.589 7.589 4 12 4
+         C16.411 4 20 7.589 20 12
+         C20 16.411 16.411 20 12 20Z"
                         />
                       </svg>
                     </button>
@@ -375,33 +384,29 @@ export const CollectionTop = ({ dataOne, dataTwo }) => {
               </div>
             </div>
 
-            {/* Show Main/Middle/Base Notes */}
             <div className="text-gray-400 m-4">
-              {chart.data.subId ? (
-                <>
-                  <div>원향 {chart.data.mainNote}</div>
-                  <div>+ {chart.data.middleNote}</div>
-                  <div>+ {chart.data.baseNote}</div>
-                </>
-              ) : (
-                <>
-                  <div>Top: {chart.data.mainNote}</div>
-                  <div>Middle: {chart.data.middleNote}</div>
-                  <div>Base: {chart.data.baseNote}</div>
-                </>
+              <div>원향 {chart.data.mainNote}</div>
+              {!chart.data.middleNote.includes("None") && (
+                <div>+ {chart.data.middleNote}</div>
+              )}
+              {!chart.data.baseNote.includes("None") && (
+                <div>+ {chart.data.baseNote}</div>
               )}
             </div>
 
-            {/* Action Buttons */}
             <div className="mx-[20px]">
               <div className="flex gap-4 mt-6">
-                {/* 피드백 확인하기 */}
                 <div className="w-full">
                   <button
-                    className="noanimationbutton flex border flex-col items-center p-4 min-w-32 w-full h-auto"
+                    className={`noanimationbutton flex border flex-col items-center p-4 min-w-32 w-full h-auto ${
+                      !chart.data.hasFeedback
+                        ? "opacity-50 cursor-not-allowed"
+                        : ""
+                    }`}
                     onClick={() =>
                       handleFeedBackCheck(chart.data.subId, chart.data)
                     }
+                    disabled={!chart.data.hasFeedback}
                   >
                     <span className="text-sm text-gray-700">
                       <img
@@ -416,13 +421,14 @@ export const CollectionTop = ({ dataOne, dataTwo }) => {
                   </button>
                 </div>
 
-                {/* 피드백 기록/수정하기 */}
                 <div className="w-full">
                   <button
-                    className="noanimationbutton border flex flex-col items-center p-4 min-w-32 w-full h-auto"
+                    className={`noanimationbutton border flex flex-col items-center p-4 min-w-32 w-full h-auto
+      ${idx !== activeSlide.chartSet.length - 1 ? "opacity-50 cursor-not-allowed" : ""}`}
                     onClick={() =>
                       onClickFeedBack(chart.data.subId, chart.data.perfumeName)
                     }
+                    disabled={idx !== activeSlide.chartSet.length - 1}
                   >
                     <span className="text-sm text-black">
                       <img
@@ -440,11 +446,19 @@ export const CollectionTop = ({ dataOne, dataTwo }) => {
                 </div>
               </div>
 
-              {/* Bottom Navigation Button */}
               <div className="mt-4">
+                {/*this need to be refactored...*/}
                 <button
                   className="noanimationbutton flex items-center justify-center w-full h-[60px] px-5 py-4"
-                  onClick={() => {}}
+                  onClick={() => {
+                    if (idx === 0) {
+                      window.location.href =
+                        "https://acscent.co.kr/shop_view/?idx=199";
+                    } else {
+                      window.location.href =
+                        "https://booking.naver.com/booking/6/bizes/1002529";
+                    }
+                  }}
                   disabled={false}
                 >
                   <span className="text-black text-[16px] pt-1">

@@ -21,7 +21,7 @@ export const InputTextTwoCombineUpload = () => {
     t("genderOptions.female"),
     t("genderOptions.other"),
   ];
-  const userState = useSelector((state) => state.user); // Access user slice
+  const userState = useSelector((state) => state.user);
   const confirmationState = useSelector((state) => state.confirmation); // Access confirmation slice
   const dispatch = useDispatch(); // Initialize dispatch
   const [keyword, setKeyword] = useState("");
@@ -36,15 +36,12 @@ export const InputTextTwoCombineUpload = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isAgreementModalOpen, setIsAgreementModalOpen] = useState(false);
 
-  // React Query mutation
   const { mutate } = useReportSubmit();
 
-  // Checkbox toggler
   const handleCheckboxChange = () => {
     setIsCheckboxChecked((prev) => !prev);
   };
 
-  // Image selection & compression
   const handleImageChange = async (event) => {
     const file = event.target.files[0];
     if (file) {
@@ -77,7 +74,6 @@ export const InputTextTwoCombineUpload = () => {
     }
   };
 
-  // Simple form validation
   const validateForm = () => {
     const newErrors = {
       userName: userName.trim() === "",
@@ -126,7 +122,6 @@ export const InputTextTwoCombineUpload = () => {
     });
   };
 
-  // Handle input changes
   const handleNameChange = (event) => {
     setUserName(event.target.value);
   };
@@ -152,7 +147,7 @@ export const InputTextTwoCombineUpload = () => {
           <div key={option} className="group flex-1">
             <button
               className={`p-3 min-w-[100px] w-full h-[50px] text-center border border-black 
-                                        transition-colors duration-500 ease-out
+                                         transition-colors duration-500 ease-out
                                         focus:bg-black focus:text-white 
                                         ${
                                           selectedOption === option

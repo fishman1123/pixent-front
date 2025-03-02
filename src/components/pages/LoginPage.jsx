@@ -24,7 +24,6 @@ export const LoginPage = () => {
         break;
       }
       default:
-        console.log(`Unsupported provider: ${provider}`);
         break;
     }
   };

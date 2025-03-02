@@ -58,7 +58,6 @@ export const selectBlendedChartData = createSelector(
       blendedData[dim] = originalData[dim] + picksAverages[dim];
     }
 
-    console.log("🔹 Blended Data (Selector Output):", blendedData);
     return blendedData;
   },
 );

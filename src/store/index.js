@@ -9,6 +9,8 @@ import checkboxSelectionsReducer from "./checkboxSelectionSlice";
 import checkboxDataReducer from "./checkboxDataSlice";
 import feedbackReducer from "./feedbackSlice";
 import feedbackPostReducer from "./feedbackPostSlice";
+import collectionReducer from "./collectionSlice";
+import uuidReducer from "./uuidSlice";
 
 export const store = configureStore({
   reducer: {
@@ -22,8 +24,9 @@ export const store = configureStore({
     checkboxSelection: checkboxSelectionsReducer,
     feedback: feedbackReducer,
     feedbackPost: feedbackPostReducer,
+    collection: collectionReducer,
+    uuid: uuidReducer,
   },
 });
 
-// You can export types if you're using TypeScript, or just export store
 export default store;
