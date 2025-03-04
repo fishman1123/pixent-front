@@ -113,9 +113,8 @@ export const SerialNumberBox = ({
 
         switch (location.pathname) {
           case "/secured/collection/add":
-            queryClient.invalidateQueries(["userCollection"]);
-
-            navigate("/secured/collection");
+            window.location.href = "/secured/collection/add";
+            // navigate("/secured/collection");
             break;
           case "/login/nickname":
             window.location.href = "/";
