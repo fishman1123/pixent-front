@@ -113,7 +113,7 @@ export const SerialNumberBox = ({
 
         switch (location.pathname) {
           case "/secured/collection/add":
-            window.location.href = "/secured/collection/add";
+            window.location.href = "/secured/collection";
             // navigate("/secured/collection");
             break;
           case "/login/nickname":
