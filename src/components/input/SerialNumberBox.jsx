@@ -8,6 +8,7 @@ import { useTranslation } from "react-i18next";
 import { openErrorModal } from "../../store/errorModalSlice";
 import { usePostCreateVariant } from "../../hooks/usePostCreateVaraint";
 import AxiosInstance from "../../api/axiosInstance";
+import { useQueryClient } from "@tanstack/react-query";
 
 export const SerialNumberBox = ({
   path,
@@ -20,6 +21,7 @@ export const SerialNumberBox = ({
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
+  const queryClient = useQueryClient();
 
   const [serialNumber, setSerialNumber] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
@@ -111,6 +113,8 @@ export const SerialNumberBox = ({
 
         switch (location.pathname) {
           case "/secured/collection/add":
+            queryClient.invalidateQueries(["userCollection"]);
+
             navigate("/secured/collection");
             break;
           case "/login/nickname":
