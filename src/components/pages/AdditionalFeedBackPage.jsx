@@ -61,6 +61,10 @@ export const AdditionalFeedBackPage = () => {
     setDummydataforfeed(reconstructed);
   }, [reportData]);
 
+  if (reportData) {
+    console.log("data is here");
+  }
+
   const [step, setStep] = useState(0);
 
   const stepOneRatio = useSelector((state) => state.feedback.stepOneRatio) || 0;

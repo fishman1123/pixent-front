@@ -14,9 +14,11 @@ export const CollectionTop = ({ dataOne, arrayData }) => {
   // -- Handler for navigating to feedback page
   const onClickFeedBack = (subId, perfumeName) => {
     if (perfumeName.includes(".")) {
-      navigate("/feedback/variation", { state: { subId, perfumeName } });
+      navigate("/secured/feedback/variation", {
+        state: { subId, perfumeName },
+      });
     } else {
-      navigate("/feedback", { state: { subId, perfumeName } });
+      navigate("/secured/feedback", { state: { subId, perfumeName } });
     }
   };
 
@@ -25,7 +27,7 @@ export const CollectionTop = ({ dataOne, arrayData }) => {
     // console.log("Feedback status:", chartData.hasFeedback);
 
     if (!subId) return;
-    navigate(`/feedback/${subId}`, {
+    navigate(`/secured/feedback/${subId}`, {
       state: {
         subid: chartData.subId,
         citrus: chartData.citrus,
@@ -142,10 +144,10 @@ export const CollectionTop = ({ dataOne, arrayData }) => {
 
   // -- Handlers for "ADD"
   const handleAddFeedback = (subId) => {
-    navigate("/collection/add", { state: { subid: subId } });
+    navigate("/secured/collection/add", { state: { subid: subId } });
   };
   const handleAddOrigin = () => {
-    navigate("/collection/validation");
+    navigate("/secured/collection/validation");
   };
 
   return (

@@ -62,9 +62,9 @@ export const RouterList = [
         element: <LoginRedirectPage />,
       },
 
-      // -- ALL PROTECTED ROUTES UNDER /protected --
+      // -- ALL secured ROUTES UNDER /protected --
       {
-        path: "protected",
+        path: "secured",
         element: <ProtectedLayout />,
         children: [
           { path: "basic", element: <Input /> },

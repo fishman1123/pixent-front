@@ -31,7 +31,7 @@ export const Intro = () => {
   const [showFeedbackToast, setShowFeedbackToast] = useState(false);
 
   useEffect(() => {
-    if (location.state?.from === "/feedback") {
+    if (location.state?.from === "/secured/feedback") {
       if (!isFeedbackEmpty(feedbackPost)) {
         setShowFeedbackToast(true);
         navigate(location.pathname, { replace: true, state: {} });
@@ -65,7 +65,7 @@ export const Intro = () => {
         <div className="mx-20">
           <ProcedureButton
             text={t("Start Analysis")}
-            route="/which"
+            route="/secured/which"
             confirm={false}
           />
         </div>

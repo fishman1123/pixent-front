@@ -49,7 +49,11 @@ export const InfoInput = () => {
       <Checkbox componentId={2} />
 
       <div className="mt-10 mb-5">
-        <ProcedureButton text={t("Next")} route="/inputTwo" confirm={true} />
+        <ProcedureButton
+          text={t("Next")}
+          route="/secured/inputTwo"
+          confirm={true}
+        />
       </div>
     </div>
   );

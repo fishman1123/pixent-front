@@ -15,25 +15,30 @@ export const BottomTab = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const isCollectionActive = location.pathname === "/collection";
-  const isReserveActive = location.pathname === "/reserve";
-  const isAnalysisActive = location.pathname === "/which";
-  const isUserActive = location.pathname === "/user";
+  const isCollectionActive = location.pathname === "/secured/collection";
+  const isReserveActive = location.pathname === "/secured/reserve";
+  const isAnalysisActive = location.pathname === "/secured/which";
+  const isUserActive = location.pathname === "/secured/user";
 
   const handleAnalysisClick = () => setShowToast(true);
   const handleCloseToast = () => setShowToast(false);
 
   const handleCharge = () => {
-    navigate("/charge");
+    navigate("/secured/charge");
     handleCloseToast();
   };
   const handleAnalysis = () => {
-    navigate("/which");
+    navigate("/secured/which");
     handleCloseToast();
   };
   const handleUserPage = () => {
-    navigate("/user");
+    // window.location.href = "/secured/user";
+    navigate("/secured/user");
+
     handleCloseToast();
+  };
+  const handleRedirectToCollection = () => {
+    window.location.href = "/secured/collection";
   };
 
   return (
@@ -47,7 +52,7 @@ export const BottomTab = () => {
               isCollectionActive ? "font-bold text-black" : "text-[#8E8E8E]"
             }`}
             disabled={isCollectionActive}
-            onClick={() => navigate("/collection")}
+            onClick={handleRedirectToCollection}
           >
             <LikeIcon
               className={`w-6 h-6 fill-current ${

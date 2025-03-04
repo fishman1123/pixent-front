@@ -1,9 +1,9 @@
 // src/hooks/useGetUserInfo.js
-import { useSuspenseQuery } from "@tanstack/react-query";
+import { useQuery, useSuspenseQuery } from "@tanstack/react-query";
 import AxiosInstance from "../api/axiosInstance";
 
 export const useGetUserInfo = (enabled = true) => {
-  return useSuspenseQuery({
+  return useQuery({
     queryKey: ["userInfo"],
     queryFn: async () => {
       const response = await AxiosInstance.get("/api/user/info");

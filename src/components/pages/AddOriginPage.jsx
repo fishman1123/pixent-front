@@ -40,7 +40,7 @@ export const AddOriginPage = () => {
         alert("Origin submitted successfully!");
         queryClient.invalidateQueries(["userCollection"]);
         setSelectedOrigin("");
-        navigate("/collection");
+        navigate("/secured/collection");
       },
       onError: (error) => {
         alert("Failed to submit origin: " + error.message);
@@ -67,7 +67,7 @@ export const AddOriginPage = () => {
               role="button"
               onClick={handleAddOrigin}
             >
-              <span className="text">분석 시작하기</span>
+              <span className="text">향료 추가하기</span>
               <span className="text" />
             </button>
           </div>

@@ -60,7 +60,9 @@ export const StatusInputBox = ({ path, status, count }) => {
           break;
         case "validation":
           if (response.data === true) {
-            navigate("/collection/addOrigin", { state: { isValid: true } });
+            navigate("/secured/collection/addOrigin", {
+              state: { isValid: true },
+            });
           } else {
             alert("wrong pw");
             window.location.reload();

@@ -40,9 +40,9 @@ export const SerialNumberBox = ({
 
   const getPlaceholderText = (pathname) => {
     switch (pathname) {
-      case "/collection/add":
+      case "/secured/collection/add":
         return "관리자번호를 입력해주세요";
-      case "/charge":
+      case "/secured/charge":
         return "ex) 추가구매";
       default:
         return "닉네임을 입력해주세요";
@@ -81,7 +81,7 @@ export const SerialNumberBox = ({
           { adminPW: serialNumber, reportId },
           {
             onSuccess: () => {
-              navigate("/collection");
+              navigate("/secured/collection");
             },
             onError: (err) => {
               console.error("❌ Feedback submission failed:", err);
@@ -110,14 +110,14 @@ export const SerialNumberBox = ({
         }
 
         switch (location.pathname) {
-          case "/collection/add":
-            navigate("/collection");
+          case "secured/collection/add":
+            navigate("/secured/collection");
             break;
           case "/login/nickname":
             window.location.href = "/";
             break;
           default:
-            window.location.href = "/user";
+            window.location.href = "/secured/user";
             break;
         }
       }

@@ -16,6 +16,7 @@ import {
 } from "../../store/feedbackSlice.js";
 
 import { useNewGetReportByUuid } from "../../hooks/useNewGetReportByUuid";
+import { useGetReportByUuid } from "../../hooks/useGetReportByUuid.jsx";
 
 export const FeedBackPage = () => {
   const location = useLocation();
@@ -26,7 +27,7 @@ export const FeedBackPage = () => {
   const routePerfumeName = location.state?.perfumeName;
 
   // 3) Use your custom hook to get the report data
-  const { data: reportData } = useNewGetReportByUuid(subId);
+  const { data: reportData } = useGetReportByUuid(subId);
 
   // 4) Local state to store a “dummy” version of that data
   const [dummydataforfeed, setDummydataforfeed] = useState(null);

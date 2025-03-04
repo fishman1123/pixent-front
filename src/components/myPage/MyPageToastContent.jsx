@@ -39,8 +39,7 @@ export const MyPageToastContent = ({
       // Here is the actual navigation to /user/collection
       queryClient.invalidateQueries(["userCollection"]);
 
-      navigate("/collection");
-      // window.location.href = "/collection";
+      window.location.href = "/secured/collection";
     }
   };
 

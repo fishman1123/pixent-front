@@ -22,6 +22,9 @@ export const Navbar = () => {
   const toggleMenu = () => {
     setIsOpen(!isOpen);
   };
+  const handleRedirect = () => {
+    window.location.href = "/";
+  };
 
   return (
     <div className="max-w-[480px] mx-auto">
@@ -29,7 +32,7 @@ export const Navbar = () => {
         <div className="max-w-[480px] mx-auto bg-white flex items-center justify-between p-5">
           {currentPage === "/" ? <TranslateButton /> : <BackButton />}
           <div className="flex-1 text-[24px] font-headerTitle text-center">
-            <button onClick={() => navigate("/")}>AC'SCENT ID</button>
+            <button onClick={handleRedirect}>AC'SCENT ID</button>
           </div>
           <Menu isOpen={isOpen} toggleMenu={toggleMenu} />
         </div>

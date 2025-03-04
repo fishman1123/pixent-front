@@ -11,10 +11,10 @@ import { BottomTab } from "../BottomTab.jsx";
 export const AppLayout = () => {
   const location = useLocation();
 
-  const isResultPage = useMatch("/result/*");
-  const isFinalPage = useMatch("/inputTwo/*");
-  const isLoginPage = useMatch("/login/*");
-  const isReportPage = useMatch("/report/*");
+  const isResultPage = useMatch("/secured/result/*");
+  const isFinalPage = useMatch("/secured/inputTwo/*");
+  const isLoginPage = useMatch("/secured/login/*");
+  const isReportPage = useMatch("/secured/report/*");
   // const isReportPage = useMatch("/report/*");
   const shouldShowNavbar =
     !isResultPage && !isFinalPage && !isLoginPage && !isReportPage;
