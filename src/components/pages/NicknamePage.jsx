@@ -10,7 +10,7 @@ export const NicknamePage = ({ reportId: propReportId }) => {
 
   // ✅ Fix `isFromCollection`
   const isFromCollection =
-    location.pathname.startsWith("/collection") && Boolean(reportId);
+    location.pathname.startsWith("/secured/collection") && Boolean(reportId);
 
   let path = "/api/user/username";
   let mainTitle = "LET PEOPLE KNOW";
