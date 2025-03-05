@@ -8,6 +8,7 @@ export const useGetReportFeedback = (reportId) => {
       const response = await AxiosInstance.get(
         `/api/user/report/${reportId}/feedback`,
       );
+      console.log("what are you? : ", response.data);
       return response.data;
     },
     // Only run query if 'reportId' has a value

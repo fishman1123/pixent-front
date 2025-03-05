@@ -23,12 +23,19 @@ export const CollectionTop = ({ dataOne, arrayData }) => {
   };
 
   // -- Handler for checking feedback details
-  const handleFeedBackCheck = (subId, chartData) => {
+  const handleFeedBackCheck = (subId, chartData, index) => {
     // console.log("Feedback status:", chartData.hasFeedback);
-
+    const textValue = index === 0 ? "구매하기" : "A/S 예약하기";
+    const urlValue =
+      index === 0
+        ? "https://acscent.co.kr/shop_view/?idx=199"
+        : "https://booking.naver.com/booking/6/bizes/1002529";
     if (!subId) return;
     navigate(`/secured/feedback/${subId}`, {
       state: {
+        perfumeName: chartData.perfumeName,
+        placeholderText: textValue,
+        url: urlValue,
         subid: chartData.subId,
         citrus: chartData.citrus,
         floral: chartData.floral,
@@ -405,9 +412,9 @@ export const CollectionTop = ({ dataOne, arrayData }) => {
                         ? "opacity-50 cursor-not-allowed"
                         : ""
                     }`}
-                    onClick={() =>
-                      handleFeedBackCheck(chart.data.subId, chart.data)
-                    }
+                    onClick={() => {
+                      handleFeedBackCheck(chart.data.subId, chart.data, idx);
+                    }}
                     disabled={!chart.data.hasFeedback}
                   >
                     <span className="text-sm text-gray-700">

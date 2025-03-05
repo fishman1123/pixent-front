@@ -8,10 +8,10 @@ export const FeedBackOptions = ({ onSelect }) => {
 
   const options = [
     // { label: "현재 향이 최고예요!", subLabel: "이대로 유지", value: 0 },
-    { label: "아주 조금만 수정할래요", subLabel: "10% 수정", value: 10 },
-    { label: "어느 정도 수정할래요", subLabel: "30% 수정", value: 30 },
-    { label: "많이 수정할래요", subLabel: "50% 수정", value: 50 },
-    { label: "대부분 수정할래요", subLabel: "70% 수정", value: 70 },
+    { label: "아주 조금만 수정할래요", subLabel: "20% 수정", value: 20 },
+    { label: "어느 정도 수정할래요", subLabel: "40% 수정", value: 40 },
+    { label: "많이 수정할래요", subLabel: "60% 수정", value: 60 },
+    { label: "대부분 수정할래요", subLabel: "80% 수정", value: 80 },
     // { label: "새 향을 추천받을래요", subLabel: "새로운 분석", value: 100 },
   ];
 

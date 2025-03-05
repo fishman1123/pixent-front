@@ -1,9 +1,32 @@
-import React, { useState } from "react";
+// AnalysisRequest.jsx
+
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom"; // If you're using react-router v6
 import { StatusInputBox } from "./StatusInputBox.jsx";
+import { useGetRequestLimit } from "../hooks/useGetRequestLimit";
+import PrimeModal from "../components/PrimeModal"; // Adjust path if needed
 
 export const AnalysisRequest = () => {
   const [count, setCount] = useState(1);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const navigate = useNavigate();
   const MAX_REQUEST = 3;
+
+  // Call your custom hook
+  const { data, isLoading, error } = useGetRequestLimit();
+
+  // Check the returned amount; if > 0, show the modal
+  useEffect(() => {
+    if (data && data.amount > 0) {
+      setIsModalOpen(true);
+    }
+  }, [data]);
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    navigate("/"); // Navigate to "/" after closing
+  };
 
   const handleDecrement = () => {
     if (count > 1) {
@@ -17,8 +40,32 @@ export const AnalysisRequest = () => {
     }
   };
 
+  // If the request is still loading or there's an error, you can handle those cases
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex justify-center p-4">Loading...</div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen flex justify-center p-4">
+        Error fetching request limit.
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen flex justify-center w-full p-4">
+      {/* PrimeModal for alerting the user if they already have a request */}
+      <PrimeModal
+        isOpen={isModalOpen}
+        title="Already Requested"
+        onClose={handleCloseModal}
+      >
+        <p>이미 충전 요청 있습니다.</p>
+      </PrimeModal>
+
       <div className="flex-1 content-center h-full min-h-[300px] w-full bg-white text-black mt-[140px] font-introTitle">
         <div className="w-full px-5">
           <div className="text-[38px]">분석권 요청하기</div>
@@ -50,11 +97,13 @@ export const AnalysisRequest = () => {
               </button>
             </div>
           </div>
+
           <StatusInputBox
             path={"/api/user/request_limit"}
             status={"request"}
             count={count}
           />
+
           <div className="flex flex-col items-center ml-5 mr-5 bg-gray-50 py-5 border">
             <div className="text-[14px] text-black">
               *요청 후 12시간 이내에 승인이 이뤄집니다.

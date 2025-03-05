@@ -12,6 +12,7 @@ export const Menu = ({ isOpen, toggleMenu }) => {
   };
 
   const handleLogin = () => {
+    toggleMenu();
     navigate("/login");
   };
 

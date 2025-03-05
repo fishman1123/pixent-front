@@ -26,6 +26,7 @@ export const selectBlendedChartData = createSelector(
     for (const optName of Object.keys(percentages)) {
       totalPickPercent += percentages[optName] || 0;
     }
+
     if (totalPickPercent <= 0) {
       return null;
     }
@@ -40,12 +41,12 @@ export const selectBlendedChartData = createSelector(
       spicy: 0,
     };
 
+    // 사용자가 선택한 옵션들의 값을 계산
     for (const noteName of Object.keys(selectedOptions)) {
       const picksForThisNote = selectedOptions[noteName] || [];
       picksForThisNote.forEach((pickName) => {
         const pickObj = optionData.find((od) => od.name === pickName);
         if (!pickObj) return;
-
         const userPct = percentages[pickName] || 0;
         dims.forEach((dim) => {
           picksAverages[dim] += (pickObj[dim] * userPct) / 100;
@@ -53,10 +54,18 @@ export const selectBlendedChartData = createSelector(
       });
     }
 
-    const blendedData = { ...originalData };
+    // 변경: 원향 비율을 적용하는 방식 수정
+    // changeRatio가 20%이면 원향을 80%로 유지해야 함
+    const originalRatio = (100 - changeRatio) / 100; // 예: 20%면 0.8이 됨
+
+    const blendedData = {};
     for (const dim of dims) {
-      blendedData[dim] = originalData[dim] + picksAverages[dim];
+      // 원향에 수정된 비율 적용 (예: 80 * 0.8 = 64)
+      const scaledOriginalValue = originalData[dim] * originalRatio;
+      // 원향 비율을 적용한 값 + 추가 향들의 값
+      blendedData[dim] = scaledOriginalValue + picksAverages[dim];
     }
+    console.log("checking suchi: ", blendedData);
 
     return blendedData;
   },

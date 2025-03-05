@@ -10,6 +10,10 @@ import { useGetUserAllReport } from "../../hooks/useGetUserAllReport";
 import { usePostCollectionCheck } from "../../hooks/usePostCollectionCheck";
 import { useQueryClient } from "@tanstack/react-query";
 
+// 1) Import dispatch and the setAuthState action
+import { useDispatch } from "react-redux";
+import { setAuthState } from "../../store/authSlice"; // Adjust the path if needed
+
 export const IntroBottom = () => {
   const [clickedId, setClickedId] = useState(null);
   const [copySuccess, setCopySuccess] = useState(false);
@@ -17,13 +21,13 @@ export const IntroBottom = () => {
 
   const [collectionStates, setCollectionStates] = useState({});
 
+  // 2) Initialize the dispatch
+  const dispatch = useDispatch();
+
   const { data: userAllReport, isLoading, isError } = useGetUserAllReport(true);
   const { mutate: postCollectionCheck } = usePostCollectionCheck();
   const { userId, reportAmount, reportList = [] } = userAllReport || {};
   const queryClient = useQueryClient();
-  // console.log("IntroBottom -> userId:", userId);
-  // console.log("IntroBottom -> reportAmount:", reportAmount);
-  // console.log("IntroBottom -> reportList:", reportList);
 
   useEffect(() => {
     const newStates = {};
@@ -33,24 +37,23 @@ export const IntroBottom = () => {
     setCollectionStates(newStates);
   }, [reportList]);
 
-  // console.log("IntroBottom -> collectionStates:", collectionStates);
+  // 3) Whenever reportList changes, update viewAttempts in Redux
+  useEffect(() => {
+    dispatch(setAuthState({ viewAttempts: reportList.length }));
+  }, [reportList.length, dispatch]);
 
-  // Show toast
   const handleClickButton = (id) => {
-    // console.log(`handleClickButton -> clickedId=${id}`);
     setClickedId(id);
     setShowToast(true);
   };
 
   const handleCloseToast = () => {
-    // console.log("handleCloseToast -> closing toast");
     setShowToast(false);
     setClickedId(null);
   };
 
   const selectedReport = reportList.find((report) => report.id === clickedId);
 
-  // Copy URL to clipboard
   const handleCopy = () => {
     if (!selectedReport) return;
     const urlToCopy = `pixent.co.kr/report/${selectedReport.uuid}`;
@@ -58,7 +61,6 @@ export const IntroBottom = () => {
       .writeText(urlToCopy)
       .then(() => {
         setCopySuccess(true);
-        // console.log("handleCopy -> copied URL:", urlToCopy);
         setTimeout(() => setCopySuccess(false), 2000);
       })
       .catch((err) => console.error("Failed to copy:", err));
@@ -78,7 +80,6 @@ export const IntroBottom = () => {
     postCollectionCheck(report.uuid, {
       onSuccess: () => {
         const nextState = currentState === "default" ? "added" : "default";
-        // console.log("check here :", selectedReport.collection);
         setCollectionStates((prev) => ({
           ...prev,
           [reportId]: nextState,
@@ -100,7 +101,6 @@ export const IntroBottom = () => {
 
   const getCollectionButtonProps = (reportId) => {
     const state = collectionStates[reportId] || "default";
-
     switch (state) {
       case "pending":
         return {

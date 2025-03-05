@@ -32,20 +32,23 @@ export const StepTwo = ({ onBack, reportId }) => {
 
   const { mutate, isLoading, error } = usePostFeedbackReport();
 
-  // Redux
+  // Redux state
   const stepOneRatio = useSelector((state) => state.feedback.stepOneRatio);
   const feedbackElement = useSelector(
     (state) => state.feedbackPost.feedbackElement,
   );
 
+  // Local UI state
   const [openAccordion, setOpenAccordion] = useState(null);
   const [selectedOptions, setSelectedOptions] = useState({});
   const [percentages, setPercentages] = useState({});
+
+  // Modal
   const [modalMessage, setModalMessage] = useState("");
   const [showModal, setShowModal] = useState(false);
 
+  // Data
   const [translatedData, setTranslatedData] = useState([]);
-
   const rawFragranceNotes = [
     {
       nameKey: "fragranceNotes.citrusName",
@@ -86,8 +89,8 @@ export const StepTwo = ({ onBack, reportId }) => {
     options: optionData.filter((opt) => opt.categoryId === note.categoryId),
   }));
 
+  // Translate your checkbox data
   useEffect(() => {
-    // Translate your checkbox data
     const data = rawCheckboxData.map((item) => {
       return {
         ...item,
@@ -100,68 +103,77 @@ export const StepTwo = ({ onBack, reportId }) => {
     setTranslatedData(data);
   }, [t]);
 
+  // Helper: total selected across all categories
   const getTotalSelectedCount = (optionsObj) =>
     Object.values(optionsObj).reduce((sum, arr) => sum + arr.length, 0);
+
+  // Helper: sum of all percentages
   const getTotalPercentages = (pcts) =>
     Object.values(pcts).reduce((sum, val) => sum + (val || 0), 0);
 
-  const resetSelections = () => {
-    dispatch(resetStepTwoSelections());
-    dispatch(resetFeedback());
-    setSelectedOptions({});
-    setPercentages({});
-    setOpenAccordion(null);
-  };
-
+  // Accordion expand/collapse
   const handleAccordionToggle = (noteName) => {
     setOpenAccordion(openAccordion === noteName ? null : noteName);
   };
 
+  // Remove a previously selected note
   const removeSelection = (noteName, option) => {
+    // Remove from local state
     setSelectedOptions((prev) => {
       const copy = { ...prev };
-      copy[noteName] = copy[noteName].filter((o) => o !== option);
+      if (copy[noteName]) {
+        copy[noteName] = copy[noteName].filter((o) => o !== option);
+        // Clean up empty array
+        if (!copy[noteName].length) {
+          delete copy[noteName];
+        }
+      }
       return copy;
     });
+
+    // Remove from local percentages
     setPercentages((prev) => {
       const copy = { ...prev };
       delete copy[option];
       return copy;
     });
+
+    // Remove from Redux feedbackElement
+    const index = feedbackElement.findIndex((el) => el.elementName === option);
+    if (index !== -1) {
+      dispatch(removeFeedbackElement(index));
+    }
   };
 
+  // Select or unselect an option
   const handleOptionSelect = (noteName, option) => {
     const newSelections = { ...selectedOptions };
-    newSelections[noteName] = [...(newSelections[noteName] || [])];
-
     const newPercentages = { ...percentages };
-
+    newSelections[noteName] = [...(newSelections[noteName] || [])];
     let actionToDispatch = null;
 
     const alreadySelected = newSelections[noteName].includes(option);
 
     if (alreadySelected) {
-      newSelections[noteName] = newSelections[noteName].filter(
-        (o) => o !== option,
-      );
-      delete newPercentages[option];
-
-      const index = feedbackElement.findIndex(
-        (el) => el.elementName === option,
-      );
-      if (index !== -1) {
-        actionToDispatch = removeFeedbackElement(index);
-      }
+      // If it's already selected, unselect it
+      removeSelection(noteName, option);
+      return; // We can exit early
     } else {
-      if (feedbackElement.filter((el) => el.elementName !== "").length >= 2) {
-        setModalMessage("두 개 이상의 노트를 선택하실 수 없습니다. (최대 2개)");
+      // Count how many total are currently selected
+      const totalSelected = getTotalSelectedCount(selectedOptions);
+
+      // If user already has 2 selected, show error and do nothing
+      if (totalSelected >= 2) {
+        setModalMessage("노트는 최대 2개까지 선택할 수 있습니다.");
         setShowModal(true);
         return;
       }
 
+      // Otherwise proceed to select
       newSelections[noteName].push(option);
       newPercentages[option] = 10;
 
+      // Check if total percentages would exceed user-specified ratio
       const newTotal = getTotalPercentages(newPercentages);
       if (stepOneRatio && newTotal > stepOneRatio) {
         setModalMessage(
@@ -171,15 +183,18 @@ export const StepTwo = ({ onBack, reportId }) => {
         return;
       }
 
+      // Check if feedbackElement has that option
       const existingIndex = feedbackElement.findIndex(
         (el) => el.elementName === option,
       );
       if (existingIndex !== -1) {
+        // If it already exists, just update ratio
         actionToDispatch = updateFeedbackElement({
           index: existingIndex,
           elementRatio: 10,
         });
       } else {
+        // If it doesn't exist, find an empty slot
         const emptyIndex = feedbackElement.findIndex(
           (el) => el.elementName === "",
         );
@@ -191,16 +206,19 @@ export const StepTwo = ({ onBack, reportId }) => {
           });
         }
       }
-    }
 
-    setSelectedOptions(newSelections);
-    setPercentages(newPercentages);
+      // Update local state
+      setSelectedOptions(newSelections);
+      setPercentages(newPercentages);
 
-    if (actionToDispatch) {
-      dispatch(actionToDispatch);
+      // Update Redux if needed
+      if (actionToDispatch) {
+        dispatch(actionToDispatch);
+      }
     }
   };
 
+  // Adjust a selected note's percentage
   const adjustPercentage = (option, amount, e) => {
     e.stopPropagation();
     e.preventDefault();
@@ -211,15 +229,16 @@ export const StepTwo = ({ onBack, reportId }) => {
       const newVal = Math.max(10, Math.min(100, oldVal + amount));
       copy[option] = newVal;
 
+      // Check if new total exceeds user ratio
       const totalPct = getTotalPercentages(copy);
       if (stepOneRatio && totalPct > stepOneRatio) {
-        copy[option] = oldVal;
+        copy[option] = oldVal; // revert
         setModalMessage(
           `사용자 지정 비율(${stepOneRatio}%)을 초과할 수 없습니다.`,
         );
         setShowModal(true);
       } else {
-        // update in slice
+        // Otherwise update Redux
         const index = feedbackElement.findIndex(
           (el) => el.elementName === option,
         );
@@ -227,15 +246,31 @@ export const StepTwo = ({ onBack, reportId }) => {
           dispatch(updateFeedbackElement({ index, elementRatio: newVal }));
         }
       }
-
       return copy;
     });
   };
 
+  // Sync local state to Redux
   useEffect(() => {
     dispatch(setStepTwoSelections({ selectedOptions, percentages }));
   }, [selectedOptions, percentages, dispatch]);
 
+  // Reset everything
+  const resetSelections = () => {
+    dispatch(resetStepTwoSelections());
+    dispatch(resetFeedback());
+    setSelectedOptions({});
+    setPercentages({});
+    setOpenAccordion(null);
+  };
+
+  // "Back" button
+  const handleBack = () => {
+    resetSelections();
+    onBack();
+  };
+
+  // "Next" or "Save" button
   const handleNext = () => {
     if (!reportId) {
       setModalMessage("Report ID가 없습니다.");
@@ -255,14 +290,13 @@ export const StepTwo = ({ onBack, reportId }) => {
     });
   };
 
-  const handleBack = () => {
-    resetSelections();
-    onBack();
-  };
-
+  // For enabling/disabling the "Save" button
   const totalUsed = getTotalPercentages(percentages);
   const leftover = stepOneRatio - totalUsed;
   const totalNotes = getTotalSelectedCount(selectedOptions);
+  // Only allow "Save" if we've used the entire ratio (leftover <= 0)
+  // AND we have at least 1 note selected,
+  // AND there's a stepOneRatio in place
   const canProceed = leftover <= 0 && totalNotes > 0 && stepOneRatio > 0;
 
   return (
@@ -278,6 +312,7 @@ export const StepTwo = ({ onBack, reportId }) => {
             const isOpen = openAccordion === note.name;
             const currentSelections = selectedOptions[note.name] || [];
 
+            // For the InfoButton content
             const matchingData = translatedData.find(
               (item) => item.id === note.categoryId,
             ) || {
@@ -292,6 +327,7 @@ export const StepTwo = ({ onBack, reportId }) => {
                 key={note.categoryId}
                 className="w-full border-b border-black"
               >
+                {/* Accordion Header */}
                 <div className="flex flex-col">
                   <button
                     onClick={() => handleAccordionToggle(note.name)}
@@ -299,10 +335,12 @@ export const StepTwo = ({ onBack, reportId }) => {
                   >
                     <div className="flex items-center space-x-2">
                       <span>{note.name}</span>
-                      {/* InfoButton */}
+                      {/* InfoButton - stops click from closing/opening accordion */}
                       <div onClick={(e) => e.stopPropagation()}>
                         <InfoButton option={matchingData} />
                       </div>
+
+                      {/* Display currently selected items for this category */}
                       {currentSelections.length > 0 && (
                         <div className="flex items-center flex-wrap gap-2">
                           {currentSelections.map((opt) => (
@@ -329,6 +367,8 @@ export const StepTwo = ({ onBack, reportId }) => {
                         </div>
                       )}
                     </div>
+
+                    {/* Chevron icon */}
                     <img
                       src={downIcon}
                       alt="Chevron"
@@ -339,6 +379,7 @@ export const StepTwo = ({ onBack, reportId }) => {
                   </button>
                 </div>
 
+                {/* Accordion Body */}
                 <div
                   className={`overflow-hidden transition-all duration-500 ${
                     isOpen
@@ -367,6 +408,8 @@ export const StepTwo = ({ onBack, reportId }) => {
                                 </span>
                                 <span>{optionObj.name}</span>
                               </div>
+
+                              {/* If selected, show +/- to adjust percentage */}
                               {isSelected && (
                                 <div className="flex items-center space-x-2">
                                   <span
@@ -392,6 +435,8 @@ export const StepTwo = ({ onBack, reportId }) => {
                               )}
                             </button>
                           </div>
+
+                          {/* Scent profile if selected */}
                           {isSelected && <ScentProfile data={optionObj} />}
                         </div>
                       );
@@ -434,6 +479,7 @@ export const StepTwo = ({ onBack, reportId }) => {
         </div>
       </div>
 
+      {/* Modal */}
       <PrimeModal
         isOpen={showModal}
         title="알림"

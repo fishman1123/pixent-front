@@ -42,6 +42,11 @@ export const MyPageToastContent = ({
       window.location.href = "/secured/collection";
     }
   };
+  const handleReportSummary = (uuid) => {
+    if (uuid) {
+      window.open(`https://www.pixent.co.kr/report/${uuid}`, "_blank");
+    }
+  };
 
   return (
     <div className="mx-[24px] w-full h-full">
@@ -76,7 +81,10 @@ export const MyPageToastContent = ({
       {/* Buttons */}
       <div className="flex gap-4 mt-6">
         <div className="w-full">
-          <button className="noanimationbutton flex flex-col items-center p-4 min-w-32 w-full h-auto">
+          <button
+            className="noanimationbutton flex flex-col items-center p-4 min-w-32 w-full h-auto"
+            onClick={() => handleReportSummary(selectedReport?.uuid)}
+          >
             <span className="text-sm text-gray-700">
               <img
                 src={barChart}

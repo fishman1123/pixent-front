@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FaArrowRight } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import AxiosInstance from "../api/axiosInstance";
@@ -8,6 +8,24 @@ export const StatusInputBox = ({ path, status, count }) => {
   const [inputValue, setInputValue] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [placeholderText, setPlaceholderText] = useState("");
+
+  // 🔹 useEffect 추가 → status가 변경될 때 placeholder 업데이트
+  useEffect(() => {
+    switch (status) {
+      case "request":
+        setPlaceholderText("요청사항을 입력해주세요.");
+        break;
+      case "validation":
+        setPlaceholderText("관리자 승인번호를 입력해주세요.");
+        break;
+      case "addOrigin":
+        setPlaceholderText("사용자 ID를 입력해주세요.");
+        break;
+      default:
+        setPlaceholderText("입력해주세요.");
+    }
+  }, [status]); // status 변경 시 실행
 
   const handleInputChange = (e) => {
     const value = e.target.value;
@@ -39,7 +57,7 @@ export const StatusInputBox = ({ path, status, count }) => {
       let requestBody;
       switch (status) {
         case "request":
-          requestBody = { amount: count ?? 0 }; // Default to 1 if count is undefined
+          requestBody = { amount: count ?? 0 };
           break;
         case "validation":
           requestBody = { adminPW: inputValue };
@@ -56,7 +74,6 @@ export const StatusInputBox = ({ path, status, count }) => {
       switch (status) {
         case "request":
           navigate("/");
-
           break;
         case "validation":
           if (response.data === true) {
@@ -93,9 +110,7 @@ export const StatusInputBox = ({ path, status, count }) => {
           className={`border ${
             errorMessage ? "border-red-500 border-2" : "border-black border-2"
           } p-2.5 w-full text-gray-700 placeholder-gray-500 focus:outline-none`}
-          placeholder={
-            status === "test" ? "사용자 ID 입력" : "요청 사항을 입력해주세요."
-          }
+          placeholder={placeholderText} // ✅ placeholder 정상 작동
           disabled={isSubmitting}
         />
         <button

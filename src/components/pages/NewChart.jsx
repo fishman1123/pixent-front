@@ -1,5 +1,12 @@
 import React from "react";
 
+// Helper function to clamp value to [0, 100]
+const clampValue = (value) => {
+  if (value > 100) return 100;
+  if (value < 0) return 0;
+  return value;
+};
+
 const NewChart = ({
   // Original data
   inputCitrusOne = 0,
@@ -17,21 +24,45 @@ const NewChart = ({
   inputFreshTwo = 0,
   inputSpicyTwo = 0,
 }) => {
+  // Clamp the values to ensure they do not exceed 100
   const scentData = [
-    { name: "Citrus", start: inputCitrusOne, end: inputCitrusTwo },
-    { name: "Floral", start: inputFloralOne, end: inputFloralTwo },
-    { name: "Woody", start: inputWoodyOne, end: inputWoodyTwo },
-    { name: "Musk", start: inputMuskOne, end: inputMuskTwo },
-    { name: "Fruity", start: inputFreshOne, end: inputFreshTwo },
-    { name: "Spicy", start: inputSpicyOne, end: inputSpicyTwo },
+    {
+      name: "Citrus",
+      start: clampValue(inputCitrusOne),
+      end: clampValue(inputCitrusTwo),
+    },
+    {
+      name: "Floral",
+      start: clampValue(inputFloralOne),
+      end: clampValue(inputFloralTwo),
+    },
+    {
+      name: "Woody",
+      start: clampValue(inputWoodyOne),
+      end: clampValue(inputWoodyTwo),
+    },
+    {
+      name: "Musk",
+      start: clampValue(inputMuskOne),
+      end: clampValue(inputMuskTwo),
+    },
+    {
+      name: "Fruity",
+      start: clampValue(inputFreshOne),
+      end: clampValue(inputFreshTwo),
+    },
+    {
+      name: "Spicy",
+      start: clampValue(inputSpicyOne),
+      end: clampValue(inputSpicyTwo),
+    },
   ];
 
-  // Find the highest value in the dataset (either start or end values)
-  const maxValue = Math.max(...scentData.flatMap((d) => [d.start, d.end]));
+  // Find the highest value in the dataset (after clamping)
+  // const maxValue = Math.max(...scentData.flatMap((d) => [d.start, d.end]));
 
   // Adjust scale based on max value condition
-  const scale = maxValue > 100 ? 1.6 : 1.9;
-
+  const scale = 1.8;
   const maxWidth = 160;
 
   const formatNumber = (num) => `${num}`;
@@ -45,7 +76,7 @@ const NewChart = ({
       <div className="mb-8">
         <div className="flex justify-center items-center">
           {/* Scent name on the left */}
-          <span className="w-20 text-gray-500 text-sm">{name}</span>
+          <span className="w-[60px] text-gray-500 text-sm">{name}</span>
 
           <div className="relative" style={{ width: maxWidth }}>
             <div className="flex items-center">
