@@ -131,7 +131,7 @@ export const ProcedureButton = ({ text, route, subText, confirm }) => {
   };
 
   const handleCharge = () => {
-    navigate("/"); // redirect to home for now
+    navigate("/secured/charge");
     handleCloseToast();
   };
 

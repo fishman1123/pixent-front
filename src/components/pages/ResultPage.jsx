@@ -350,7 +350,7 @@ export const ResultPage = () => {
           {/* Example of passing children to the modal */}
           <div className="w-full mb-4 flex justify-center">
             <img
-              src="/newguideline.png"
+              src="/guideline.png"
               alt="guideline"
               className="max-w-[320px] w-auto h-auto"
             />
