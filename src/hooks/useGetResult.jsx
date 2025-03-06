@@ -7,7 +7,7 @@ export const useGetResults = (page, size) => {
     queryKey: ["results", page, size],
     queryFn: async () => {
       const response = await AxiosInstance.get(
-        `/api/result?page=${page}&size=${size}&sort=id,asc`,
+        `/api/result?page=${page}&size=${size}&sort=id,desc`,
       );
       return response.data;
     },
