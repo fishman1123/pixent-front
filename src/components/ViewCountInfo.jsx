@@ -35,11 +35,20 @@ export const ViewCountInfo = ({ onCharge, startAnalysis }) => {
       </div>
       <div>
         <button
-          className="noanimationbutton flex items-center justify-center w-full"
+          className={`noanimationbutton flex items-center justify-center w-full px-5 py-2 ${
+            viewChance === 0
+              ? "bg-gray-300 text-gray-500 cursor-not-allowed border-0"
+              : ""
+          }`}
           role="button"
           onClick={startAnalysis}
+          disabled={viewChance === 0}
         >
-          <span className="text">분석 시작하기</span>
+          <span className="text">
+            {viewChance === 0
+              ? "사용 할 수 있는 분석권이 없습니다."
+              : "분석 시작하기"}
+          </span>
           <span className="text" />
         </button>
       </div>
