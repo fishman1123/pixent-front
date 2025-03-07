@@ -36,7 +36,7 @@ export const OriginSelectBox = ({ setSelectedOrigin }) => {
             return (
               <div
                 key={option.id}
-                className="grid-item text-[14px] bg-white border"
+                className="grid-item text-[13px] bg-white border"
               >
                 <div className="label-and-button">
                   <span
