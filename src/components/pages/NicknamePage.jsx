@@ -20,12 +20,12 @@ export const NicknamePage = ({ reportId: propReportId }) => {
   if (reportId === "ticket") {
     path = "/testTwo";
     mainTitle = "관리자 페이지입니다";
-    subTitle = "ㅎㅇㅎㅇ";
+    subTitle = "";
     status = reportId;
   } else if (isFromCollection) {
     path = "/api/user/report/variation";
     mainTitle = "관리자 페이지입니다";
-    subTitle = "ㅎㅇㅎㅇ";
+    subTitle = "";
   }
 
   return (
