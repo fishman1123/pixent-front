@@ -7,7 +7,8 @@ import { logout } from "../store/authSlice";
 
 const AxiosInstance = axios.create({
   // baseURL: config.API_BASE_URL,
-  baseURL: `https://perfume-maker-dev.pixent.co.kr/`,
+  // baseURL: `https://perfume-maker-dev.pixent.co.kr/`,
+  baseURL: `https://perfume-maker.pixent.co.kr/`,
 });
 
 // Attach token if present
