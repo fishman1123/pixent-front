@@ -61,6 +61,16 @@ export const RouterList = [
         path: "oauth2/login/redirect",
         element: <LoginRedirectPage />,
       },
+      {
+        path: "report",
+        element: <ReportViewer />,
+        children: [
+          {
+            path: ":id",
+            element: <ReportViewerResult />,
+          },
+        ],
+      },
 
       // -- ALL secured ROUTES UNDER /protected --
       {
@@ -122,16 +132,6 @@ export const RouterList = [
               {
                 path: ":id",
                 element: <FeedBackDetailPage />,
-              },
-            ],
-          },
-          {
-            path: "report",
-            element: <ReportViewer />,
-            children: [
-              {
-                path: ":id",
-                element: <ReportViewerResult />,
               },
             ],
           },
