@@ -127,7 +127,11 @@ export const IntroBottom = () => {
     <div className="flex-1 flex-col flex h-full min-h-[300px] w-full mt-6 bg-white text-black">
       <div className="text-left ml-[30px] text-[24px] font-bold">GALLERY</div>
 
-      <div className="flex flex-wrap justify-center gap-4 p-4">
+      <div
+        className={`flex flex-wrap ${
+          reportList.length === 1 ? "justify-start" : "justify-center"
+        } gap-4 p-4`}
+      >
         {reportList.map((report) => (
           <div className="w-[45%] max-w-[160px]" key={report.id}>
             <IntroSecondButton
