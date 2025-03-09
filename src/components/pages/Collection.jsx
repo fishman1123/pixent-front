@@ -89,9 +89,6 @@ export const Collection = () => {
     return <div>Failed to load user collection.</div>;
   }
 
-  // 7) If the user had *some* data, we built `reconstructedData`.
-  //    If we STILL don't have it, we show loading again
-  //    (this can happen if `collectionData` was null or undefined).
   if (!reconstructedData && !showModal) {
     return <LoadingData />;
   }
@@ -102,7 +99,6 @@ export const Collection = () => {
     navigate("/");
   };
 
-  // Example "disable" array
   const checkDisableList = [];
 
   // 8) Render

@@ -121,12 +121,10 @@ export const CollectionTop = ({ dataOne, arrayData }) => {
     };
   });
 
-  // -- Slide states
   const [currentSlide, setCurrentSlide] = useState(0);
   const [expandStates, setExpandStates] = useState(slides.map(() => false));
   const activeSlide = slides[currentSlide];
 
-  // -- Slide navigation
   const prevSlide = () => {
     if (currentSlide > 0) {
       setExpandStates(slides.map(() => false));
@@ -140,7 +138,6 @@ export const CollectionTop = ({ dataOne, arrayData }) => {
     }
   };
 
-  // -- Toggle expand
   const toggleExpand = (slideIndex) => {
     setExpandStates((prev) => {
       const copy = [...prev];
@@ -189,7 +186,6 @@ export const CollectionTop = ({ dataOne, arrayData }) => {
         />
       </button>
 
-      {/* Slides Wrapper */}
       <div className="bg-black pb-4 px-4">
         <div className="relative w-full h-auto overflow-hidden pt-3">
           <div
@@ -201,7 +197,6 @@ export const CollectionTop = ({ dataOne, arrayData }) => {
 
               return (
                 <div key={idx} className="w-full shrink-0 flex flex-col px-2">
-                  {/* Example 'ADD' Button */}
                   <div className="w-[80px] ml-[40px] flex justify-center">
                     <button
                       className="noanimationbutton flex items-center justify-center min-w-[80px]
@@ -256,27 +251,22 @@ export const CollectionTop = ({ dataOne, arrayData }) => {
                           key={idx2}
                           className="flex items-center justify-between bg-[#333] p-3 mb-6"
                         >
-                          <div>
-                            <div className="flex items-center gap-3">
-                              <span>•</span>
-                              <span className="font-[inter]">{item.name}</span>
-                              {idx2 !== 0 && (
-                                <div
-                                  className="noanimationbutton flex items-center justify-center min-h-[20px]
-              px-2 py-1 pt-0 bg-black border border-white text-white"
-                                >
-                                  <span className="text-sm font-medium tracking-wide">
-                                    A/S
-                                  </span>
-                                </div>
-                              )}
-                            </div>
-                            {item.subName && (
-                              <p className="text-gray-400 text-sm">
-                                {item.subName}
-                              </p>
+                          {/* Left Section */}
+                          <div className="flex items-center gap-3 flex-grow min-w-0">
+                            <span>•</span>
+                            <span className="font-[inter] truncate whitespace-nowrap flex-grow max-w-[120px]">
+                              {item.name}
+                            </span>
+                            {idx2 !== 0 && (
+                              <div className="noanimationbutton flex items-center justify-center w-[42px] min-h-[20px] px-2 py-1 pt-0 bg-black border border-white text-white">
+                                <span className="text-sm font-medium tracking-wide">
+                                  A/S
+                                </span>
+                              </div>
                             )}
                           </div>
+
+                          {/* Right Section (Date) */}
                           <div className="text-sm ml-6">{item.date}</div>
                         </div>
                       );

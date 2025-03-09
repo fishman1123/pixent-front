@@ -72,7 +72,7 @@ export const RouterList = [
         ],
       },
 
-      // -- ALL secured ROUTES UNDER /protected --
+      // -- ALL secured ROUTES UNDER /secured/*
       {
         path: "secured",
         element: <ProtectedLayout />,

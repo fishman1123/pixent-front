@@ -9,13 +9,7 @@ export const LoadingData = () => {
         </h1>
       </div>
       <div className="flex w-full h-[300px] justify-center items-center">
-        <div className="flex-col">
-          <img
-            src="/warning.png"
-            alt="User Image"
-            className="max-w-full max-h-full"
-          />
-        </div>
+        <div className="flex-col"></div>
       </div>
     </div>
   );

@@ -86,7 +86,7 @@ export const ResultPage = () => {
   }
 
   return (
-    <div className="flex flex-col justify-center items-center min-h-screen w-full text-center">
+    <div className="flex flex-col justify-center items-center min-h-screen w-full text-center px-5">
       <div className="w-full h-auto flex flex-col justify-center items-center">
         {responseData.userImageUrl ? (
           <img

@@ -12,7 +12,7 @@ export const Preference = () => {
   }, []);
 
   return (
-    <div className="relative flex-col justify-center items-center min-h-screen w-full text-center pt-12">
+    <div className="relative flex-col justify-center items-center min-h-screen w-full text-center pt-12 px-5">
       <div className="pt-6">
         <PreferenceButton
           id="pure-ai"

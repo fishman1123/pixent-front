@@ -14,10 +14,14 @@ export const AppLayout = () => {
   const isResultPage = useMatch("/secured/result/*");
   const isFinalPage = useMatch("/secured/inputTwo/*");
   const isLoginPage = useMatch("/secured/login/*");
-  const isReportPage = useMatch("/secured/report/*");
-  // const isReportPage = useMatch("/report/*");
+  const isReportPage = useMatch("/report/*");
+  const isfromInputTwo = location.state?.from === "/secured/inputTwo";
   const shouldShowNavbar =
-    !isResultPage && !isFinalPage && !isLoginPage && !isReportPage;
+    !isResultPage &&
+    !isFinalPage &&
+    !isLoginPage &&
+    !isReportPage &&
+    !isfromInputTwo;
 
   const authState = useSelector((state) => state.auth);
 
