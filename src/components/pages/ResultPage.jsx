@@ -56,7 +56,7 @@ export const ResultPage = () => {
   }, [dispatch, navigate]);
 
   const handleCopy = () => {
-    const urlToCopy = `https://www.pixent.co.kr/report/${responseData?.uuid}`;
+    const urlToCopy = `pixent.co.kr/report/${responseData?.uuid}`;
     navigator.clipboard
       .writeText(urlToCopy)
       .then(() => {

@@ -69,6 +69,10 @@ export const RouterList = [
             path: ":id",
             element: <ReportViewerResult />,
           },
+          {
+            path: "*",
+            element: <WrongPath />,
+          },
         ],
       },
 
