@@ -9,6 +9,7 @@ import UserIcon from "../assets/user.svg?react";
 
 import ToastModal from "./ToastModal";
 import { ViewCountInfo } from "./ViewCountInfo.jsx";
+import { useGetUserAllReport } from "../hooks/useGetUserAllReport.js";
 
 export const BottomTab = () => {
   const [showToast, setShowToast] = useState(false);
@@ -22,6 +23,7 @@ export const BottomTab = () => {
 
   const handleAnalysisClick = () => setShowToast(true);
   const handleCloseToast = () => setShowToast(false);
+  const { refetch: refetchUserAllReport } = useGetUserAllReport(false);
 
   const handleCharge = () => {
     navigate("/secured/charge");
@@ -31,10 +33,10 @@ export const BottomTab = () => {
     navigate("/secured/which");
     handleCloseToast();
   };
-  const handleUserPage = () => {
+  const handleUserPage = async () => {
     // window.location.href = "/secured/user";
+    await refetchUserAllReport();
     navigate("/secured/user");
-
     handleCloseToast();
   };
   const handleRedirectToCollection = () => {

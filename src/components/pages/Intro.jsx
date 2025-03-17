@@ -31,10 +31,11 @@ export const Intro = () => {
   const [showFeedbackToast, setShowFeedbackToast] = useState(false);
 
   useEffect(() => {
-    if (location.state?.from === "/secured/feedback") {
+    // 2) Check if we came from "/feedback"
+    if (location.state?.from === "/feedback") {
+      // 3) If feedback data is valid (not empty), display the toast
       if (!isFeedbackEmpty(feedbackPost)) {
         setShowFeedbackToast(true);
-        navigate(location.pathname, { replace: true, state: {} });
       }
     }
   }, [location, feedbackPost, navigate]);

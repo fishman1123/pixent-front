@@ -27,7 +27,7 @@ const FeedBackFinal = () => {
   }, [citrus, floral, woody, musk, fruity, spicy, feedbackElement]);
 
   const handleCheckFeedback = () => {
-    navigation("/user");
+    navigation("/secured/user", { replace: true, state: {} });
   };
 
   return (
