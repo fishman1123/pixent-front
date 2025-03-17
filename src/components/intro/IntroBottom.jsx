@@ -126,35 +126,36 @@ export const IntroBottom = () => {
   return (
     <div className="flex-1 flex-col flex h-full min-h-[300px] w-full mt-6 bg-white text-black">
       <div className="text-left ml-[30px] text-[24px] font-bold">GALLERY</div>
+      <div className="flex w-full justify-center">
+        <div
+          className={`flex flex-wrap w-[80%] ${
+            reportList.length % 2 === 0 ? "justify-center" : "justify-start"
+          } gap-4 p-4`}
+        >
+          {reportList.map((report) => (
+            <div className="w-[45%] max-w-[160px]" key={report.id}>
+              <IntroSecondButton
+                perfumeName={report.perfumeName}
+                mainNote={report.mainNote}
+                userImageUrl={report.userImageUrl}
+                isClicked={clickedId === report.id}
+                onClick={() => handleClickButton(report.id)}
+              />
+            </div>
+          ))}
 
-      <div
-        className={`flex flex-wrap ${
-          reportList.length === 1 ? "justify-start" : "justify-center"
-        } gap-4 p-4`}
-      >
-        {reportList.map((report) => (
-          <div className="w-[45%] max-w-[160px]" key={report.id}>
-            <IntroSecondButton
-              perfumeName={report.perfumeName}
-              mainNote={report.mainNote}
-              userImageUrl={report.userImageUrl}
-              isClicked={clickedId === report.id}
-              onClick={() => handleClickButton(report.id)}
-            />
-          </div>
-        ))}
-
-        {showToast && selectedReport && (
-          <ToastModal onClose={handleCloseToast}>
-            <MyPageToastContent
-              selectedReport={selectedReport}
-              handleCopy={handleCopy}
-              copySuccess={copySuccess}
-              getCollectionButtonProps={getCollectionButtonProps}
-              handleCollectionClick={handleCollectionClick}
-            />
-          </ToastModal>
-        )}
+          {showToast && selectedReport && (
+            <ToastModal onClose={handleCloseToast}>
+              <MyPageToastContent
+                selectedReport={selectedReport}
+                handleCopy={handleCopy}
+                copySuccess={copySuccess}
+                getCollectionButtonProps={getCollectionButtonProps}
+                handleCollectionClick={handleCollectionClick}
+              />
+            </ToastModal>
+          )}
+        </div>
       </div>
     </div>
   );
