@@ -381,7 +381,9 @@ export const StepTwo = ({ onBack, reportId }) => {
 
                 {/* Accordion Body */}
                 <div
-                  className={`overflow-hidden transition-all duration-500 ${
+                  // className={`overflow-hidden transition-all duration-500 ${
+                  //transition 임시제거
+                  className={`overflow-hidden ${
                     isOpen
                       ? "max-h-[1000px] opacity-100 p-4 bg-white"
                       : "max-h-0 opacity-0"
