@@ -2,12 +2,8 @@
 
 import React, { useEffect } from "react";
 import { Outlet, useLocation } from "react-router-dom";
-import { useRecoilValue } from "recoil";
-import { isAnyModalOpenSelector } from "../../recoil/selector/isAnyModalOpenSelector.jsx";
 
 export const MainLayout = () => {
-  // const isAnyModalOpen = useRecoilValue(isAnyModalOpenSelector);
-
   const location = useLocation();
   // Scroll to the top when the location changes
   useEffect(() => {
