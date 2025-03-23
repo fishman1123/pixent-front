@@ -130,7 +130,7 @@ export const IntroBottom = () => {
         <div
           className={`flex flex-wrap w-[80%] ${
             reportList.length % 2 === 0 ? "justify-center" : "justify-start"
-          } gap-4 p-4`}
+          } gap-4 py-4`}
         >
           {reportList.map((report) => (
             <div className="w-[45%] max-w-[160px]" key={report.id}>
