@@ -7,6 +7,7 @@ import icon from "../../assets/newplus.svg";
 import fixIcon from "../../assets/fix.svg";
 import upIcon from "../../assets/up.svg";
 import { SummaryChart } from "../result/SummaryChart.jsx";
+import { dateExtractor } from "../../util/dateExtractor.js";
 
 export const CollectionTop = ({ dataOne, arrayData }) => {
   const navigate = useNavigate();
@@ -61,11 +62,16 @@ export const CollectionTop = ({ dataOne, arrayData }) => {
 
     // "items" array for listing
     const items = [
-      { name: report.perfumeName, subName: "", date: "2024.01.10" },
+      {
+        name: report.perfumeName,
+        subName: "",
+        // this doesnt show up
+        date: dateExtractor(report.createdAt),
+      },
       ...matched.map((mItem, mIndex) => ({
         name: mItem.perfumeName,
         subName: `from ${report.perfumeName}`,
-        date: `2024.0${mIndex + 2}.15`,
+        date: dateExtractor(mItem.createdAt),
       })),
     ];
 
@@ -86,6 +92,7 @@ export const CollectionTop = ({ dataOne, arrayData }) => {
           spicy: report.spicy,
           subId: report.uuid,
           hasFeedback: report.hasFeedback,
+          date: dateExtractor(report.createdAt),
         },
       },
       ...matched.map((mItem, idx) => ({
@@ -109,6 +116,7 @@ export const CollectionTop = ({ dataOne, arrayData }) => {
           spicy: mItem.spicy,
           subId: mItem.subId ?? null,
           hasFeedback: mItem.hasFeedback,
+          date: dateExtractor(mItem.createdAt),
         },
       })),
     ];
@@ -339,7 +347,8 @@ export const CollectionTop = ({ dataOne, arrayData }) => {
                     <div className="font-bold text-lg">
                       {chart.data.perfumeName}
                     </div>
-                    <div className="text-gray-400">2025.01.01</div>
+                    {/*<div className="text-gray-400">123213</div>*/}
+                    <div className="text-gray-400">{chart.data.date}</div>
                   </div>
                   <div className="w-[80px] ml-[40px] flex justify-center">
                     <button

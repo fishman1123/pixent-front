@@ -73,7 +73,7 @@ export const Collection = () => {
     dispatch(setUuidList(uuids));
     //
     // console.log("Collection -> Original serverData:", collectionData);
-    // console.log("Collection -> Reconstructed:", newObject);
+    console.log("Collection -> Reconstructed:", newObject);
   }, [collectionData, dispatch]);
 
   // 5) Query for second collection

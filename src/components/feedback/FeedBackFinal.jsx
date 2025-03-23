@@ -19,15 +19,14 @@ const FeedBackFinal = () => {
     // console.log("musk:", musk);
     // console.log("fruity:", fruity);
     // console.log("spicy:", spicy);
-
     // console.log("=== Feedback Elements ===");
-    feedbackElement.forEach((element, index) => {
-      console.log(`Element ${index + 1}:`, element);
-    });
+    // feedbackElement.forEach((element, index) => {
+    //   console.log(`Element ${index + 1}:`, element);
+    // });
   }, [citrus, floral, woody, musk, fruity, spicy, feedbackElement]);
 
   const handleCheckFeedback = () => {
-    navigation("/secured/user", { replace: true, state: {} });
+    navigation("/secured/collection", { replace: true, state: {} });
   };
 
   return (

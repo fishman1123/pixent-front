@@ -35,10 +35,10 @@ export const SerialNumberBox = ({
   const postFeedback = usePostCreateVariant();
 
   // ✅ Debugging Log
-  console.log(
-    "✅ Received isFromCollection in SerialNumberBox:",
-    isFromCollection,
-  );
+  // console.log(
+  //   "✅ Received isFromCollection in SerialNumberBox:",
+  //   isFromCollection,
+  // );
 
   const getPlaceholderText = (pathname) => {
     switch (pathname) {
