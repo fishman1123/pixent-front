@@ -46,7 +46,10 @@ export const TranslateButton = () => {
   };
 
   return (
-    <div className="relative ml-[4px] mt-[4px] w-[50px]" ref={dropdownRef}>
+    <div
+      className="relative mt-[4px] w-[50px] flex justify-center"
+      ref={dropdownRef}
+    >
       {/* Translator Icon with Dropdown */}
       <button
         onClick={toggleDropdown}

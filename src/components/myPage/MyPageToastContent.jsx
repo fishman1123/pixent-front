@@ -48,6 +48,10 @@ export const MyPageToastContent = ({
     }
   };
 
+  const handlePurchaseClick = () => {
+    window.open("https://acscent.co.kr/shop_view/?idx=199", "_blank");
+  };
+
   return (
     <div className="mx-[24px] w-full h-full">
       {/* Header */}
@@ -239,7 +243,7 @@ export const MyPageToastContent = ({
               className="noanimationbutton flex items-center justify-center w-full px-5 py-4"
               role="button"
               onClick={() => {
-                // TODO: handle purchase logic
+                handlePurchaseClick();
               }}
             >
               <img src={cartIcon} alt="Arrow Right" className="w-6 h-6 mr-1" />

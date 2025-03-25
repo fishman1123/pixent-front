@@ -41,8 +41,12 @@ export const Navbar = () => {
           {currentPage === "/" ? (
             <TranslateButton />
           ) : shouldShowBackButton ? (
-            <BackButton />
-          ) : null}
+            <div className="w-[50px]">
+              <BackButton />
+            </div>
+          ) : (
+            <div className="w-[50px]"></div>
+          )}
 
           <div className="flex-1 text-[24px] font-headerTitle text-center">
             <button onClick={handleRedirect}>AC'SCENT ID</button>
