@@ -71,7 +71,7 @@ const ToastModal = ({ children, onClose }) => {
       `}
     >
       <div
-        className={`w-full max-h-[90%] overflow-y-auto transform transition-transform duration-300
+        className={`w-full max-h-[98%] overflow-y-auto transform transition-transform duration-300
           ${opened && !closing ? "" : "translate-y-full"}`}
         style={
           opened && !closing
