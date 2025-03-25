@@ -85,21 +85,22 @@ export const FeedBackDetailPage = () => {
       <div className="pl-4">
         <h1 className="text-xl mb-4">Scent Profile</h1>
       </div>
-
-      <FeedBackChart
-        inputCitrusOne={dummyOne.citrus}
-        inputFloralOne={dummyOne.floral}
-        inputWoodyOne={dummyOne.woody}
-        inputMuskOne={dummyOne.musk}
-        inputFreshOne={dummyOne.fresh}
-        inputSpicyOne={dummyOne.spicy}
-        inputCitrusTwo={dummyTwo.citrus}
-        inputFloralTwo={dummyTwo.floral}
-        inputWoodyTwo={dummyTwo.woody}
-        inputMuskTwo={dummyTwo.musk}
-        inputFreshTwo={dummyTwo.fresh}
-        inputSpicyTwo={dummyTwo.spicy}
-      />
+      <div>
+        <FeedBackChart
+          inputCitrusOne={dummyOne.citrus}
+          inputFloralOne={dummyOne.floral}
+          inputWoodyOne={dummyOne.woody}
+          inputMuskOne={dummyOne.musk}
+          inputFreshOne={dummyOne.fresh}
+          inputSpicyOne={dummyOne.spicy}
+          inputCitrusTwo={dummyTwo.citrus}
+          inputFloralTwo={dummyTwo.floral}
+          inputWoodyTwo={dummyTwo.woody}
+          inputMuskTwo={dummyTwo.musk}
+          inputFreshTwo={dummyTwo.fresh}
+          inputSpicyTwo={dummyTwo.spicy}
+        />
+      </div>
 
       {/* 조향 레시피 */}
       <div className="w-full mr-4">

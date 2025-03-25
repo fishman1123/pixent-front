@@ -1,9 +1,8 @@
-// src/components/pages/Admin.jsx
 import React, { useState, useEffect } from "react";
 import { useGetResults } from "../../hooks/useGetResult.jsx";
 import { useDeleteResult } from "../../hooks/useDeleteResult";
 import PrimeModal from "../PrimeModal.jsx";
-import { LoadingData } from "../pages/LoadingData.jsx"; // Import the new PrimeModal
+import { LoadingData } from "../pages/LoadingData.jsx";
 
 export const Admin = () => {
   const [page, setPage] = useState(0);
@@ -25,8 +24,39 @@ export const Admin = () => {
   const { mutate: deleteResult } = useDeleteResult();
   const [tempSize, setTempSize] = useState(size);
   const [searchQuery, setSearchQuery] = useState("");
-
   const [isSearchActive, setIsSearchActive] = useState(false);
+
+  // Close the main notification modal on Enter
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === "Enter") {
+        closeModal(); // calls setShowModal(false)
+      }
+    };
+
+    if (showModal) {
+      window.addEventListener("keydown", handleKeyDown);
+    }
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [showModal]);
+
+  // Close the row-click (share/copy) modal on Enter
+  useEffect(() => {
+    const handleRowKeyDown = (e) => {
+      if (e.key === "Enter") {
+        closeRowModal(); // calls setShowRowModal(false)
+      }
+    };
+
+    if (showRowModal) {
+      window.addEventListener("keydown", handleRowKeyDown);
+    }
+    return () => {
+      window.removeEventListener("keydown", handleRowKeyDown);
+    };
+  }, [showRowModal]);
 
   useEffect(() => {
     const storedPass = sessionStorage.getItem("admin_pass");
@@ -62,6 +92,7 @@ export const Admin = () => {
       setPage((prev) => prev + 1);
     }
   };
+
   const handleSearchClick = () => {
     setIsSearchActive(true);
   };
@@ -285,16 +316,19 @@ export const Admin = () => {
           페이지: {number + 1} 중 {totalPages}
         </div>
       </div>
+
       <div>
         <div>Implement on here</div>
       </div>
 
+      {/* Main Notification Modal */}
       <PrimeModal isOpen={showModal} title="Notification" onClose={closeModal}>
         <div className="max-h-[500px] overflow-y-auto">
           <p>{modalMessage}</p>
         </div>
       </PrimeModal>
 
+      {/* Row-click Modal */}
       {selectedItem && (
         <PrimeModal
           isOpen={showRowModal}

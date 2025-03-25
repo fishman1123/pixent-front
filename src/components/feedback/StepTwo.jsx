@@ -331,7 +331,7 @@ export const StepTwo = ({ onBack, reportId }) => {
                 <div className="flex flex-col">
                   <button
                     onClick={() => handleAccordionToggle(note.name)}
-                    className="w-full flex justify-between items-center pl-[4px] pr-[4px] py-3 text-[16px] font-medium bg-white text-black"
+                    className="w-full flex justify-between items-center pl-[4px] h-[50px] pr-[4px] py-3 text-[16px] font-medium bg-white text-black"
                   >
                     <div className="flex items-center space-x-2">
                       <span>{note.name}</span>

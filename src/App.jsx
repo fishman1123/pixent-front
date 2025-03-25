@@ -37,9 +37,11 @@ function App() {
         <QueryClientProvider client={queryClient}>
           <ErrorBoundary>
             <Suspense fallback={<LoadingData />}>
-              <AuthInitializer>
-                <RouterProvider router={router} />
-              </AuthInitializer>
+              <div>
+                <AuthInitializer>
+                  <RouterProvider router={router} />
+                </AuthInitializer>
+              </div>
             </Suspense>
           </ErrorBoundary>
           <ErrorModal />
