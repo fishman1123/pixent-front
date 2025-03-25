@@ -11,7 +11,7 @@ import { resetFeedback } from "../../store/feedbackPostSlice.js";
 import { resetStepTwoSelections } from "../../store/feedbackSlice.js";
 import { setUuidList } from "../../store/uuidSlice.js";
 
-import { LoadingData } from "./LoadingData.jsx";
+import { LoadingData } from "../pages/LoadingData.jsx";
 import PrimeModal from "../PrimeModal.jsx";
 
 export const Collection = () => {

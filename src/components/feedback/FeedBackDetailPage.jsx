@@ -2,8 +2,8 @@ import React from "react";
 import { useLocation } from "react-router-dom";
 import { useGetReportFeedback } from "../../hooks/useGetReportFeedback.js";
 import { FeedBackChart } from "../FeedBackChart.jsx";
-import NewChart from "./NewChart.jsx";
-import { LoadingData } from "./LoadingData.jsx";
+import NewChart from "../NewChart.jsx";
+import { LoadingData } from "../pages/LoadingData.jsx";
 
 export const FeedBackDetailPage = () => {
   const { state } = useLocation() || {};

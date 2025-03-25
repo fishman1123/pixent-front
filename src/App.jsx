@@ -32,18 +32,20 @@ function App() {
   }, []);
 
   return (
-    <Provider store={store}>
-      <QueryClientProvider client={queryClient}>
-        <ErrorBoundary>
-          <Suspense fallback={<LoadingData />}>
-            <AuthInitializer>
-              <RouterProvider router={router} />
-            </AuthInitializer>
-          </Suspense>
-        </ErrorBoundary>
-        <ErrorModal />
-      </QueryClientProvider>
-    </Provider>
+    <div className="overflow-y-scroll scrollbar-hide h-screen">
+      <Provider store={store}>
+        <QueryClientProvider client={queryClient}>
+          <ErrorBoundary>
+            <Suspense fallback={<LoadingData />}>
+              <AuthInitializer>
+                <RouterProvider router={router} />
+              </AuthInitializer>
+            </Suspense>
+          </ErrorBoundary>
+          <ErrorModal />
+        </QueryClientProvider>
+      </Provider>
+    </div>
   );
 }
 

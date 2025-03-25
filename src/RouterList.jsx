@@ -1,8 +1,8 @@
 // src/RouterList.js
 import React from "react";
-import { Intro } from "./components/pages/Intro.jsx";
-import { Input } from "./components/pages/Input.jsx";
-import { InfoInput } from "./components/pages/InfoInput.jsx";
+import { Intro } from "./components/intro/Intro.jsx";
+import { Input } from "./components/input/Input.jsx";
+import { InfoInput } from "./components/inputInfo/InfoInput.jsx";
 import { InfoInputTwo } from "./components/pages/InfoInputTwo.jsx";
 import { WrongPath } from "./components/pages/WrongPath.jsx";
 import { ResultPage } from "./components/pages/ResultPage.jsx";
@@ -17,22 +17,21 @@ import Loading from "./components/pages/Loading.jsx";
 import { ReportSummary } from "./components/pages/ReportSummary";
 import { LoginPage } from "./components/pages/LoginPage";
 import { LoginRedirectPage } from "./components/pages/LoginRedirectPage";
-import { NicknamePage } from "./components/pages/NicknamePage";
+import { NicknamePage } from "./components/nickname/NicknamePage";
 import Test from "./components/summary/Test";
 import TestTwo from "./components/summary/TestTwo";
 import { ProtectedLayout } from "./components/layout/ProtectedLayout";
-import { UserPage } from "./components/pages/UserPage.jsx";
-import { Collection } from "./components/pages/Collection.jsx";
-import { FeedBackPage } from "./components/pages/FeedBackPage.jsx";
-import NewChart from "./components/pages/NewChart.jsx";
+import { UserPage } from "./components/myPage/UserPage.jsx";
+import { Collection } from "./components/collection/Collection.jsx";
+import { FeedBackPage } from "./components/feedback/FeedBackPage.jsx";
 import { FeedBackChart } from "./components/FeedBackChart.jsx";
-import { FeedBackDetailPage } from "./components/pages/FeedBackDetailPage.jsx";
+import { FeedBackDetailPage } from "./components/feedback/FeedBackDetailPage.jsx";
 import { AnalysisRequest } from "./components/AnalysisRequest.jsx";
 import AuthInitializer from "./components/AuthInitializer.jsx";
-import { AdditionalFeedBackPage } from "./components/pages/AdditionalFeedBackPage.jsx";
+import { AdditionalFeedBackPage } from "./components/feedback/AdditionalFeedBackPage.jsx";
 import { AdminUsers } from "./components/admin/AdminUsers.jsx";
-import { AddOriginPage } from "./components/pages/AddOriginPage.jsx";
-import { ValidationPage } from "./components/pages/ValidationPage.jsx";
+import { AddOriginPage } from "./components/addOrigin/AddOriginPage.jsx";
+import { ValidationPage } from "./components/validation/ValidationPage.jsx";
 
 export const RouterList = [
   {
