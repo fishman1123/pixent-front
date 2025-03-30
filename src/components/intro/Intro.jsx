@@ -6,7 +6,7 @@ import { useTranslation } from "react-i18next";
 import { useLocation, useNavigate } from "react-router-dom";
 
 import PrimeModal from "../PrimeModal";
-import { IntroTop } from "../intro/IntroTop";
+import { IntroTop } from "./IntroTop.jsx";
 import { IntroCenter } from "../intro/IntroCenter";
 import { IntroBottom } from "../intro/IntroBottom";
 import { ProcedureButton } from "../ProcedureButton";

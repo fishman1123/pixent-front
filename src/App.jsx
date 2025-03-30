@@ -20,6 +20,7 @@ const queryClient = new QueryClient();
 function setScreenSize() {
   const vh = window.innerHeight * 0.01;
   document.documentElement.style.setProperty("--vh", `${vh}px`);
+  document.documentElement.classList.add("scrollbar-hide");
 }
 
 function App() {
@@ -32,16 +33,17 @@ function App() {
   }, []);
 
   return (
-    <div className="overflow-y-scroll scrollbar-hide h-screen">
+    // <div className="overflow-y-scroll scrollbar-hide h-screen">
+    <div className=" scrollbar-hide h-screen">
       <Provider store={store}>
         <QueryClientProvider client={queryClient}>
           <ErrorBoundary>
             <Suspense fallback={<LoadingData />}>
-              <div>
-                <AuthInitializer>
+              <AuthInitializer>
+                <div>
                   <RouterProvider router={router} />
-                </AuthInitializer>
-              </div>
+                </div>
+              </AuthInitializer>
             </Suspense>
           </ErrorBoundary>
           <ErrorModal />

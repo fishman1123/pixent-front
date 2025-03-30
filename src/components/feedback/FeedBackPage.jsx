@@ -1,20 +1,19 @@
-// src/components/feedback/FeedBackPage.jsx
-
 import { useLocation } from "react-router-dom";
 import { SummaryChart } from "../result/SummaryChart.jsx";
-import { StepOne } from "../feedback/StepOne";
-import { StepTwo } from "../feedback/StepTwo";
-import { StepThree } from "../feedback/StepThree";
+import { StepOne } from "./StepOne.jsx";
+import { StepTwo } from "./StepTwo.jsx";
+import { StepThree } from "./StepThree.jsx";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-// Import the reset actions
+// Redux actions
 import { resetFeedback } from "../../store/feedbackPostSlice";
 import {
   resetStepTwoSelections,
   setOriginalChartData,
 } from "../../store/feedbackSlice.js";
 
+// Hooks
 import { useNewGetReportByUuid } from "../../hooks/useNewGetReportByUuid";
 import { useGetReportByUuid } from "../../hooks/useGetReportByUuid.jsx";
 
@@ -22,17 +21,17 @@ export const FeedBackPage = () => {
   const location = useLocation();
   const dispatch = useDispatch();
 
-  // 2) Retrieve subId/perfumeName from route state
+  // Retrieve subId/perfumeName from route state
   const subId = location.state?.subId;
   const routePerfumeName = location.state?.perfumeName;
 
-  // 3) Use your custom hook to get the report data
+  // Use your custom hook to get the report data
   const { data: reportData } = useGetReportByUuid(subId);
 
-  // 4) Local state to store a “dummy” version of that data
+  // Local state to store a “dummy” version of that data
   const [dummydataforfeed, setDummydataforfeed] = useState(null);
 
-  // 5) On fetch success, build the shape you need
+  // On fetch success, build the shape you need
   useEffect(() => {
     if (!reportData) return;
 
@@ -62,10 +61,10 @@ export const FeedBackPage = () => {
     setDummydataforfeed(reconstructed);
   }, [reportData]);
 
-  // 6) Local step-based UI
+  // Local step-based UI
   const [step, setStep] = useState(0);
 
-  // 7) Pull data from Redux to calculate leftover, etc.
+  // Pull data from Redux
   const stepOneRatio = useSelector((state) => state.feedback.stepOneRatio) || 0;
   const { percentages } = useSelector(
     (state) => state.feedback.stepTwoSelections,
@@ -80,7 +79,7 @@ export const FeedBackPage = () => {
 
   const [selectedNote, setSelectedNote] = useState("");
 
-  // 8) Once we have “dummydataforfeed,” also set the original chart data
+  // Once we have “dummydataforfeed,” also set the original chart data
   useEffect(() => {
     if (!dummydataforfeed) return;
     dispatch(
@@ -95,7 +94,7 @@ export const FeedBackPage = () => {
     );
   }, [dispatch, dummydataforfeed]);
 
-  // 9) Step transitions
+  // Step transitions
   const nextStep = (noteName) => {
     if (step === 1) {
       setSelectedNote(noteName);
@@ -107,10 +106,9 @@ export const FeedBackPage = () => {
     setStep((prev) => (prev > 0 ? prev - 1 : 0));
   };
 
-  // 10) Decide if we show some UI elements only if user has a stepOneRatio
+  // Show certain UI elements only if user has a stepOneRatio
   const shouldShowUI = stepOneRatio > 0;
 
-  // 11) Decide the main content to render
   let content;
   if (!dummydataforfeed) {
     content = <div>Reconstructing data from the server...</div>;
@@ -127,45 +125,57 @@ export const FeedBackPage = () => {
 
     content = (
       <>
-        {/* Perfume info + chart */}
-        <div className="rounded-md bg-white p-4 mb-4">
-          <div className="flex justify-between">
-            <div className="flex flex-col">
-              <h2 className="text-lg font-bold text-black">
-                {finalPerfumeName}
-              </h2>
-
-              <div
-                className={`transition-all duration-500 overflow-hidden ${
-                  shouldShowUI ? "max-h-32 mt-2" : "max-h-0"
-                }`}
-              >
-                <p className="text-gray-600 text-sm">
-                  향을 {leftover}% 더 추가해주세요
-                </p>
-                <p className="text-gray-600 text-[12px]">
-                  구매일자: {createdAtString}
-                </p>
-              </div>
-            </div>
+        {/* Perfume info header (fixed) */}
+        <div
+          className="
+            flex justify-between
+            border-t border-b border-black
+            p-4
+            fixed
+            top-[88px]
+            left-0 right-0
+            bg-white
+            z-50
+          "
+        >
+          <div className="flex flex-col">
+            <h2 className="text-lg font-bold text-black">{finalPerfumeName}</h2>
 
             <div
-              className={`transition-all duration-500 overflow-hidden flex items-center ${
-                shouldShowUI ? "max-h-32" : "max-h-0"
+              className={`transition-all duration-500 overflow-hidden ${
+                shouldShowUI ? "max-h-32 mt-2" : "max-h-0"
               }`}
             >
-              <p className="text-[54px] text-black font-bold">{bigNumber}%</p>
+              <p className="text-gray-600 text-sm">
+                향을 {leftover}% 더 추가해주세요
+              </p>
+              <p className="text-gray-600 text-[12px]">
+                구매일자: {createdAtString}
+              </p>
             </div>
           </div>
 
-          <SummaryChart
-            inputCitrus={dummydataforfeed.citrus}
-            inputFloral={dummydataforfeed.floral}
-            inputWoody={dummydataforfeed.woody}
-            inputMusk={dummydataforfeed.musk}
-            inputSpicy={dummydataforfeed.spicy}
-            inputFresh={dummydataforfeed.fruity}
-          />
+          <div
+            className={`transition-all duration-500 overflow-hidden flex items-center ${
+              shouldShowUI ? "max-h-32" : "max-h-0"
+            }`}
+          >
+            <p className="text-[54px] text-black font-bold">{bigNumber}%</p>
+          </div>
+        </div>
+
+        {/* Push down the rest of the content so it's not hidden under the fixed header */}
+        <div className="mt-[120px] rounded-md bg-white mb-4">
+          <div className="p-4">
+            <SummaryChart
+              inputCitrus={dummydataforfeed.citrus}
+              inputFloral={dummydataforfeed.floral}
+              inputWoody={dummydataforfeed.woody}
+              inputMusk={dummydataforfeed.musk}
+              inputSpicy={dummydataforfeed.spicy}
+              inputFresh={dummydataforfeed.fruity}
+            />
+          </div>
         </div>
 
         {/* Step-based container */}
@@ -175,17 +185,17 @@ export const FeedBackPage = () => {
             style={{ transform: `translateX(-${step * 100}%)` }}
           >
             {/* StepOne */}
-            <div className="w-full shrink-0">
+            <div className="w-full shrink-0 px-4">
               <StepOne onNext={nextStep} />
             </div>
 
             {/* StepTwo */}
-            <div className="w-full shrink-0">
+            <div className="w-full shrink-0 px-4">
               <StepTwo onBack={prevStep} reportId={dummydataforfeed.uuid} />
             </div>
 
             {/* StepThree */}
-            <div className="w-full shrink-0">
+            <div className="w-full shrink-0 px-4">
               <StepThree />
             </div>
           </div>
@@ -202,9 +212,8 @@ export const FeedBackPage = () => {
     );
   }
 
-  // 12) Finally return the overall layout
   return (
-    <div className="flex-col min-h-screen w-full pt-[10px] px-4 scrollbar-hide">
+    <div className="flex-col min-h-screen w-full pt-[10px] scrollbar-hide">
       {content}
     </div>
   );

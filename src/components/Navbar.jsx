@@ -34,25 +34,23 @@ export const Navbar = () => {
   };
 
   return (
-    <div className="max-w-[480px] mx-auto">
-      <div className="fixed top-0 left-0 w-full text-black z-30">
-        <div className="max-w-[480px] mx-auto bg-white flex items-center justify-between p-5">
-          {/* Hide back button if the previous path was /feedback/* or if on /secured/Collection/ */}
-          {currentPage === "/" ? (
-            <TranslateButton />
-          ) : shouldShowBackButton ? (
-            <div className="w-[50px]">
-              <BackButton />
-            </div>
-          ) : (
-            <div className="w-[50px]"></div>
-          )}
-
-          <div className="flex-1 text-[24px] font-headerTitle text-center">
-            <button onClick={handleRedirect}>AC'SCENT ID</button>
+    <div className="fixed top-0 left-0 w-full text-black z-30">
+      <div className="max-w-[480px] mx-auto bg-white flex items-center justify-between p-5">
+        {/* Hide back button if the previous path was /feedback/* or if on /secured/Collection/ */}
+        {currentPage === "/" ? (
+          <TranslateButton />
+        ) : shouldShowBackButton ? (
+          <div className="w-[50px]">
+            <BackButton />
           </div>
-          <Menu isOpen={isOpen} toggleMenu={toggleMenu} />
+        ) : (
+          <div className="w-[50px]"></div>
+        )}
+
+        <div className="flex-1 text-[24px] font-headerTitle text-center">
+          <button onClick={handleRedirect}>AC'SCENT ID</button>
         </div>
+        <Menu isOpen={isOpen} toggleMenu={toggleMenu} />
       </div>
     </div>
   );

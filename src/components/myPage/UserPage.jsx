@@ -1,7 +1,7 @@
 // UserPage.jsx
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Navigate } from "react-router-dom";
+import { Navigate, useLocation } from "react-router-dom";
 
 import { setAuthState } from "../../store/authSlice";
 import { useGetUserInfo } from "../../hooks/useGetUserInfo";
@@ -32,8 +32,10 @@ export function UserPage() {
       ],
     },
   ];
+  // const location = useLocation();
 
   useEffect(() => {
+    window.scrollTo(0, 0);
     if (!userInfo) return;
 
     const needsUpdate =
@@ -55,6 +57,11 @@ export function UserPage() {
       );
     }
   }, [userInfo, authState, dispatch]);
+
+  // useEffect(() => {
+  //   window.scrollTo(0, 0);
+  // }, [location]);
+
   // if (!authState.isAuthenticated) {
   //   return <Navigate to="/login" replace />;
   // }

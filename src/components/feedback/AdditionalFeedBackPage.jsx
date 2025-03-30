@@ -2,9 +2,9 @@
 
 import { useLocation } from "react-router-dom";
 import { SummaryChart } from "../result/SummaryChart.jsx";
-import { StepOne } from "../feedback/StepOne";
-import { StepTwo } from "../feedback/StepTwo";
-import { StepThree } from "../feedback/StepThree";
+import { StepOne } from "./StepOne.jsx";
+import { StepTwo } from "./StepTwo.jsx";
+import { StepThree } from "./StepThree.jsx";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -126,6 +126,14 @@ export const AdditionalFeedBackPage = () => {
       <>
         {/* Perfume info + chart */}
         <div className="rounded-md bg-white p-4 mb-4">
+          <SummaryChart
+            inputCitrus={dummydataforfeed.citrus}
+            inputFloral={dummydataforfeed.floral}
+            inputWoody={dummydataforfeed.woody}
+            inputMusk={dummydataforfeed.musk}
+            inputSpicy={dummydataforfeed.spicy}
+            inputFresh={dummydataforfeed.fruity}
+          />
           <div className="flex justify-between">
             <div className="flex flex-col">
               <h2 className="text-lg font-bold text-black">
@@ -154,15 +162,6 @@ export const AdditionalFeedBackPage = () => {
               <p className="text-[54px] text-black font-bold">{bigNumber}%</p>
             </div>
           </div>
-
-          <SummaryChart
-            inputCitrus={dummydataforfeed.citrus}
-            inputFloral={dummydataforfeed.floral}
-            inputWoody={dummydataforfeed.woody}
-            inputMusk={dummydataforfeed.musk}
-            inputSpicy={dummydataforfeed.spicy}
-            inputFresh={dummydataforfeed.fruity}
-          />
         </div>
 
         {/* Step-based container */}

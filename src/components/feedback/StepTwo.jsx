@@ -329,9 +329,17 @@ export const StepTwo = ({ onBack, reportId }) => {
               >
                 {/* Accordion Header */}
                 <div className="flex flex-col">
-                  <button
+                  {/* Changed from <button> to <div role="button"> */}
+                  <div
+                    role="button"
+                    tabIndex={0}
                     onClick={() => handleAccordionToggle(note.name)}
-                    className="w-full flex justify-between items-center pl-[4px] h-[50px] pr-[4px] py-3 text-[16px] font-medium bg-white text-black"
+                    onKeyPress={(e) => {
+                      if (e.key === "Enter" || e.key === " ") {
+                        handleAccordionToggle(note.name);
+                      }
+                    }}
+                    className="cursor-pointer w-full flex justify-between items-center pl-[4px] h-[50px] pr-[4px] py-3 text-[16px] font-medium bg-white text-black"
                   >
                     <div className="flex items-center space-x-2">
                       <span>{note.name}</span>
@@ -376,13 +384,11 @@ export const StepTwo = ({ onBack, reportId }) => {
                         isOpen ? "rotate-0" : "rotate-180"
                       }`}
                     />
-                  </button>
+                  </div>
                 </div>
 
                 {/* Accordion Body */}
                 <div
-                  // className={`overflow-hidden transition-all duration-500 ${
-                  //transition 임시제거
                   className={`overflow-hidden ${
                     isOpen
                       ? "max-h-[1000px] opacity-100 p-4 bg-white"

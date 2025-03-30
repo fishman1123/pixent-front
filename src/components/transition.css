@@ -1,14 +1,14 @@
 /* transition.css */
-
 .fade-enter {
     opacity: 0;
-    transform: translateY(20px); /* Start slightly below */
+    transform: translateY(20px);
 }
 
 .fade-enter-active {
     opacity: 1;
     transform: translateY(0);
-    transition: opacity 5ms ease-in-out, transform 500ms ease-in-out;
+    /* Match the JS side: 300ms */
+    transition: opacity 300ms ease-in-out, transform 300ms ease-in-out;
 }
 
 .fade-exit {
@@ -18,6 +18,7 @@
 
 .fade-exit-active {
     opacity: 0;
-    transform: translateY(-20px); /* Move slightly above */
-    transition: opacity 500ms ease-in-out, transform 500ms ease-in-out;
+    transform: translateY(-20px);
+    /* Match the JS side: 300ms */
+    transition: opacity 300ms ease-in-out, transform 300ms ease-in-out;
 }

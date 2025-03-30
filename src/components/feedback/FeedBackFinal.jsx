@@ -62,7 +62,13 @@ const FeedBackFinal = () => {
           </div>
 
           <div className="w-full">
-            <button className="noanimationbutton flex flex-col items-center p-4 min-w-32 w-full h-auto">
+            <button
+              className="noanimationbutton flex flex-col items-center p-4 min-w-32 w-full h-auto"
+              onClick={() => {
+                window.location.href =
+                  "https://booking.naver.com/booking/6/bizes/1367254/items/6591246?area=ple&lang=ko&startDate=2025-03-29&theme=place";
+              }}
+            >
               <span className="text-sm text-gray-700">
                 <img
                   src={reservationIcon}

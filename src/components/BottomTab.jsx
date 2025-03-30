@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useLayoutEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 
 // 1) Import SVGs via "?react"
@@ -15,6 +15,9 @@ export const BottomTab = () => {
   const [showToast, setShowToast] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
+  useLayoutEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location]);
 
   const isCollectionActive = location.pathname === "/secured/collection";
   const isReserveActive = location.pathname === "/secured/reserve";
@@ -34,20 +37,21 @@ export const BottomTab = () => {
     handleCloseToast();
   };
   const handleUserPage = async () => {
-    // window.location.href = "/secured/user";
     await refetchUserAllReport();
     navigate("/secured/user");
     handleCloseToast();
   };
   const handleRedirectToCollection = () => {
+    // You could also use navigate("/secured/collection") if you prefer
     window.location.href = "/secured/collection";
   };
 
   return (
-    <div className="max-w-[480px] mx-auto">
-      {/* Bottom bar */}
+    <>
+      {/* Fixed bottom bar */}
       <div className="fixed bottom-0 left-0 w-full bg-white z-30">
-        <div className="max-w-[480px] border-t border-gray-200 mx-auto flex justify-around py-2">
+        {/* Inner container for centering icons to 480px */}
+        <div className="mx-auto max-w-[480px] border-t border-gray-200 flex justify-around py-2">
           {/* Collection */}
           <button
             className={`w-1/4 flex flex-col items-center space-y-1 whitespace-nowrap ${
@@ -61,7 +65,6 @@ export const BottomTab = () => {
                 isCollectionActive ? "text-black" : "text-[#8E8E8E]"
               }`}
             />
-
             <span className="text-xs">향수 컬렉션</span>
           </button>
 
@@ -73,7 +76,7 @@ export const BottomTab = () => {
             disabled={isReserveActive}
             onClick={() => {
               window.location.href =
-                "https://booking.naver.com/booking/6/bizes/1002529";
+                "https://booking.naver.com/booking/6/bizes/1367254/items/6591246?area=ple&lang=ko&startDate=2025-03-29&theme=place";
             }}
           >
             <ReserveIcon
@@ -127,6 +130,6 @@ export const BottomTab = () => {
           />
         </ToastModal>
       )}
-    </div>
+    </>
   );
 };

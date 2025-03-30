@@ -30,7 +30,7 @@ export const CollectionTop = ({ dataOne, arrayData }) => {
     const urlValue =
       index === 0
         ? "https://acscent.co.kr/shop_view/?idx=199"
-        : "https://booking.naver.com/booking/6/bizes/1002529";
+        : "https://booking.naver.com/booking/6/bizes/1367254/items/6591246?area=ple&lang=ko&startDate=2025-03-29&theme=place";
     if (!subId) return;
     navigate(`/secured/feedback/${subId}`, {
       state: {
@@ -464,7 +464,7 @@ export const CollectionTop = ({ dataOne, arrayData }) => {
                         "https://acscent.co.kr/shop_view/?idx=199";
                     } else {
                       window.location.href =
-                        "https://booking.naver.com/booking/6/bizes/1002529";
+                        "https://booking.naver.com/booking/6/bizes/1367254/items/6591246?area=ple&lang=ko&startDate=2025-03-29&theme=place";
                     }
                   }}
                   disabled={false}
