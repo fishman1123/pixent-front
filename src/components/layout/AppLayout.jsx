@@ -55,8 +55,11 @@ export const AppLayout = () => {
         </TransitionGroup>
 
         {/* 3) Footer is outside of the transition */}
-        <div className={`p-2 ${authState.isAuthenticated ? "mb-9" : ""}`}>
-          <Footer />
+        <div className="p-2">
+          <ExtraFooter />
+          <div className={`p-2 ${authState.isAuthenticated ? "mb-9" : ""}`}>
+            <Footer />
+          </div>
         </div>
       </div>
 
