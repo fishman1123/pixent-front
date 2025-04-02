@@ -80,7 +80,7 @@ export const Collection = () => {
   const uuidList = useSelector((state) => state.uuid.uuidList);
   const { data: secondCollectionData, isLoading: isSecondLoading } =
     useGetSecondCollection(uuidList.length > 0 ? uuidList : []);
-
+  console.log(secondCollectionData);
   // 6) Handle loading / error
   if (isLoading || isSecondLoading) {
     return <LoadingData />;

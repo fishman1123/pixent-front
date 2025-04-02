@@ -32,6 +32,7 @@ import { AdditionalFeedBackPage } from "./components/feedback/AdditionalFeedBack
 import { AdminUsers } from "./components/admin/AdminUsers.jsx";
 import { AddOriginPage } from "./components/addOrigin/AddOriginPage.jsx";
 import { ValidationPage } from "./components/validation/ValidationPage.jsx";
+import { AddOptionToastContent } from "./components/addOption/AddOptionToastContent.jsx";
 
 export const RouterList = [
   {
@@ -106,6 +107,10 @@ export const RouterList = [
               {
                 index: true,
                 element: <Collection />,
+              },
+              {
+                path: "option",
+                element: <AddOptionToastContent />,
               },
               {
                 path: "add",

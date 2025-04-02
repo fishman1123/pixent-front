@@ -6,11 +6,25 @@ import barChart from "../../assets/newchart.svg";
 import icon from "../../assets/newplus.svg";
 import fixIcon from "../../assets/fix.svg";
 import upIcon from "../../assets/up.svg";
+import confirmIcon from "../../assets/logo.svg";
 import { SummaryChart } from "../result/SummaryChart.jsx";
 import { dateExtractor } from "../../util/dateExtractor.js";
+import ToastModal from "../ToastModal.jsx";
+import { AddOptionToastContent } from "../addOption/AddOptionToastContent.jsx";
 
 export const CollectionTop = ({ dataOne, arrayData }) => {
   const navigate = useNavigate();
+  const [showToast, setShowToast] = useState(false);
+  const [selectedSubId, setSelectedSubId] = useState(null);
+  const [selectedLikeStatus, setSelectedLikeStatus] = useState(null);
+  const [selectedIsLastIdx, setSelectedIsLastIdx] = useState(null);
+  const [selectedHasFeedback, setSelectedHasFeedback] = useState(null);
+  const [selectedName, setSelectedName] = useState("");
+  const [selectedIsConfirm, setSelectedIsConfirm] = useState("");
+
+  if (!dataOne || !dataOne.user_report) {
+    return <div>Loading...</div>;
+  }
 
   // -- Handler for navigating to feedback page
   const onClickFeedBack = (subId, perfumeName) => {
@@ -116,10 +130,13 @@ export const CollectionTop = ({ dataOne, arrayData }) => {
           spicy: mItem.spicy,
           subId: mItem.subId ?? null,
           hasFeedback: mItem.hasFeedback,
+          likeStatus: mItem.likeStatus ?? "none",
           date: dateExtractor(mItem.createdAt),
         },
       })),
     ];
+    console.log("whats's in it:", chartSet);
+    console.log("report object: ", report);
 
     return {
       title: report.perfumeName,
@@ -155,8 +172,32 @@ export const CollectionTop = ({ dataOne, arrayData }) => {
   };
 
   // -- Handlers for "ADD"
-  const handleAddFeedback = (subId) => {
-    navigate("/secured/collection/add", { state: { subid: subId } });
+  const handleAddOptinon = (subId) => {};
+  // const handleAddFeedback = (subId) => {
+  //   navigate("/secured/collection/add", { state: { subid: subId } });
+  // };
+  const handleAddFeedback = (
+    subId,
+    likeStatus,
+    checkLastIdx,
+    hasFeedback,
+    targetPerfumeName,
+    targetIsConfirm,
+  ) => {
+    // Convert "true" or true → true, everything else → false
+    const isActuallyConfirmed =
+      targetIsConfirm === true || targetIsConfirm === "true";
+
+    setSelectedSubId(subId);
+    setSelectedLikeStatus(likeStatus);
+    setSelectedIsLastIdx(checkLastIdx);
+    setSelectedHasFeedback(hasFeedback);
+    setSelectedName(targetPerfumeName);
+
+    // Now store a proper boolean in state
+    setSelectedIsConfirm(isActuallyConfirmed);
+
+    setShowToast(true);
   };
   const handleAddOrigin = () => {
     navigate("/secured/collection/validation");
@@ -340,30 +381,55 @@ export const CollectionTop = ({ dataOne, arrayData }) => {
               inputSpicy={chart.data.spicy}
             />
 
+            {/*{!chart.data.middleNote.includes("None") && (*/}
+            {/*    <div>+ {chart.data.middleNote}</div>*/}
+            {/*)}*/}
+
             <div className="text-black mb-2 border-t border-b border-black">
               <div className="m-[20px]">
                 <div className="flex justify-between">
                   <div className="flex flex-col">
-                    <div className="font-bold text-lg">
-                      {chart.data.perfumeName}
+                    <div className="flex">
+                      <div className="font-bold text-lg">
+                        {chart.data.perfumeName}
+                      </div>
+                      <div>
+                        <span className="text-gray-400 pl-2 w-[30px] h-[25px] inline-flex">
+                          {chart.data.likeStatus && (
+                            <button className="w-full h-full">
+                              <img
+                                alt="confirm"
+                                src={confirmIcon}
+                                className="w-full h-full object-contain"
+                              />
+                            </button>
+                          )}
+                        </span>
+                      </div>
                     </div>
+
                     {/*<div className="text-gray-400">123213</div>*/}
                     <div className="text-gray-400">{chart.data.date}</div>
                   </div>
                   <div className="w-[80px] ml-[40px] flex justify-center">
                     <button
                       className={`noanimationbutton flex items-center justify-center min-w-[80px]
-    min-h-[30px] px-2 py-1 border border-gray-600 text-black font-light 
-    ${
-      idx !== activeSlide.chartSet.length - 1
-        ? "opacity-50 cursor-not-allowed"
-        : ""
-    }`}
-                      onClick={() => handleAddFeedback(chart.data.subId)}
-                      disabled={
-                        chart.id !== "chartOne" &&
-                        idx !== activeSlide.chartSet.length - 1
+    min-h-[30px] px-2 py-1 border border-gray-600 text-black font-light`}
+                      onClick={() =>
+                        handleAddFeedback(
+                          chart.data.subId,
+                          chart.data.likeStatus?.toString() ?? false,
+                          idx === activeSlide.chartSet.length - 1,
+                          chart.data.hasFeedback?.toString() ?? false,
+                          chart.data.perfumeName,
+                          chart.data.likeStatus?.toString() ?? false,
+                        )
                       }
+                      disabled=""
+                      // disabled={
+                      //   chart.id !== "chartOne" &&
+                      //   idx !== activeSlide.chartSet.length - 1
+                      // }
                     >
                       <span className="text-sm tracking-wide">ADD</span>
                       <svg
@@ -478,6 +544,19 @@ export const CollectionTop = ({ dataOne, arrayData }) => {
           </div>
         ))}
       </div>
+      {showToast && (
+        <ToastModal onClose={() => setShowToast(false)}>
+          <AddOptionToastContent
+            targetSubId={selectedSubId}
+            targetLikeStatus={selectedLikeStatus}
+            targetCheckLastIdx={selectedIsLastIdx}
+            targetHasFeedback={selectedHasFeedback}
+            targetSelectedName={selectedName}
+            // Pass the boolean value
+            taragetConfirmed={selectedIsConfirm}
+          />
+        </ToastModal>
+      )}
     </div>
   );
 };

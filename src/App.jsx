@@ -34,7 +34,7 @@ function App() {
 
   return (
     // <div className="overflow-y-scroll scrollbar-hide h-screen">
-    <div className=" scrollbar-hide h-screen">
+    <div className="scrollbar-hide h-screen">
       <Provider store={store}>
         <QueryClientProvider client={queryClient}>
           <ErrorBoundary>

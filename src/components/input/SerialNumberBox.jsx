@@ -31,7 +31,6 @@ export const SerialNumberBox = ({
     dispatch(setUserState({ currentPage: "input" }));
   }, [dispatch]);
 
-  // ✅ Use the mutation hook
   const postFeedback = usePostCreateVariant();
 
   // ✅ Debugging Log
