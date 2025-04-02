@@ -82,7 +82,8 @@ export const SerialNumberBox = ({
           { adminPW: serialNumber, reportId },
           {
             onSuccess: () => {
-              navigate("/secured/collection");
+              // navigate("/secured/collection");
+              window.location.href = "/secured/collection";
             },
             onError: (err) => {
               console.error("❌ Feedback submission failed:", err);

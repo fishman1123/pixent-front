@@ -213,7 +213,7 @@ export const FeedBackPage = () => {
   }
 
   return (
-    <div className="flex-col min-h-screen w-full pt-[10px] scrollbar-hide">
+    <div className="flex-col min-h-screen w-full max-w-[520px] pt-[10px] scrollbar-hide">
       {content}
     </div>
   );

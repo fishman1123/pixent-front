@@ -26,7 +26,8 @@ const FeedBackFinal = () => {
   }, [citrus, floral, woody, musk, fruity, spicy, feedbackElement]);
 
   const handleCheckFeedback = () => {
-    navigation("/secured/collection", { replace: true, state: {} });
+    // navigation("/secured/collection", { replace: true, state: {} });
+    window.location.href = "/secured/collection";
   };
 
   return (

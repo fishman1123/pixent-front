@@ -8,28 +8,29 @@ export default {
   theme: {
     extend: {
       maxWidth: {
-        'custom': '375px',
+        custom: "375px",
       },
       minWidth: {
-        'pcScreen': '500px',
+        pcScreen: "500px",
       },
       screens: {
-        'responsive': '100vw',
-        'xs': { max: '370px' },
+        responsive: "100vw",
+        xs: { max: "370px" },
+        maxPcScreen: "530px",
       },
       backgroundColor: {
-        'intro': 'white',
+        intro: "white",
       },
       fontFamily: {
-        'headerTitle': ['"Times New Roman"', 'serif'],
-        'introTitle': ['"Inter"', 'serif'],
+        headerTitle: ['"Times New Roman"', "serif"],
+        introTitle: ['"Inter"', "serif"],
       },
     },
   },
   plugins: [
-    require('@tailwindcss/forms'),
-    require('@tailwindcss/typography'),
-    require('@tailwindcss/aspect-ratio'),
-    require('flowbite/plugin'),
+    require("@tailwindcss/forms"),
+    require("@tailwindcss/typography"),
+    require("@tailwindcss/aspect-ratio"),
+    require("flowbite/plugin"),
   ],
-}
+};

@@ -41,7 +41,10 @@ export const AddOptionToastContent = ({
   const isPurchaseDisabled = !targetSelectedName.includes(".");
 
   // 3) Feedback button disabled
-  const isFeedbackDisabled = !targetHasFeedback || !targetCheckLastIdx;
+  const isFeedbackDisabled =
+    targetHasFeedback === "false" || !targetCheckLastIdx;
+  // console.log(typeof targetHasFeedback);
+  // console.log(typeof isFeedbackDisabled);
 
   // 4) Handler for purchase confirmation
   const handlePurchaseConfirmation = () => {
