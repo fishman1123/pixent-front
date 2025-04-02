@@ -76,7 +76,6 @@ export const Collection = () => {
     // console.log("Collection -> Reconstructed:", newObject);
   }, [collectionData, dispatch]);
 
-  // 5) Query for second collection
   const uuidList = useSelector((state) => state.uuid.uuidList);
   const { data: secondCollectionData, isLoading: isSecondLoading } =
     useGetSecondCollection(uuidList.length > 0 ? uuidList : []);
@@ -99,7 +98,6 @@ export const Collection = () => {
     navigate("/");
   };
 
-  const checkDisableList = [];
 
   // 8) Render
   return (
