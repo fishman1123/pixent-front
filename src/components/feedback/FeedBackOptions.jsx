@@ -28,7 +28,7 @@ export const FeedBackOptions = ({ onSelect }) => {
           className="bg-white text-black text-center p-4 shadow-md border border-gray-300"
           onClick={() => handleSelect(option.value)}
         >
-          <p className="text-md font-semibold">{option.label}</p>
+          <p className="text-[3.3vw] font-semibold">{option.label}</p>
           <p className="text-gray-500 text-sm">{option.subLabel}</p>
         </button>
       ))}

@@ -124,8 +124,43 @@ export const AdditionalFeedBackPage = () => {
 
     content = (
       <>
+        <div
+          className="flex justify-between
+            border-t border-b border-black
+            p-4
+            fixed
+            top-[88px]
+            left-0 right-0
+            bg-white
+            z-50"
+        >
+          <div className="flex flex-col">
+            <h2 className="text-lg font-bold text-black">{finalPerfumeName}</h2>
+
+            <div
+              className={`transition-all duration-500 overflow-hidden ${
+                shouldShowUI ? "max-h-32 mt-2" : "max-h-0"
+              }`}
+            >
+              <p className="text-gray-600 text-sm">
+                향을 {leftover}% 더 추가해주세요
+              </p>
+              <p className="text-gray-600 text-[12px]">
+                구매일자: {createdAtString}
+              </p>
+            </div>
+          </div>
+
+          <div
+            className={`transition-all duration-500 overflow-hidden flex items-center ${
+              shouldShowUI ? "max-h-32" : "max-h-0"
+            }`}
+          >
+            <p className="text-[54px] text-black font-bold">{bigNumber}%</p>
+          </div>
+        </div>
         {/* Perfume info + chart */}
-        <div className="rounded-md bg-white p-4 mb-4">
+        <div className="mt-[120px] rounded-md bg-white p-4 mb-4">
           <SummaryChart
             inputCitrus={dummydataforfeed.citrus}
             inputFloral={dummydataforfeed.floral}
@@ -134,34 +169,6 @@ export const AdditionalFeedBackPage = () => {
             inputSpicy={dummydataforfeed.spicy}
             inputFresh={dummydataforfeed.fruity}
           />
-          <div className="flex justify-between">
-            <div className="flex flex-col">
-              <h2 className="text-lg font-bold text-black">
-                {finalPerfumeName}
-              </h2>
-
-              <div
-                className={`transition-all duration-500 overflow-hidden ${
-                  shouldShowUI ? "max-h-32 mt-2" : "max-h-0"
-                }`}
-              >
-                <p className="text-gray-600 text-sm">
-                  향을 {leftover}% 더 추가해주세요
-                </p>
-                <p className="text-gray-600 text-[12px]">
-                  구매일자: {createdAtString}
-                </p>
-              </div>
-            </div>
-
-            <div
-              className={`transition-all duration-500 overflow-hidden flex items-center ${
-                shouldShowUI ? "max-h-32" : "max-h-0"
-              }`}
-            >
-              <p className="text-[54px] text-black font-bold">{bigNumber}%</p>
-            </div>
-          </div>
         </div>
 
         {/* Step-based container */}
