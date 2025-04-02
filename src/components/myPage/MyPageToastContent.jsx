@@ -35,7 +35,7 @@ export const MyPageToastContent = ({
 
   const handleBottomButtonClick = () => {
     if (!bottomButtonDisabled) {
-      console.log("Navigating to 향수 컬렉션…");
+      // console.log("Navigating to 향수 컬렉션…");
       // Here is the actual navigation to /user/collection
       queryClient.invalidateQueries(["userCollection"]);
 

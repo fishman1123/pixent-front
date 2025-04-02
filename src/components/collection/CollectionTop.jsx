@@ -135,8 +135,8 @@ export const CollectionTop = ({ dataOne, arrayData }) => {
         },
       })),
     ];
-    console.log("whats's in it:", chartSet);
-    console.log("report object: ", report);
+    // console.log("whats's in it:", chartSet);
+    // console.log("report object: ", report);
 
     return {
       title: report.perfumeName,

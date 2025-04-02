@@ -34,8 +34,8 @@ export const AddOptionToastContent = ({
   const realConfirmed =
     taragetConfirmed === true || taragetConfirmed === "true";
 
-  console.log("taragetConfirmed (raw):", taragetConfirmed);
-  console.log("realConfirmed (bool):", realConfirmed);
+  // console.log("taragetConfirmed (raw):", taragetConfirmed);
+  // console.log("realConfirmed (bool):", realConfirmed);
 
   // 2) Purchase button disabled if there's no "." in the name
   const isPurchaseDisabled = !targetSelectedName.includes(".");

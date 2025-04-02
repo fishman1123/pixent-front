@@ -65,7 +65,7 @@ export const selectBlendedChartData = createSelector(
       // 원향 비율을 적용한 값 + 추가 향들의 값
       blendedData[dim] = scaledOriginalValue + picksAverages[dim];
     }
-    console.log("checking suchi: ", blendedData);
+    // console.log("checking suchi: ", blendedData);
 
     return blendedData;
   },

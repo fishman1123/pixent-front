@@ -61,9 +61,9 @@ export const AdditionalFeedBackPage = () => {
     setDummydataforfeed(reconstructed);
   }, [reportData]);
 
-  if (reportData) {
-    console.log("data is here");
-  }
+  // if (reportData) {
+  //   console.log("data is here");
+  // }
 
   const [step, setStep] = useState(0);
 
