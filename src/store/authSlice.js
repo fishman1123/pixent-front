@@ -6,6 +6,7 @@ export const checkAuth = createAsyncThunk(
   "auth/checkAuth",
   async (_, { rejectWithValue }) => {
     const token = localStorage.getItem("gToken");
+    console.log(token);
     if (!token) {
       return rejectWithValue("No token found");
     }
