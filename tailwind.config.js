@@ -17,6 +17,7 @@ export default {
         responsive: "100vw",
         xs: { max: "370px" },
         maxPcScreen: "530px",
+        'copy-visible': '421px',
       },
       backgroundColor: {
         intro: "white",

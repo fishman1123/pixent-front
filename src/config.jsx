@@ -7,8 +7,8 @@
 //     API_BASE_URL,
 // };
 const config = {
-    API_BASE_URL: import.meta.env.VITE_API_BASE_URL,
+  API_BASE_URL: import.meta.env.VITE_API_BASE_URL,
+  API_KAKAO_KEY: import.meta.env.VITE_API_KAKAO_KEY,
 };
 
 export default config;
-

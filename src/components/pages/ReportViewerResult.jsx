@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react";
+// ReportViewerResult.jsx
+import React, { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useGetReportByUuid } from "../../hooks/useGetReportByUuid";
 import imageUploadIcon from "../../assets/upload.svg";
@@ -7,36 +8,23 @@ import { RedirectButton } from "../RedirectButton.jsx";
 import CopyIcon from "../../assets/copy.svg";
 import { LoadingData } from "./LoadingData.jsx";
 
+// Import the KakaoShareButton
+import { KakaoShareButton } from "../KakaoShareButton.jsx";
+
 export const ReportViewerResult = () => {
   const navigate = useNavigate();
   const { id: uuid } = useParams();
   const [copySuccess, setCopySuccess] = useState(false);
 
-  /**
-   * 1) gToken이 없으면 바로 404(*)로 리다이렉트
-   */
-  const token = localStorage.getItem("gToken");
-  useEffect(() => {
-    if (!token) {
-      navigate("*");
-    }
-  }, [token, navigate]);
-
-  // 토큰이 없으면 UI 자체를 렌더링하지 않고 종료
-  if (!token) return null;
-
-  /**
-   * 2) 데이터 요청
-   */
+  // Data request
   const { data: responseData, isLoading, isError } = useGetReportByUuid(uuid);
 
-  // 로딩 or 에러 처리
+  // Loading or error handling
   if (isLoading) return <LoadingData />;
   if (isError) return <div>Error fetching report. Please try again later.</div>;
 
   if (!responseData?.appearance) {
-    // appearance가 없어도 잘못된 데이터이므로 리다이렉트
-    navigate("*");
+    navigate("/");
     return null;
   }
 
@@ -86,6 +74,7 @@ export const ReportViewerResult = () => {
       </div>
 
       <div className="mx-5">
+        {/* ANALYSIS */}
         <div className="mt-[80px]">
           <div className="text-left text-[18px] font-bold">ANALYSIS</div>
           <div className="relative flex items-center justify-center w-full mt-3 mb-5">
@@ -94,7 +83,6 @@ export const ReportViewerResult = () => {
           </div>
           <div className="text-left">
             <h2 className="font-bold text-[14px] pb-2">Facial Feature</h2>
-            {/* Optional Chaining */}
             <p className="text-[12px]">
               {responseData?.appearance?.facialFeature}
             </p>
@@ -104,12 +92,15 @@ export const ReportViewerResult = () => {
             <p className="text-[12px]">{responseData?.appearance?.vibe}</p>
           </div>
         </div>
+
+        {/* NOTES */}
         <div className="text-left text-[18px] font-bold mt-8">NOTES</div>
         <div className="relative flex items-center justify-center w-full mt-3 mb-5">
           <div className="h-[1px] w-full bg-black ml-[1px]" />
           <div className="h-[1px] w-full bg-black mr-[5px]" />
         </div>
-        {/* TOP Note */}
+
+        {/* TOP / MIDDLE / BASE Note */}
         <div className="text-left">
           <div className="flex items-center">
             <img
@@ -123,7 +114,6 @@ export const ReportViewerResult = () => {
           <p className="text-[12px]">{responseData?.mainNoteDesc}</p>
           <p className="text-[12px]">{responseData?.mainNoteAnalysis}</p>
         </div>
-        {/* MIDDLE Note */}
         <div className="text-left mt-4">
           <div className="flex items-center">
             <img
@@ -137,7 +127,6 @@ export const ReportViewerResult = () => {
           <p className="text-[12px]">{responseData?.middleNoteDesc}</p>
           <p className="text-[12px]">{responseData?.middleNoteAnalysis}</p>
         </div>
-        {/* BASE Note */}
         <div className="text-left mt-4">
           <div className="flex items-center">
             <img
@@ -151,6 +140,7 @@ export const ReportViewerResult = () => {
           <p className="text-[12px]">{responseData?.baseNoteDesc}</p>
           <p className="text-[12px]">{responseData?.baseNoteAnalysis}</p>
         </div>
+
         {/* PROFILES */}
         <div className="text-left">
           <div>
@@ -160,11 +150,10 @@ export const ReportViewerResult = () => {
             <div className="h-[1px] w-full bg-black ml-[1px]" />
             <div className="h-[1px] w-full bg-black mr-[5px]" />
           </div>
-          <div>
-            <p className="text-[12px]">{responseData?.profile}</p>
-          </div>
+          <p className="text-[12px]">{responseData?.profile}</p>
         </div>
-        {/* 차트 */}
+
+        {/* Chart */}
         <div className="mt-8">
           <ResultChart
             inputCitrus={responseData?.citrus}
@@ -176,7 +165,7 @@ export const ReportViewerResult = () => {
           />
         </div>
 
-        {/* 아래는 복사, 공유, 구매하기 버튼 등등 */}
+        {/* Copy, Share Buttons */}
         <div className="flex">
           <div className="w-full">
             <div className="my-4 flex items-center border border-gray-200">
@@ -194,7 +183,7 @@ export const ReportViewerResult = () => {
               <button
                 onClick={handleCopy}
                 data-tooltip-target="tooltip-copy-url-button"
-                className="relativetext-gray-500 border-l border-r p-2 px-4 h-full flex items-center justify-center space-x-2 w-[120px] whitespace-nowrap"
+                className="relativetext-gray-500 border-l border-r p-2 px-4 h-full flex items-center justify-center space-x-2 w-[50px] copy-visible:w-[120px] whitespace-nowrap"
               >
                 <span
                   id="default-icon"
@@ -221,10 +210,12 @@ export const ReportViewerResult = () => {
                     />
                   </svg>
                 </span>
-                <span className="text-sm">
+                <span className="text-sm hidden copy-visible:inline-block">
                   {copySuccess ? "Copied!" : "Copy URL"}
                 </span>
               </button>
+
+              {/* Twitter Share Button */}
               <button
                 onClick={() => {
                   const url = `https://www.pixent.co.kr/report/${responseData?.uuid}`;
@@ -246,6 +237,10 @@ export const ReportViewerResult = () => {
                   <path d="M22.46 6c-.77.35-1.6.58-2.46.69a4.4 4.4 0 0 0 1.93-2.43 8.93 8.93 0 0 1-2.82 1.1 4.48 4.48 0 0 0-7.62 4.08A12.72 12.72 0 0 1 3.11 4.7a4.44 4.44 0 0 0-.61 2.26 4.47 4.47 0 0 0 2 3.72 4.43 4.43 0 0 1-2-.56v.06a4.48 4.48 0 0 0 3.57 4.38 4.48 4.48 0 0 1-2 .07 4.47 4.47 0 0 0 4.18 3.1A8.96 8.96 0 0 1 2 20.54a12.64 12.64 0 0 0 6.8 2 12.63 12.63 0 0 0 12.74-12.74c0-.2 0-.39-.01-.58A9.14 9.14 0 0 0 24 4.56a8.92 8.92 0 0 1-2.54.7z" />
                 </svg>
               </button>
+
+              {/* Kakao Share Button */}
+              <KakaoShareButton uuid={responseData?.uuid || ""} />
+
               <div
                 id="tooltip-copy-url-button"
                 role="tooltip"
