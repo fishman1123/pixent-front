@@ -6,8 +6,46 @@ import { SummaryChart } from '../result/SummaryChart';
 export const PrintReportTemplate = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const reportData = location.state;
+  const [reportData, setReportData] = useState(location.state);
   const [isMobile, setIsMobile] = useState(false);
+
+  // Attempt to get data from sessionStorage if not provided via location.state
+  useEffect(() => {
+    if (!reportData) {
+      try {
+        // Listen for the custom event from the opener page
+        const handleReportDataReady = () => {
+          const storedData = sessionStorage.getItem('reportData');
+          if (storedData) {
+            const parsedData = JSON.parse(storedData);
+            setReportData(parsedData);
+            
+            // Clear the data from sessionStorage after retrieving it
+            sessionStorage.removeItem('reportData');
+          }
+        };
+
+        // Check if data already exists
+        const storedData = sessionStorage.getItem('reportData');
+        if (storedData) {
+          const parsedData = JSON.parse(storedData);
+          setReportData(parsedData);
+          
+          // Clear the data from sessionStorage after retrieving it
+          sessionStorage.removeItem('reportData');
+        }
+
+        // Add event listener for data that might be set later
+        window.addEventListener('reportDataReady', handleReportDataReady);
+        
+        return () => {
+          window.removeEventListener('reportDataReady', handleReportDataReady);
+        };
+      } catch (error) {
+        console.error("Error retrieving report data:", error);
+      }
+    }
+  }, [reportData]);
 
   useEffect(() => {
     // More comprehensive check for mobile devices
@@ -60,13 +98,30 @@ export const PrintReportTemplate = () => {
     };
   }, []);
 
+  // Redirect to home if no data after 3 seconds
   useEffect(() => {
+    let timer;
     if (!reportData) {
-      navigate('/');
+      timer = setTimeout(() => {
+        navigate('/');
+      }, 3000);
     }
+    
+    return () => {
+      if (timer) clearTimeout(timer);
+    };
   }, [reportData, navigate]);
 
-  if (!reportData) return null;
+  if (!reportData) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-blue-500 mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading report data...</p>
+        </div>
+      </div>
+    );
+  }
 
   // Show warning on mobile devices
   if (isMobile) {
@@ -142,7 +197,6 @@ export const PrintReportTemplate = () => {
         </button>
       </div>
 
-      {/* A5 Container */}
       <div className="w-[210mm] aspect-[210/148] max-w-[100vw] mx-auto bg-white py-[4mm] px-[8mm] box-border font-sans shadow-lg border border-gray-200 overflow-hidden scale-[0.95] print:scale-100 print:w-[210mm] print:h-[148mm] print:overflow-hidden print:shadow-none print:m-0 print:py-[4mm] print:px-[8mm] print:border-none">
         {/* Report Header */}
         <div className="text-center mb-[1mm] print:mb-[3mm]">

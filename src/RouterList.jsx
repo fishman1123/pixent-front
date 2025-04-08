@@ -87,7 +87,6 @@ export const RouterList = [
           { path: "input", element: <InfoInput /> },
           { path: "inputTwo", element: <InfoInputTwo /> },
           { path: "🌚", element: <Admin /> },
-          { path: "🌝", element: <AdminUsers /> },
           { path: "loading", element: <Loading /> },
           { path: "test", element: <ReportSummary /> },
           { path: "dummy", element: <AnalysisRequest /> },
