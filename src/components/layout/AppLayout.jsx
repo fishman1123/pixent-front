@@ -17,6 +17,7 @@ export const AppLayout = () => {
   const isFinalPage = useMatch("/secured/inputTwo/*");
   const isLoginPage = useMatch("/secured/login/*");
   const isReportPage = useMatch("/report/*");
+  const isPrintPage = useMatch("/print");
   const isfromInputTwo = location.state?.from === "/secured/inputTwo";
 
   const shouldShowNavbar =
@@ -24,7 +25,11 @@ export const AppLayout = () => {
     !isFinalPage &&
     !isLoginPage &&
     !isReportPage &&
+    !isPrintPage &&
     !isfromInputTwo;
+
+  // Determine if we should use full width (only for print page)
+  const useFullWidth = isPrintPage;
 
   const authState = useSelector((state) => state.auth);
 
@@ -35,7 +40,7 @@ export const AppLayout = () => {
   return (
     <>
       {/* Top-level container */}
-      <div className="relative min-h-screen max-w-[480px] mx-auto scrollbar-hide">
+      <div className={`relative min-h-screen ${useFullWidth ? 'w-full' : 'max-w-[480px]'} mx-auto scrollbar-hide`}>
         {/* 1) Navbar (no fade) */}
         {shouldShowNavbar && <Navbar />}
 
@@ -55,7 +60,7 @@ export const AppLayout = () => {
         </TransitionGroup>
 
         {/* 3) Footer is outside of the transition */}
-        <div className="p-2">
+        <div className={`p-2 ${useFullWidth ? 'hidden' : ''}`}>
           <ExtraFooter />
           <div className={`p-2 ${authState.isAuthenticated ? "mb-9" : ""}`}>
             <Footer />
@@ -64,7 +69,7 @@ export const AppLayout = () => {
       </div>
 
       {/* 4) BottomTab is also outside the transition */}
-      {authState.isAuthenticated && <BottomTab />}
+      {authState.isAuthenticated && !useFullWidth && <BottomTab />}
     </>
   );
 };

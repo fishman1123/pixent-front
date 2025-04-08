@@ -284,6 +284,18 @@ export const ReportViewerResult = () => {
             </button>
           </div>
         </div>
+
+        <div className="mt-8 mb-10 ">
+          <div className="flex flex-col items-center">
+            <button 
+              className="defaultButton" 
+              onClick={() => navigate("/print", { state: responseData })}
+            >
+              <span className="text">인쇄용 보기</span>
+              <span>이동하기</span>
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   );

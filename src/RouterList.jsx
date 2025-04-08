@@ -33,6 +33,7 @@ import { AdminUsers } from "./components/admin/AdminUsers.jsx";
 import { AddOriginPage } from "./components/addOrigin/AddOriginPage.jsx";
 import { ValidationPage } from "./components/validation/ValidationPage.jsx";
 import { AddOptionToastContent } from "./components/addOption/AddOptionToastContent.jsx";
+import { PrintReportTemplate } from "./components/pages/PrintReportTemplate.jsx";
 
 export const RouterList = [
   {
@@ -163,6 +164,10 @@ export const RouterList = [
       {
         path: "summary",
         element: <PrintReport />,
+      },
+      {
+        path: "print",
+        element: <PrintReportTemplate />,
       },
       {
         path: "*",
