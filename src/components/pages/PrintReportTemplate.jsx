@@ -143,7 +143,7 @@ export const PrintReportTemplate = () => {
       </div>
 
       {/* A5 Container */}
-      <div className="w-[210mm] aspect-[210/148] max-w-[90vw] mx-auto bg-white py-[4mm] px-[8mm] box-border font-sans shadow-lg border border-gray-200 overflow-hidden scale-[0.95] print:scale-100 print:w-[210mm] print:h-[148mm] print:overflow-hidden print:shadow-none print:m-0 print:py-[4mm] print:px-[8mm] print:border-none">
+      <div className="w-[210mm] aspect-[210/148] max-w-[100vw] mx-auto bg-white py-[4mm] px-[8mm] box-border font-sans shadow-lg border border-gray-200 overflow-hidden scale-[0.95] print:scale-100 print:w-[210mm] print:h-[148mm] print:overflow-hidden print:shadow-none print:m-0 print:py-[4mm] print:px-[8mm] print:border-none">
         {/* Report Header */}
         <div className="text-center mb-[1mm] print:mb-[3mm]">
           <div className="border-t border-black relative my-[2mm] print:my-[2mm]"></div>
