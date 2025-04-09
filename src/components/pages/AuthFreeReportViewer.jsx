@@ -1,7 +1,6 @@
-// ReportViewerResult.jsx
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { useGetReportByUuid } from "../../hooks/useGetReportByUuid";
+import { useGetFreeReportByUuid } from "../../hooks/useGetFreeReportByUuid";
 import imageUploadIcon from "../../assets/upload.svg";
 import { ResultChart } from "../result/ResultChart.jsx";
 import { RedirectButton } from "../RedirectButton.jsx";
@@ -11,13 +10,11 @@ import { LoadingData } from "./LoadingData.jsx";
 // Import the KakaoShareButton
 import { KakaoShareButton } from "../KakaoShareButton.jsx";
 
-export const ReportViewerResult = () => {
+export const AuthFreeReportViewer = () => {
   const navigate = useNavigate();
   const { id: uuid } = useParams();
   const [copySuccess, setCopySuccess] = useState(false);
   const [browserChecked, setBrowserChecked] = useState(false);
-  // Regular report, not a free report
-  const isFreeReport = false;
 
   // Browser detection - execute BEFORE data fetching
   useEffect(() => {
@@ -72,7 +69,7 @@ export const ReportViewerResult = () => {
   }, []);
 
   // Data request - only execute after browser check if no redirection occurred
-  const { data: responseData, isLoading, isError } = useGetReportByUuid(
+  const { data: responseData, isLoading, isError } = useGetFreeReportByUuid(
     browserChecked ? uuid : null
   );
 
@@ -90,7 +87,7 @@ export const ReportViewerResult = () => {
   };
 
   const handleCopy = () => {
-    const urlToCopy = `pixent.co.kr${isFreeReport ? '/free' : ''}/report/${responseData?.uuid}`;
+    const urlToCopy = `pixent.co.kr/free/report/${responseData?.uuid}`;
     navigator.clipboard
       .writeText(urlToCopy)
       .then(() => {
@@ -233,7 +230,7 @@ export const ReportViewerResult = () => {
                 id="copy-url-input"
                 type="text"
                 className="flex-1 min-w-0 text-gray-500 text-sm focus:ring-blue-500 outline-none border-none"
-                value={`https://www.pixent.co.kr${isFreeReport ? '/free' : ''}/report/${responseData?.uuid}`}
+                value={`https://www.pixent.co.kr/free/report/${responseData?.uuid}`}
                 disabled
                 readOnly
               />
@@ -275,7 +272,7 @@ export const ReportViewerResult = () => {
               {/* Twitter Share Button */}
               <button
                 onClick={() => {
-                  const url = `https://www.pixent.co.kr${isFreeReport ? '/free' : ''}/report/${responseData?.uuid}`;
+                  const url = `https://www.pixent.co.kr/free/report/${responseData?.uuid}`;
                   const text = `Share analysis report created by Pixent!`;
                   const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(
                     text,
@@ -296,7 +293,7 @@ export const ReportViewerResult = () => {
               </button>
 
               {/* Kakao Share Button */}
-              <KakaoShareButton uuid={responseData?.uuid || ""} isFreeReport={isFreeReport} />
+              <KakaoShareButton uuid={responseData?.uuid || ""} isFreeReport={true} />
 
               <div
                 id="tooltip-copy-url-button"
@@ -356,4 +353,4 @@ export const ReportViewerResult = () => {
       </div>
     </div>
   );
-};
+}; 

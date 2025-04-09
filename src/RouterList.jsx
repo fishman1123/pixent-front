@@ -34,6 +34,7 @@ import { AddOriginPage } from "./components/addOrigin/AddOriginPage.jsx";
 import { ValidationPage } from "./components/validation/ValidationPage.jsx";
 import { AddOptionToastContent } from "./components/addOption/AddOptionToastContent.jsx";
 import { PrintReportTemplate } from "./components/pages/PrintReportTemplate.jsx";
+import { AuthFreeReportViewer } from "./components/pages/AuthFreeReportViewer.jsx";
 
 export const RouterList = [
   {
@@ -75,6 +76,10 @@ export const RouterList = [
             element: <WrongPath />,
           },
         ],
+      },
+      {
+        path: "free/report/:id",
+        element: <AuthFreeReportViewer />,
       },
 
       // -- ALL secured ROUTES UNDER /secured/*

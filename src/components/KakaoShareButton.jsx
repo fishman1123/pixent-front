@@ -6,7 +6,7 @@ import config from "../config.jsx";
 // Kakao SDK needs to be accessed from the global window object
 const { Kakao } = window;
 
-export const KakaoShareButton = ({ uuid }) => {
+export const KakaoShareButton = ({ uuid, isFreeReport = false }) => {
   const kakaoKey = config.API_KAKAO_KEY;
   console.log("Kakao button UUID:", uuid);
   console.log(kakaoKey);
@@ -30,7 +30,9 @@ export const KakaoShareButton = ({ uuid }) => {
     const cleanUuid = uuid.toString().trim();
     
     // Use explicit URL construction with full domain and proper encoding
-    const reportUrl = `https://www.pixent.co.kr/report/${encodeURIComponent(cleanUuid)}`;
+    const reportUrl = isFreeReport 
+      ? `https://www.pixent.co.kr/free/report/${encodeURIComponent(cleanUuid)}`
+      : `https://www.pixent.co.kr/report/${encodeURIComponent(cleanUuid)}`;
     
     console.log("Kakao sharing URL:", reportUrl);
     
@@ -40,7 +42,7 @@ export const KakaoShareButton = ({ uuid }) => {
         content: {
           title: "왓 얼유 두잉 향삣삐.",
           description: "기적 같은 하루가 널 기다리고 있어. 그러니 구매좀 해줘, 향 삣삐",
-          imageUrl: "https://www.pixent.co.kr/header.png",
+          imageUrl: "https://www.pixent.co.kr/giga.png",
           link: {
             mobileWebUrl: reportUrl,
             webUrl: reportUrl,

@@ -1,28 +1,24 @@
-import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 
-import { CollectionTop } from "../collection/CollectionTop";
-import { CollectionCenter } from "../collection/CollectionCenter";
-import { useGetUserCollection } from "../../hooks/useGetUserCollection";
-import { useGetSecondCollection } from "../../hooks/useGetSecondCollection";
+import { CollectionTop } from '../collection/CollectionTop';
+import { CollectionCenter } from '../collection/CollectionCenter';
+import { useGetUserCollection } from '../../hooks/useGetUserCollection';
+import { useGetSecondCollection } from '../../hooks/useGetSecondCollection';
 
-import { resetFeedback } from "../../store/feedbackPostSlice.js";
-import { resetStepTwoSelections } from "../../store/feedbackSlice.js";
-import { setUuidList } from "../../store/uuidSlice.js";
+import { resetFeedback } from '../../store/feedbackPostSlice.js';
+import { resetStepTwoSelections } from '../../store/feedbackSlice.js';
+import { setUuidList } from '../../store/uuidSlice.js';
 
-import { LoadingData } from "../pages/LoadingData.jsx";
-import PrimeModal from "../PrimeModal.jsx";
+import { LoadingData } from '../pages/LoadingData.jsx';
+import PrimeModal from '../PrimeModal.jsx';
 
 export const Collection = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const {
-    data: collectionData,
-    isLoading,
-    isError,
-  } = useGetUserCollection(true);
+  const { data: collectionData, isLoading, isError } = useGetUserCollection(true);
 
   const [reconstructedData, setReconstructedData] = useState(null);
   const [showModal, setShowModal] = useState(false);
@@ -36,8 +32,7 @@ export const Collection = () => {
     if (!collectionData) return;
 
     const isEmptyList =
-      !Array.isArray(collectionData.reportList) ||
-      collectionData.reportList.length === 0;
+      !Array.isArray(collectionData.reportList) || collectionData.reportList.length === 0;
 
     if (isEmptyList) {
       setShowModal(true);
@@ -46,7 +41,7 @@ export const Collection = () => {
 
     const newObject = {
       user_uuid: collectionData.userId,
-      user_report: collectionData.reportList.map((report) => ({
+      user_report: collectionData.reportList.map(report => ({
         id: report.id,
         userName: report.userName,
         perfumeName: report.perfumeName,
@@ -69,17 +64,18 @@ export const Collection = () => {
 
     setReconstructedData(newObject);
 
-    const uuids = newObject.user_report.map((r) => r.uuid);
+    const uuids = newObject.user_report.map(r => r.uuid);
     dispatch(setUuidList(uuids));
     //
-    // console.log("Collection -> Original serverData:", collectionData);
+    console.log('Collection -> Original serverData:', collectionData);
     // console.log("Collection -> Reconstructed:", newObject);
   }, [collectionData, dispatch]);
 
   // 5) Query for second collection
-  const uuidList = useSelector((state) => state.uuid.uuidList);
-  const { data: secondCollectionData, isLoading: isSecondLoading } =
-    useGetSecondCollection(uuidList.length > 0 ? uuidList : []);
+  const uuidList = useSelector(state => state.uuid.uuidList);
+  const { data: secondCollectionData, isLoading: isSecondLoading } = useGetSecondCollection(
+    uuidList.length > 0 ? uuidList : []
+  );
   // console.log(secondCollectionData);
   // 6) Handle loading / error
   if (isLoading || isSecondLoading) {
@@ -96,7 +92,7 @@ export const Collection = () => {
   // Close the modal => navigate home
   const handleCloseModal = () => {
     setShowModal(false);
-    navigate("/");
+    navigate('/');
   };
 
   const checkDisableList = [];
@@ -114,11 +110,7 @@ export const Collection = () => {
       )}
 
       {/* If user_report was empty, or some empty scenario => show modal */}
-      <PrimeModal
-        isOpen={showModal}
-        title="컬렉션 조회결과"
-        onClose={handleCloseModal}
-      >
+      <PrimeModal isOpen={showModal} title="컬렉션 조회결과" onClose={handleCloseModal}>
         <p>컬렉션으로 추가한 향이 없습니다.</p>
       </PrimeModal>
     </div>
