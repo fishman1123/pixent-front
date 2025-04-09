@@ -29,8 +29,8 @@ export const KakaoShareButton = ({ uuid }) => {
     // Ensure we're using a clean UUID without any problematic characters
     const cleanUuid = uuid.toString().trim();
     
-    // Use explicit URL construction to avoid any possible trailing issues
-    const reportUrl = "https://www.pixent.co.kr/report/" + cleanUuid;
+    // Use explicit URL construction with full domain and proper encoding
+    const reportUrl = `https://www.pixent.co.kr/report/${encodeURIComponent(cleanUuid)}`;
     
     console.log("Kakao sharing URL:", reportUrl);
     

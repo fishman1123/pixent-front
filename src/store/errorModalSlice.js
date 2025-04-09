@@ -4,6 +4,7 @@ import { createSlice } from '@reduxjs/toolkit';
 const initialState = {
     isOpen: false,
     message: '',
+    redirectTo: null,
 };
 
 const errorModalSlice = createSlice({
@@ -12,12 +13,13 @@ const errorModalSlice = createSlice({
     reducers: {
         openErrorModal: (state, action) => {
             state.isOpen = true;
-            // Optionally set a message if passed in
             state.message = action.payload?.message ?? '';
+            state.redirectTo = action.payload?.redirectTo ?? null;
         },
         closeErrorModal: (state) => {
             state.isOpen = false;
             state.message = '';
+            state.redirectTo = null;
         },
     },
 });

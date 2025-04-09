@@ -14,6 +14,16 @@ import "flowbite";
 import "./i18n";
 import { LoadingData } from "./components/pages/LoadingData.jsx";
 
+// Create a wrapper component that includes both the router and ErrorModal
+const AppContent = () => {
+  return (
+    <>
+      <RouterProvider router={router} />
+      <ErrorModal />
+    </>
+  );
+};
+
 const router = createBrowserRouter(RouterList);
 const queryClient = new QueryClient();
 
@@ -33,20 +43,16 @@ function App() {
   }, []);
 
   return (
-    // <div className="overflow-y-scroll scrollbar-hide h-screen">
     <div className="scrollbar-hide h-screen">
       <Provider store={store}>
         <QueryClientProvider client={queryClient}>
           <ErrorBoundary>
             <Suspense fallback={<LoadingData />}>
               <AuthInitializer>
-                <div>
-                  <RouterProvider router={router} />
-                </div>
+                <AppContent />
               </AuthInitializer>
             </Suspense>
           </ErrorBoundary>
-          <ErrorModal />
         </QueryClientProvider>
       </Provider>
     </div>

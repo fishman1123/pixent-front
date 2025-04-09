@@ -15,7 +15,7 @@ export const MainLayout = () => {
 
   return (
     <div className={`relative min-h-screen bg-intro ${isAdminPage ? 'w-full max-w-none' : 'max-w-[480px]'} mx-auto`}>
-      <div className="relative z-10 mt-[80px] ">
+      <div className={`relative z-10 ${isAdminPage ? '' : 'mt-[80px]'}`}>
         <Outlet />
       </div>
     </div>

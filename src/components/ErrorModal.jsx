@@ -3,9 +3,17 @@ import React, { useState, useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { closeErrorModal } from '../store/errorModalSlice';
+import { useNavigate } from 'react-router-dom';
 
 const ErrorModal = () => {
     const dispatch = useDispatch();
+    let navigate;
+    
+    try {
+        navigate = useNavigate();
+    } catch (error) {
+        console.warn('Navigation not available:', error);
+    }
 
     // 1) Read the current modal state from Redux
     const errorModalState = useSelector((state) => state.errorModal);
@@ -42,6 +50,15 @@ const ErrorModal = () => {
     // Close button or backdrop click => dispatch closeErrorModal
     const handleClose = () => {
         dispatch(closeErrorModal());
+        // If there's a redirect path, navigate to it
+        if (errorModalState.redirectTo) {
+            if (navigate) {
+                navigate(errorModalState.redirectTo);
+            } else {
+                // Fallback to window.location if navigation is not available
+                window.location.href = errorModalState.redirectTo;
+            }
+        }
     };
 
     // If not mounted, no modal in DOM
@@ -63,14 +80,11 @@ const ErrorModal = () => {
                 }`}
                 onClick={(e) => e.stopPropagation()}
             >
-                <h2 className="text-xl font-bold mb-4">Error</h2>
-                {/* If you want to show the actual message from Redux:
-           <p>{errorModalState.message}</p>
-           or your custom error text below */}
-                <p>이미지에 문제가 있는것 같습니다, 문의 부탁 드립니다.</p>
+                <h2 className="text-xl font-bold mb-4">알림</h2>
+                <p>{errorModalState.message}</p>
                 <div className="mt-4 flex justify-end">
                     <button onClick={handleClose} className="bg-black text-white py-2 px-4">
-                        Close
+                        확인
                     </button>
                 </div>
             </div>
