@@ -100,7 +100,7 @@ export const AuthFreeReportViewer = () => {
   };
 
   return (
-    <div className="flex flex-col justify-center items-center min-h-screen w-full text-center">
+    <div className="flex flex-col justify-center items-center min-h-screen w-full text-center mt-[80px]">
       <div className="w-full h-auto flex flex-col justify-center items-center">
         {responseData.userImageUrl ? (
           <img
@@ -341,13 +341,13 @@ export const AuthFreeReportViewer = () => {
 
         <div className="mt-8 mb-10 ">
           <div className="flex flex-col items-center">
-            <button 
+            {/* <button 
               className="defaultButton" 
               onClick={() => navigate("/print", { state: responseData })}
             >
               <span className="text">인쇄용 보기</span>
               <span>이동하기</span>
-            </button>
+            </button> */}
           </div>
         </div>
       </div>
