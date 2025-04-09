@@ -90,7 +90,8 @@ export const ReportViewerResult = () => {
   };
 
   const handleCopy = () => {
-    const urlToCopy = `pixent.co.kr${isFreeReport ? '/free' : ''}/report/${responseData?.uuid}`;
+    // Always use the free report URL when copying
+    const urlToCopy = `pixent.co.kr/free/report/${responseData?.uuid}`;
     navigator.clipboard
       .writeText(urlToCopy)
       .then(() => {
@@ -233,7 +234,7 @@ export const ReportViewerResult = () => {
                 id="copy-url-input"
                 type="text"
                 className="flex-1 min-w-0 text-gray-500 text-sm focus:ring-blue-500 outline-none border-none"
-                value={`https://www.pixent.co.kr${isFreeReport ? '/free' : ''}/report/${responseData?.uuid}`}
+                value={`https://www.pixent.co.kr/free/report/${responseData?.uuid}`}
                 disabled
                 readOnly
               />
@@ -275,7 +276,7 @@ export const ReportViewerResult = () => {
               {/* Twitter Share Button */}
               <button
                 onClick={() => {
-                  const url = `https://www.pixent.co.kr${isFreeReport ? '/free' : ''}/report/${responseData?.uuid}`;
+                  const url = `https://www.pixent.co.kr/free/report/${responseData?.uuid}`;
                   const text = `Share analysis report created by Pixent!`;
                   const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(
                     text,
@@ -296,7 +297,7 @@ export const ReportViewerResult = () => {
               </button>
 
               {/* Kakao Share Button */}
-              <KakaoShareButton uuid={responseData?.uuid || ""} isFreeReport={isFreeReport} />
+              <KakaoShareButton uuid={responseData?.uuid || ""} isFreeReport={true} />
 
               <div
                 id="tooltip-copy-url-button"

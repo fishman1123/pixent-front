@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import mainImage from "../assets/mainImage.png";
 import kakaoIcon from "../assets/kakao.svg";
+import gigaImage from "../assets/giga.png";
 import config from "../config.jsx";
 
 // Kakao SDK needs to be accessed from the global window object
@@ -42,7 +43,7 @@ export const KakaoShareButton = ({ uuid, isFreeReport = false }) => {
         content: {
           title: "왓 얼유 두잉 향삣삐.",
           description: "기적 같은 하루가 널 기다리고 있어. 그러니 구매좀 해줘, 향 삣삐",
-          imageUrl: "https://www.pixent.co.kr/giga.png",
+          imageUrl: window.location.origin + "/giga.png",
           link: {
             mobileWebUrl: reportUrl,
             webUrl: reportUrl,
