@@ -1,5 +1,5 @@
 // ReportViewerResult.jsx
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useGetReportByUuid } from "../../hooks/useGetReportByUuid";
 import imageUploadIcon from "../../assets/upload.svg";
@@ -15,12 +15,67 @@ export const ReportViewerResult = () => {
   const navigate = useNavigate();
   const { id: uuid } = useParams();
   const [copySuccess, setCopySuccess] = useState(false);
+  const [browserChecked, setBrowserChecked] = useState(false);
 
-  // Data request
-  const { data: responseData, isLoading, isError } = useGetReportByUuid(uuid);
+  // Browser detection - execute BEFORE data fetching
+  useEffect(() => {
+    const copyToClipboard = async (val) => {
+      try {
+        await navigator.clipboard.writeText(val);
+        alert(
+          'URL주소가 복사되었습니다.\n\nSafari가 열리면 주소창을 길게 터치한 뒤, "붙여놓기 및 이동"를 누르면 정상적으로 이용하실 수 있습니다.'
+        );
+      } catch (err) {
+        console.error('Failed to copy URL:', err);
+      }
+    };
+
+    const redirectToExternalBrowser = () => {
+      const targetUrl = window.location.href;
+      copyToClipboard(targetUrl);
+
+      if (/iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+        window.location.href = "x-web-search://?";
+      } else {
+        window.location.href = `intent://${targetUrl.replace(
+          /https?:\/\//i,
+          ""
+        )}#Intent;scheme=http;package=com.android.chrome;end`;
+      }
+    };
+
+    const userAgent = navigator.userAgent.toLowerCase();
+    if (/kakaotalk/i.test(userAgent)) {
+      window.location.href = `kakaotalk://web/openExternal?url=${encodeURIComponent(
+        window.location.href
+      )}`;
+      return; // Prevent setting browserChecked to true
+    } else if (/line/i.test(userAgent)) {
+      const targetUrl = window.location.href;
+      window.location.href = targetUrl.includes("?")
+        ? `${targetUrl}&openExternalBrowser=1`
+        : `${targetUrl}?openExternalBrowser=1`;
+      return; // Prevent setting browserChecked to true
+    } else if (
+      /inapp|naver|snapchat|wirtschaftswoche|thunderbird|instagram|everytimeapp|whatsApp|electron|wadiz|aliapp|zumapp|iphone.*whale|android.*whale|kakaostory|band|twitter|DaumApps|DaumDevice\/mobile|FB_IAB|FB4A|FBAN|FBIOS|FBSS|trill|SamsungBrowser\/[^1]/i.test(
+        userAgent
+      )
+    ) {
+      redirectToExternalBrowser();
+      return; // Prevent setting browserChecked to true
+    }
+
+    // Only set browserChecked to true if no redirection occurred
+    setBrowserChecked(true);
+  }, []);
+
+  // Data request - only execute after browser check if no redirection occurred
+  const { data: responseData, isLoading, isError } = useGetReportByUuid(
+    browserChecked ? uuid : null
+  );
 
   // Loading or error handling
-  if (isLoading) return <LoadingData />;
+  if (!browserChecked || isLoading) return <LoadingData />;
   if (isError) return <div>Error fetching report. Please try again later.</div>;
 
   if (!responseData?.appearance) {
