@@ -252,20 +252,20 @@ export const PrintReportTemplate = () => {
         <div className="flex justify-between px-[2mm] text-center mb-[2mm] print:mb-[2mm]">
           {/* Image Analysis Report */}
           <div className="w-[48%]">
-            <div className="border-t border-black relative my-[1mm] print:my-[1mm]"></div>
+            <div className="border-t border-black relative mt-[1mm] print:mt-[1mm]"></div>
             <div className="uppercase tracking-wider font-medium text-[min(2vw,12pt)] print:text-[12pt]">
               Image Analysis Report
             </div>
-            <div className="border-t border-black relative my-[1mm] print:my-[1mm]"></div>
+            <div className="border-t border-black relative"></div>
           </div>
           
           {/* Scent Analysis Report */}
           <div className="w-[48%]">
-            <div className="border-t border-black relative my-[1mm] print:my-[1mm]"></div>
+            <div className="border-t border-black relative mt-[1mm] print:mt-[1mm]"></div>
             <div className="uppercase tracking-wider font-medium text-[min(2vw,12pt)] print:text-[12pt]">
               Scent Analysis Report
             </div>
-            <div className="border-t border-black relative my-[1mm] print:my-[1mm]"></div>
+            <div className="border-t border-black relative"></div>
           </div>
         </div>
 
