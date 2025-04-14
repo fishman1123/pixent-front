@@ -249,18 +249,24 @@ export const PrintReportTemplate = () => {
 
       <div className="w-[210mm] aspect-[210/148] max-w-[100vw] mx-auto bg-white py-[4mm] px-[8mm] box-border font-sans shadow-lg border border-gray-200 overflow-hidden scale-[0.95] print:scale-100 print:w-[210mm] print:h-[148mm] print:overflow-hidden print:shadow-none print:m-0 print:py-[4mm] print:px-[8mm] print:border-none">
         {/* Report Header */}
-        <div className="text-center mb-[1mm] print:mb-[3mm]">
-          <div className="border-t border-black relative my-[2mm] print:my-[2mm]"></div>
-
-          <div className="flex justify-between px-[14mm]">
+        <div className="flex justify-between px-[2mm] text-center mb-[2mm] print:mb-[2mm]">
+          {/* Image Analysis Report */}
+          <div className="w-[48%]">
+            <div className="border-t border-black relative my-[1mm] print:my-[1mm]"></div>
             <div className="uppercase tracking-wider font-medium text-[min(2vw,12pt)] print:text-[12pt]">
               Image Analysis Report
             </div>
+            <div className="border-t border-black relative my-[1mm] print:my-[1mm]"></div>
+          </div>
+          
+          {/* Scent Analysis Report */}
+          <div className="w-[48%]">
+            <div className="border-t border-black relative my-[1mm] print:my-[1mm]"></div>
             <div className="uppercase tracking-wider font-medium text-[min(2vw,12pt)] print:text-[12pt]">
               Scent Analysis Report
             </div>
+            <div className="border-t border-black relative my-[1mm] print:my-[1mm]"></div>
           </div>
-          <div className="border-t border-black relative my-[2mm] print:my-[2mm]"></div>
         </div>
 
         <div className="flex h-[140mm] overflow-hidden">
