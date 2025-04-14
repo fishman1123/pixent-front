@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import imageUploadIcon from '../../assets/upload.svg';
+import printerIcon from '../../assets/printer.svg';
 import { SummaryChart } from '../result/SummaryChart';
 
 export const PrintReportTemplate = () => {
@@ -229,20 +230,7 @@ export const PrintReportTemplate = () => {
           className="w-full md:w-auto px-6 py-3 text-black border border-black hover:bg-black hover:text-white transition-colors font-bold text-lg flex items-center justify-center mx-auto"
           onClick={() => window.print()}
         >
-          <svg
-            className="w-5 h-5 mr-2"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm0 0V9a2 2 0 012-2h6a2 2 0 012 2v9m-6 0a2 2 0 002 2h0a2 2 0 002-2"
-            />
-          </svg>
+          <img src={printerIcon} alt="Print" className="w-5 h-5 mr-2" />
           보고서 프린트하기 (A5 Landscape)
         </button>
       </div>
@@ -258,7 +246,6 @@ export const PrintReportTemplate = () => {
             </div>
             <div className="border-t border-black relative"></div>
           </div>
-          
           {/* Scent Analysis Report */}
           <div className="w-[48%]">
             <div className="border-t border-black relative mt-[1mm] print:mt-[1mm]"></div>
@@ -271,14 +258,15 @@ export const PrintReportTemplate = () => {
 
         <div className="flex h-[140mm] overflow-hidden">
           {/* Two Column Layout */}
-          <div className="flex gap-[12mm] print:gap-[16mm] w-full">
+          <div className="flex gap-[16mm] print:gap-[16mm] w-full">
             {/* Left Column - Customer Profile and Image Analysis */}
             {/* number 1 */}
             <div className="flex-1 flex flex-col">
-              {/* Customer Profile Section */}
               <div className="mb-[1mm] print:mb-[1mm]">
-                <div className="flex mb-[4mm] min-h-[120px] overflow-hidden print:mb-[4mm]">
-                  <div className="border border-black w-[32mm] h-[40mm] mr-[5mm] overflow-hidden print:w-[32mm] print:h-[40mm] print:mr-[5mm]">
+                <div className="flex mb-[2mm] max-h-[180px] overflow-hidden print:mb-[2mm]">
+                  <div className="flex flex-col mr-[5mm] print:mr-[5mm]">
+                    <div className="font-bold text-[min(1.8vw,11pt)] print:text-[11pt]">Customer Profile</div>
+                    <div className="border border-black w-[32mm] h-[40mm]  overflow-hidden print:w-[32mm] print:h-[40mm] ">
                     {reportData.userImageUrl ? (
                       <img
                         src={reportData.userImageUrl}
@@ -291,8 +279,10 @@ export const PrintReportTemplate = () => {
                       </div>
                     )}
                   </div>
+                  </div>
+                  
                   <div className="flex-1 flex flex-wrap print:flex-wrap">
-                    <div className="mb-[3mm] mr-[10mm] min-w-[40mm] print:mb-[3mm] print:mr-[10mm] print:min-w-[40mm]">
+                    <div className="mb-[3mm] mr-[10mm] mt-[8mm] min-w-[40mm] print:mb-[3mm] print:mr-[10mm] print:mt-[8mm] print:min-w-[40mm]">
                       <div className="flex uppercase font-bold tracking-wider text-[min(1.8vw,11pt)] print:text-[11pt]">
                         Name
                       </div>
@@ -323,7 +313,7 @@ export const PrintReportTemplate = () => {
               {/* Image Analysis Section */}
               <div className="mb-[1mm]">
                 <div className="flex uppercase font-bold tracking-wider text-[min(1.8vw,11pt)] mb-[2mm] print:text-[11pt] print:mb-[1mm]">
-                  Facial Analysis
+                  Image Analysis
                 </div>
                 <div className="flex uppercase font-bold tracking-wider text-[min(1.8vw,11pt)] mb-[1mm] print:text-[11pt] print:mb-[1mm]">
                   Facial Feature
@@ -430,7 +420,7 @@ export const PrintReportTemplate = () => {
             <div className="flex-1">
               <div>
                 {/* Scent Profile Chart */}
-                <div className="w-full flex justify-center items-center mb-[1mm]">
+                <div className="w-full flex justify-center items-center mb-[6mm]">
                   <div className="w-[55mm] h-[45mm] scale-[0.85] origin-center print:scale-[0.85]">
                     <SummaryChart
                       inputCitrus={reportData?.citrus || 0}
