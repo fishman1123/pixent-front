@@ -213,7 +213,6 @@ export const ResultPage = () => {
           />
         </div>
         <div className="border-1 border-t-0 px-6 shadow-md">
-          <div className="flex pt-4">Share Link</div>
           {/* Copy URL + Twitter Buttons */}
           <div className="flex">
             <div className="w-full">

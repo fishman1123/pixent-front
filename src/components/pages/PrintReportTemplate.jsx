@@ -241,7 +241,7 @@ export const PrintReportTemplate = () => {
           {/* Image Analysis Report */}
           <div className="w-[48%]">
             <div className="border-t border-black relative mt-[1mm] print:mt-[1mm]"></div>
-            <div className="uppercase tracking-wider font-medium text-[min(2vw,12pt)] print:text-[12pt]">
+            <div className="uppercase tracking-wider font-bold text-[min(2vw,12pt)] print:text-[12pt]">
               Image Analysis Report
             </div>
             <div className="border-t border-black relative"></div>
@@ -249,7 +249,7 @@ export const PrintReportTemplate = () => {
           {/* Scent Analysis Report */}
           <div className="w-[48%]">
             <div className="border-t border-black relative mt-[1mm] print:mt-[1mm]"></div>
-            <div className="uppercase tracking-wider font-medium text-[min(2vw,12pt)] print:text-[12pt]">
+            <div className="uppercase tracking-wider font-bold text-[min(2vw,12pt)] print:text-[12pt]">
               Scent Analysis Report
             </div>
             <div className="border-t border-black relative"></div>
@@ -282,7 +282,7 @@ export const PrintReportTemplate = () => {
                   </div>
                   
                   <div className="flex-1 flex flex-wrap print:flex-wrap">
-                    <div className="mb-[3mm] mr-[10mm] mt-[8mm] min-w-[40mm] print:mb-[3mm] print:mr-[10mm] print:mt-[8mm] print:min-w-[40mm]">
+                    <div className="mb-[1mm] mr-[10mm] mt-[8mm] min-w-[40mm] print:mb-[1mm] print:mr-[10mm] print:mt-[8mm] print:min-w-[40mm]">
                       <div className="flex uppercase font-bold tracking-wider text-[min(1.8vw,11pt)] print:text-[11pt]">
                         Name
                       </div>
@@ -303,7 +303,7 @@ export const PrintReportTemplate = () => {
                         Keyword(s)
                       </div>
                       <div className="flex pl-[6px] text-[min(1.5vw,10pt)] print:text-[10pt] print:pl-[6px]">
-                        —
+                      {reportData.keyword || '—'}
                       </div>
                     </div>
                   </div>
@@ -420,8 +420,8 @@ export const PrintReportTemplate = () => {
             <div className="flex-1">
               <div>
                 {/* Scent Profile Chart */}
-                <div className="w-full flex justify-center items-center mb-[6mm]">
-                  <div className="w-[55mm] h-[45mm] scale-[0.85] origin-center print:scale-[0.85]">
+                <div className="w-full flex justify-center items-center mb-[4mm] print:mb-[4mm]">
+                  <div className="w-[55mm] h-[45mm] scale-[1] origin-center mt-[2mm] print:scale-[1] print:mt-[2mm]">
                     <SummaryChart
                       inputCitrus={reportData?.citrus || 0}
                       inputFloral={reportData?.floral || 0}
