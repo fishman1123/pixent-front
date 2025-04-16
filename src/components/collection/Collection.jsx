@@ -67,7 +67,7 @@ export const Collection = () => {
     const uuids = newObject.user_report.map(r => r.uuid);
     dispatch(setUuidList(uuids));
     //
-    console.log('Collection -> Original serverData:', collectionData);
+    // console.log('Collection -> Original serverData:', collectionData);
     // console.log("Collection -> Reconstructed:", newObject);
   }, [collectionData, dispatch]);
 
