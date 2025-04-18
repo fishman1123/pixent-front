@@ -24,7 +24,7 @@ pixent-front/
 │   ├── data/        # Data files
 │   ├── hooks/       # Custom React hooks
 │   ├── locales/     # Internationalization files
-│   ├── recoil/      # Recoil state management
+│   ├── recoil/      # Recoil state management(outdated)
 │   ├── store/       # Redux store
 │   └── util/        # Utility functions
 ├── dist/            # Production build output
