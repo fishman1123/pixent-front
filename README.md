@@ -34,7 +34,7 @@ pixent-front/
 ## Tech Stack
 
 - **Frontend Framework**: React (Vite)
-- **State Management**: Redux Toolkit, Recoil
+- **State Management**: Redux Toolkit, Recoil(outdated)
 - **API Client**: Axios, React Query
 - **Styling**: TailwindCSS, Flowbite
 - **Internationalization**: i18next
