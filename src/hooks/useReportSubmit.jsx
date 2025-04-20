@@ -88,7 +88,7 @@ export const useReportSubmit = () => {
     // console.log('Combined FormData:', loggedData);
     // console.log('--- End of FormData log ---');
 
-    const response = await AxiosInstance.post('/api/imagebyGemini', formData);
+    const response = await AxiosInstance.post('/api/imageByGemini', formData);
 
     return response.data;
   }, [confirmationState, userState, checkboxData]);
