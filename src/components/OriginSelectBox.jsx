@@ -1,13 +1,15 @@
 import React, { useState } from "react";
 import "./inputInfo/CheckboxGrid.css";
+import feedbackChoiceData from "../data/feedbackchoice.json";
 
 export const OriginSelectBox = ({ setSelectedOrigin }) => {
-  // Create AC'SCENT 1 ~ 30 list
-  const originNames = Array.from({ length: 30 }, (_, i) => ({
-    id: i + 1,
-    label: `AC'SCENT ${i + 1}`,
-    description: `This is the description for AC'SCENT ${i + 1}`,
-    additionalInfo: [`Additional info for AC'SCENT ${i + 1}`],
+  // Use data from feedbackchoice.json
+  const originNames = feedbackChoiceData.map(item => ({
+    id: item.id,
+    label: item.name,
+    description: item.desc,
+    additionalInfo: [`Citrus: ${item.citrus}`, `Floral: ${item.floral}`, `Woody: ${item.woody}`, 
+                     `Musk: ${item.musk}`, `Fruity: ${item.fruity}`, `Spicy: ${item.spicy}`],
   }));
 
   const [isModalOpen, setIsModalOpen] = useState(false);
