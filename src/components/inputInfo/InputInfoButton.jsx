@@ -1,16 +1,15 @@
 import React from 'react';
-import { useSetRecoilState } from 'recoil';
-import { userAtoms } from '../../recoil/userAtoms';
+import { useDispatch } from 'react-redux';
+import { setUserState } from '../../store/userSlice'; // Update path as needed
 import { useNavigate } from 'react-router-dom';
 import '../intro/IntroButton.css';
 
 export const InputInfoButton = () => {
-    const setUserState = useSetRecoilState(userAtoms);
+    const dispatch = useDispatch();
     const navigate = useNavigate();
 
     const handleButtonClick = () => {
-        setUserState((prevState) => ({
-            ...prevState,
+        dispatch(setUserState({
             currentPage: 'input',
         }));
         navigate('/inputTwo');

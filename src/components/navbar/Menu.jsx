@@ -15,6 +15,11 @@ export const Menu = ({ isOpen, toggleMenu }) => {
     toggleMenu();
     navigate("/login");
   };
+  
+  const handleNavigate = (path) => {
+    toggleMenu();
+    navigate(path);
+  };
 
   const isLoggedIn = !!localStorage.getItem("gToken");
 
@@ -52,6 +57,11 @@ export const Menu = ({ isOpen, toggleMenu }) => {
         <div className="pt-[30px] pl-2">
           <h2 className="text-lg font-bold">Menu</h2>
           <ul className="mt-4">
+            <li className="py-2">
+              <button onClick={() => handleNavigate('/intro')}>
+                About
+              </button>
+            </li>
             <li className="py-2">
               <a href="/admin">Admin</a>
             </li>

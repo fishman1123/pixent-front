@@ -5,6 +5,7 @@ const initialState = {
     isOpen: false,
     message: '',
     redirectTo: null,
+    alertMessage: '',
 };
 
 const errorModalSlice = createSlice({
@@ -21,8 +22,19 @@ const errorModalSlice = createSlice({
             state.message = '';
             state.redirectTo = null;
         },
+        setAlertMessage: (state, action) => {
+            state.alertMessage = action.payload;
+        },
+        closeAlertMessage: (state) => {
+            state.alertMessage = '';
+        },
     },
 });
 
-export const { openErrorModal, closeErrorModal } = errorModalSlice.actions;
+export const { 
+    openErrorModal, 
+    closeErrorModal,
+    setAlertMessage,
+    closeAlertMessage
+} = errorModalSlice.actions;
 export default errorModalSlice.reducer;

@@ -1,45 +1,47 @@
 import React, { useEffect, useState } from "react";
-import { useRecoilState } from "recoil";
+import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { authAtom } from "../recoil/authAtoms";
-import { userAtoms } from "../recoil/userAtoms";
+import { setAuthState } from "../store/authSlice";
+import { setUserState } from "../store/userSlice"; // Adjust import path if needed
 import PrimeModal from "./PrimeModal"; // or your "GeneralModal"
 
 const SecuredRoute = ({ children }) => {
   const navigate = useNavigate();
-
-  const [authState, setAuthState] = useRecoilState(authAtom);
-  const [userState, setUserState] = useRecoilState(userAtoms);
+  const dispatch = useDispatch();
+  
+  const authState = useSelector((state) => state.auth);
+  const userState = useSelector((state) => state.user);
 
   const [showModal, setShowModal] = useState(false);
   const [checked, setChecked] = useState(false); // Have we checked localStorage?
+  
   useEffect(() => {
     const token = localStorage.getItem("gToken");
     if (token) {
-      setAuthState((prev) => ({ ...prev, isAuthenticated: true }));
+      dispatch(setAuthState({ isAuthenticated: true }));
     } else {
-      setAuthState((prev) => ({ ...prev, isAuthenticated: false }));
+      dispatch(setAuthState({ isAuthenticated: false }));
     }
     setChecked(true);
-  }, [setAuthState]);
+  }, [dispatch]);
 
   useEffect(() => {
     if (checked) {
       if (!authState.isAuthenticated) {
-        setUserState((prev) => ({ ...prev, isAuthenticated: false }));
+        dispatch(setUserState({ isAuthenticated: false }));
         setShowModal(true);
       } else {
         if (!authState.nickname) {
           // check nickname
-          setUserState((prev) => ({ ...prev, isAuthenticated: true }));
+          dispatch(setUserState({ isAuthenticated: true }));
           setShowModal(true);
         } else {
-          setUserState((prev) => ({ ...prev, isAuthenticated: true }));
+          dispatch(setUserState({ isAuthenticated: true }));
           setShowModal(false);
         }
       }
     }
-  }, [checked, authState.isAuthenticated, authState.nickname, setUserState]);
+  }, [checked, authState.isAuthenticated, authState.nickname, dispatch]);
 
   const handleCloseModal = () => {
     setShowModal(false);

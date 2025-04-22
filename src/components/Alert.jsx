@@ -1,14 +1,15 @@
 import React from 'react';
-import { useRecoilState } from 'recoil';
-import { alertMessageState } from '../recoil/errorModalAtom.jsx';
+import { useSelector, useDispatch } from 'react-redux';
+import { closeAlertMessage } from '../store/errorModalSlice'; // Update this import path as needed
 
 export const Alert = () => {
-    const [message, setMessage] = useRecoilState(alertMessageState);
+    const message = useSelector((state) => state.errorModal.alertMessage || '');
+    const dispatch = useDispatch();
 
     if (!message) return null; // Do not render if there is no message
 
     const handleClose = () => {
-        setMessage(''); // Clear the alert message
+        dispatch(closeAlertMessage()); // Clear the alert message
     };
 
     return (

@@ -1,6 +1,7 @@
 // src/RouterList.js
 import React from "react";
 import { Intro } from "./components/intro/Intro.jsx";
+import { IntroLanding } from "./components/intro/IntroLanding.jsx";
 import { Input } from "./components/input/Input.jsx";
 import { InfoInput } from "./components/inputInfo/InfoInput.jsx";
 import { InfoInputTwo } from "./components/pages/InfoInputTwo.jsx";
@@ -45,6 +46,10 @@ export const RouterList = [
       {
         index: true,
         element: <Intro />,
+      },
+      {
+        path: "intro",
+        element: <IntroLanding />,
       },
       {
         path: "login",

@@ -1,20 +1,19 @@
 import { useEffect } from "react";
-import { useSetRecoilState } from "recoil";
-import { userAtoms } from "../../recoil/userAtoms";
+import { useDispatch } from "react-redux";
+import { setUserState } from "../../store/userSlice"; // Update path as needed
 import { CenterLine } from "../input/CenterLine.jsx";
 import { TopTextBox } from "../input/TopTextBox.jsx";
 import { SerialNumberBox } from "../input/SerialNumberBox.jsx";
 import { TipBox } from "../input/TipBox.jsx";
 
 export const Input = () => {
-  const setUserState = useSetRecoilState(userAtoms);
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    setUserState((prevState) => ({
-      ...prevState,
+    dispatch(setUserState({
       currentPage: "input",
     }));
-  }, [setUserState]);
+  }, [dispatch]);
 
   return (
     <div className="flex-col justify-center items-center min-h-screen w-full text-center">

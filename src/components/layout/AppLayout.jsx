@@ -19,6 +19,7 @@ export const AppLayout = () => {
   const isReportPage = useMatch("/report/*");
   const isPrintPage = useMatch("/print");
   const isAdminPage = useMatch("/secured/🌚"); // Admin page check
+  const isIntroLandingPage = useMatch("/intro"); // New intro landing page check
   const isfromInputTwo = location.state?.from === "/secured/inputTwo";
 
   const shouldShowNavbar =
@@ -28,13 +29,14 @@ export const AppLayout = () => {
     !isReportPage &&
     !isPrintPage &&
     !isfromInputTwo &&
-    !isAdminPage; // Now we don't want to show navbar on admin page
+    !isAdminPage && 
+    !isIntroLandingPage; // Don't show navbar on intro landing page
 
-  // Determine if we should use full width (for print page and admin page)
-  const useFullWidth = isPrintPage || isAdminPage;
+  // Determine if we should use full width (for print page, admin page, and intro landing page)
+  const useFullWidth = isPrintPage || isAdminPage || isIntroLandingPage;
   
-  // Determine if we should show footer and bottom tab (not for print or admin)
-  const hideFooterAndBottomTab = isPrintPage || isAdminPage;
+  // Determine if we should show footer and bottom tab (not for print, admin or intro landing)
+  const hideFooterAndBottomTab = isPrintPage || isAdminPage || isIntroLandingPage;
 
   const authState = useSelector((state) => state.auth);
 
@@ -50,10 +52,17 @@ export const AppLayout = () => {
       document.body.classList.remove('admin-page');
     }
     
+    if (isIntroLandingPage) {
+      document.body.classList.add('intro-landing-page');
+    } else {
+      document.body.classList.remove('intro-landing-page');
+    }
+    
     return () => {
       document.body.classList.remove('admin-page');
+      document.body.classList.remove('intro-landing-page');
     };
-  }, [isAdminPage]);
+  }, [isAdminPage, isIntroLandingPage]);
 
   return (
     <>
@@ -75,7 +84,7 @@ export const AppLayout = () => {
             unmountOnExit
           >
             {/* Wrap only the routed page here */}
-            <div className={isAdminPage ? 'w-full' : ''}>
+            <div className={isAdminPage || isIntroLandingPage ? 'w-full' : ''}>
               <Outlet />
             </div>
           </CSSTransition>
