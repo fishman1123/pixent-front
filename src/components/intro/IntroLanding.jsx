@@ -225,7 +225,7 @@ export const IntroLanding = () => {
             variants={itemVariants}
             className="mb-6"
           >
-            <span className="section-title text-white">WE ARE PIXENT</span>
+            <span className="section-title">WE ARE PIXENT</span>
           </motion.div>
           
           <motion.h1 
@@ -248,7 +248,7 @@ export const IntroLanding = () => {
                 className="button-outline inline-block"
                 onClick={handleNavigateToHome}
               >
-                코박죽 하러가기
+                분석하기
               </a>
             </motion.div>
           </motion.div>
