@@ -270,7 +270,7 @@ export const IntroLanding = () => {
                 <span className="section-title">Company Information</span>
               </div>
               <h2 className="text-3xl font-bold max-w-md mb-6">
-                Since Its Founding In 2023, Pixent Has Experienced Remarkable Growth. Explore Our Delightful Perfume Presence Here.
+                Since Its Founding In 2023, Pixent Has Experienced Remarkable Growth.
               </h2>
             </motion.div>
             
