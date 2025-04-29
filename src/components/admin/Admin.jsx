@@ -34,12 +34,13 @@ export const Admin = () => {
 
   // User management states
   const [userPage, setUserPage] = useState(0);
-  const [userSize, setUserSize] = useState(10);
+  const [userSize, setUserSize] = useState(100);
   const [tempUserSize, setTempUserSize] = useState(userSize);
   const [userSearchQuery, setUserSearchQuery] = useState("");
   const [isUserSearchActive, setIsUserSearchActive] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
   const [showUserModal, setShowUserModal] = useState(false);
+  const [requestAmountFilter, setRequestAmountFilter] = useState("all");
   
   // Tab state to switch between admin views
   const [activeTab, setActiveTab] = useState('results');
@@ -169,6 +170,14 @@ export const Admin = () => {
     };
   }, []);
 
+  // Sort users by request amount when switching to users tab
+  useEffect(() => {
+    if (activeTab === 'users' && userData && userData.content) {
+      // Reset the filter to "all" to show all users sorted by request amount
+      setRequestAmountFilter("all");
+    }
+  }, [activeTab, userData]);
+
   // Show mobile warning
   if (isMobile) {
     return (
@@ -224,12 +233,18 @@ export const Admin = () => {
   const { content, totalPages, number } = data || { content: [], totalPages: 0, number: 0 };
   const { content: userContent = [], totalPages: userTotalPages, number: userNumber } = userData || { content: [], totalPages: 0, number: 0 };
 
-  // Filter user content based on search query
-  const filteredUserContent = userSearchQuery
-    ? userContent.filter((user) =>
-        user.name.toLowerCase().includes(userSearchQuery.toLowerCase())
-      )
-    : userContent;
+  // Filter user content based on search query and request amount filter, sorted by request amount
+  const filteredUserContent = userContent
+    .filter(user => 
+      userSearchQuery ? user.name.toLowerCase().includes(userSearchQuery.toLowerCase()) : true
+    )
+    .filter(user => {
+      if (requestAmountFilter === "all") return true;
+      if (requestAmountFilter === "1") return user.requestedLimit === 1;
+      if (requestAmountFilter === "2") return user.requestedLimit === 2;
+      if (requestAmountFilter === "3") return user.requestedLimit === 3;
+      return true;
+    });
 
   // Results tab functions
   const handlePrev = () => {
@@ -364,6 +379,10 @@ export const Admin = () => {
 
   const handleUserSearchChange = (e) => {
     setUserSearchQuery(e.target.value);
+  };
+
+  const handleRequestAmountFilterChange = (e) => {
+    setRequestAmountFilter(e.target.value);
   };
 
   const handleUserRowClick = (user) => {
@@ -700,19 +719,81 @@ export const Admin = () => {
             {activeTab === 'users' && (
               <div className="space-y-6">
                 <div className="flex flex-col sm:flex-row justify-between items-center gap-4 mb-4">
-                  <div className="relative w-full max-w-md">
-                    <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                      <svg className="w-4 h-4 text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
-                        <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
-                      </svg>
+                  <div className="w-full max-w-md">
+                    {/* Username search */}
+                    <div className="relative mb-3">
+                      <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                        <svg className="w-4 h-4 text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                          <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
+                        </svg>
+                      </div>
+                      <input
+                        type="text"
+                        value={userSearchQuery}
+                        onChange={handleUserSearchChange}
+                        placeholder="Search by username"
+                        className="block w-full p-4 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500"
+                      />
                     </div>
-                    <input
-                      type="text"
-                      value={userSearchQuery}
-                      onChange={handleUserSearchChange}
-                      placeholder="Search by username"
-                      className="block w-full p-4 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500"
-                    />
+                    
+                    {/* Request Amount Filter */}
+                    <div className="bg-gray-50 p-3 rounded-lg border border-gray-300 mb-3">
+                      <p className="text-sm font-medium text-gray-900 mb-2">Filter by Request Amount:</p>
+                      <div className="flex flex-wrap gap-3">
+                        <div className="flex items-center">
+                          <input
+                            id="request-amount-all"
+                            type="radio"
+                            value="all"
+                            checked={requestAmountFilter === "all"}
+                            onChange={handleRequestAmountFilterChange}
+                            className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500"
+                          />
+                          <label htmlFor="request-amount-all" className="ml-2 text-sm font-medium text-gray-900">
+                            All
+                          </label>
+                        </div>
+                        <div className="flex items-center">
+                          <input
+                            id="request-amount-1"
+                            type="radio"
+                            value="1"
+                            checked={requestAmountFilter === "1"}
+                            onChange={handleRequestAmountFilterChange}
+                            className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500"
+                          />
+                          <label htmlFor="request-amount-1" className="ml-2 text-sm font-medium text-gray-900">
+                            1 request
+                          </label>
+                        </div>
+                        <div className="flex items-center">
+                          <input
+                            id="request-amount-2"
+                            type="radio"
+                            value="2"
+                            checked={requestAmountFilter === "2"}
+                            onChange={handleRequestAmountFilterChange}
+                            className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500"
+                          />
+                          <label htmlFor="request-amount-2" className="ml-2 text-sm font-medium text-gray-900">
+                            2 requests
+                          </label>
+                        </div>
+                        <div className="flex items-center">
+                          <input
+                            id="request-amount-3"
+                            type="radio"
+                            value="3"
+                            checked={requestAmountFilter === "3"}
+                            onChange={handleRequestAmountFilterChange}
+                            className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500"
+                          />
+                          <label htmlFor="request-amount-3" className="ml-2 text-sm font-medium text-gray-900">
+                            3 requests
+                          </label>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                   
                   <div className="flex items-center mt-2 sm:mt-0 space-x-2">

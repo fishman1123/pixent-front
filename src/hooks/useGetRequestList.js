@@ -7,7 +7,7 @@ export const useGetRequestList = (page, size) => {
     queryKey: ["requests", page, size],
     queryFn: async () => {
       const response = await AxiosInstance.get(
-        `/api/user?page=${page}&size=${size}&sort=createdAt,asc`,
+        `/api/user?page=${page}&size=${size}&sort=requestedLimit,desc`,
       );
       return response.data;
     },
